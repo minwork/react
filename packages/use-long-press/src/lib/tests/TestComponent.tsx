@@ -1,7 +1,6 @@
-import React, { Component, HTMLAttributes, useRef } from 'react';
-import { mount, ReactWrapper, shallow, ShallowWrapper } from 'enzyme';
-import { useLongPress } from '../src';
-import { LongPressCallback, LongPressOptions } from '../src/types';
+import React, { useRef } from 'react';
+import { LongPressCallback, LongPressOptions, useLongPress } from 'use-long-press';
+import { render, RenderResult } from '@testing-library/react';
 
 export interface TestComponentProps extends LongPressOptions {
   callback: LongPressCallback | null;
@@ -10,7 +9,7 @@ export interface TestComponentProps extends LongPressOptions {
 
 let i = 1;
 
-export const TestComponent: React.FC<TestComponentProps> = ({ callback, context, children, ...options }) => {
+export const TestComponent: React.FC<TestComponentProps> = ({ callback, context, ...options }) => {
   const bind = useLongPress<HTMLButtonElement>(callback, options);
   const key = useRef(i++);
 
@@ -21,14 +20,24 @@ export const TestComponent: React.FC<TestComponentProps> = ({ callback, context,
   );
 };
 
-export function createShallowTestComponent<Target = Element>(
+export function createTestElement(
   props: TestComponentProps
-): ShallowWrapper<Required<TestComponentProps & HTMLAttributes<Target>>> {
-  return shallow<Component<Required<TestComponentProps & HTMLAttributes<Target>>>>(<TestComponent {...props} />);
+) {
+  const component = createTestComponent(props);
+
+  return getComponentElement(component);
 }
 
-export function createMountedTestComponent<Target = Element>(
+export function createTestComponent<Target = Element>(
   props: TestComponentProps
-): ReactWrapper<Required<TestComponentProps & HTMLAttributes<Target>>> {
-  return mount<Component<Required<TestComponentProps & HTMLAttributes<Target>>>>(<TestComponent {...props} />);
+) {
+  return render(<TestComponent {...props} />);
+}
+
+export function getComponentElement(component: RenderResult): HTMLButtonElement {
+  const element = component.container.firstChild;
+  if (!element) {
+    throw new Error('Component is missing clickable element');
+  }
+  return element as HTMLButtonElement;
 }
