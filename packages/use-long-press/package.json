@@ -1,0 +1,12 @@
+{
+  "name": "use-long-press",
+  "version": "3.0.0",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.js"
+    }
+  }
+}
