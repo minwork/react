@@ -2,13 +2,17 @@
   "name": "react",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "prepare": "husky install"
+  },
   "private": true,
   "dependencies": {
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^17.4.4",
+    "@commitlint/config-conventional": "^17.4.4",
     "@nrwl/eslint-plugin-nx": "15.8.5",
     "@nrwl/js": "15.8.5",
     "@nrwl/linter": "15.8.5",
@@ -31,6 +35,7 @@
     "eslint-plugin-jsx-a11y": "6.7.1",
     "eslint-plugin-react": "7.32.2",
     "eslint-plugin-react-hooks": "4.6.0",
+    "husky": "^8.0.3",
     "jsdom": "~20.0.3",
     "nx": "15.8.5",
     "prettier": "^2.6.2",
