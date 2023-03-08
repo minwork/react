@@ -35,6 +35,16 @@
         "passWithNoTests": true,
         "reportsDirectory": "../../coverage/packages/use-long-press"
       }
+    },
+    "release": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "yarn run semantic-release --extends=./packages/use-long-press/release.config.js --no-ci"
+          }
+        ]
+      }
     }
   }
 }

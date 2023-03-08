@@ -1,0 +1,21 @@
+{
+  "branches": [
+    {
+      "name": "main",
+      "channel": "main"
+    },
+    {
+      "name": "next",
+      "channel": "next",
+      "prerelease": "rc"
+    },
+    {
+      "name": "develop",
+      "channel": "develop",
+      "prerelease": "alpha"
+    }
+  ],
+  "commitPaths": [
+    "packages/use-long-press/*"
+  ]
+}

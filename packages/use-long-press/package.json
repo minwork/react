@@ -1,6 +1,18 @@
 {
   "name": "use-long-press",
   "version": "3.0.0",
+  "description": "React hook for detecting click (or tap) and hold event. Easy to use, highly customizable options, thoroughly tested.",
+  "author": "minwork",
+  "license": "MIT",
+  "keywords": [
+    "react",
+    "hook",
+    "click and hold",
+    "tap and hold",
+    "long press"
+  ],
+  "repository": "https://github.com/minwork/react",
+  "readme": "https://github.com/minwork/react/tree/main/packages/use-long-press",
   "main": "./index.js",
   "types": "./index.d.ts",
   "exports": {
@@ -8,5 +20,11 @@
       "import": "./index.mjs",
       "require": "./index.js"
     }
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0 || ^17.0.0 || ^18.0.0"
   }
 }
