@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { LongPressCallback, LongPressOptions, useLongPress } from 'use-long-press';
+import { LongPressCallback, LongPressOptions, useLongPress } from '../use-long-press';
 import { render, RenderResult } from '@testing-library/react';
 
 export interface TestComponentProps extends LongPressOptions {
@@ -28,7 +28,7 @@ export function createTestElement(
   return getComponentElement(component);
 }
 
-export function createTestComponent<Target = Element>(
+export function createTestComponent(
   props: TestComponentProps
 ) {
   return render(<TestComponent {...props} />);

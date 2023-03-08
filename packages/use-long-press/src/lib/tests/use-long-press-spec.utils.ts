@@ -2,7 +2,7 @@ import React from 'react';
 import { expect } from 'vitest';
 import { createEvent } from '@testing-library/react';
 import { EventType } from '@testing-library/dom/types/events';
-import { LongPressCallbackMeta } from 'use-long-press';
+import { LongPressCallbackMeta } from '../use-long-press.types';
 
 
 export function mockReactTouchEvent<EventType extends React.TouchEvent = React.TouchEvent>(
@@ -72,3 +72,6 @@ export const expectSpecificEvent = (event: Event) => expect.objectContaining({
 })
 
 export const emptyContext: LongPressCallbackMeta<undefined> = { context: undefined };
+
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+export const noop = () => {};

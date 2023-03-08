@@ -9,8 +9,9 @@ import {
   expectTouchEvent,
   mockReactMouseEvent,
   mockReactTouchEvent,
+  noop,
 } from './use-long-press-spec.utils';
-import { LongPressCallback, LongPressDetectEvents, LongPressEventReason, useLongPress } from 'use-long-press';
+import { LongPressCallback, LongPressDetectEvents, LongPressEventReason, useLongPress } from '../use-long-press';
 import {
   createTestComponent,
   createTestElement,
@@ -34,7 +35,7 @@ describe('Check isolated hook calls', () => {
   });
 
   it('should return object with all handlers when callback is not null', () => {
-    const { result } = renderHook(() => useLongPress(() => {}));
+    const { result } = renderHook(() => useLongPress(noop));
     expect(result.current()).toMatchObject({
       onMouseDown: expect.any(Function),
       onMouseUp: expect.any(Function),
@@ -46,7 +47,7 @@ describe('Check isolated hook calls', () => {
 
   it('should return appropriate handlers when called with detect param', () => {
     const { result: resultBoth } = renderHook(() =>
-      useLongPress(() => {}, {
+      useLongPress(noop, {
         detect: LongPressDetectEvents.BOTH,
       })
     );
@@ -59,7 +60,7 @@ describe('Check isolated hook calls', () => {
     });
 
     const { result: resultMouse } = renderHook(() =>
-      useLongPress(() => {}, {
+      useLongPress(noop, {
         detect: LongPressDetectEvents.MOUSE,
       })
     );
@@ -70,7 +71,7 @@ describe('Check isolated hook calls', () => {
     });
 
     const { result: resultTouch } = renderHook(() =>
-      useLongPress(() => {}, {
+      useLongPress(noop, {
         detect: LongPressDetectEvents.TOUCH,
       })
     );
@@ -150,6 +151,7 @@ describe('Browser compatibility', () => {
     touchEvent = mockReactTouchEvent();
 
     // Temporary remove TouchEvent from window to check if it will be properly handled
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     delete window.TouchEvent;
 
@@ -807,7 +809,7 @@ describe('Hook returned binder', () => {
       detect: detectType,
     };
 
-    let component = render(<TestComponent {...props} />);
+    const component = render(<TestComponent {...props} />);
 
     if (detectType === LongPressDetectEvents.MOUSE && isMouseEvent(event)) {
       fireEvent.mouseDown(getComponentElement(component), event);

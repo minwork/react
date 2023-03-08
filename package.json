@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "lint": "nx run-many --target=lint",
+    "test": "nx run-many --target=test"
   },
   "private": true,
   "dependencies": {
