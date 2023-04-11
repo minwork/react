@@ -9,7 +9,7 @@ const commitAnalyzerOptions = {
     mergeCorrespondence: ['branch', 'id'],
   },
   releaseRules: [
-    { type: 'docs', scope: 'README', release: 'patch' },
+    // { type: 'docs', scope: 'README', release: 'patch' },
     { type: 'refactor', release: 'patch' },
     { type: 'style', release: 'patch' },
     { type: 'perf', release: 'patch' },
@@ -22,6 +22,7 @@ module.exports = {
   pkgRoot: `dist/${folder}${appName}`,
   tagFormat: `${appName}-v$\{version}`,
   commitPaths: [`${folder}${appName}/*`, 'package.json', 'nx.json'],
+  extends: "../../release.config.js",
   plugins: [
     ['@semantic-release/commit-analyzer', commitAnalyzerOptions],
     [
@@ -44,13 +45,6 @@ module.exports = {
       },
     ],
     ['@semantic-release/changelog', { changelogFile: `./${folder}${appName}/CHANGELOG.md` }],
-    [
-      '@semantic-release/exec',
-      {
-        // prepareCmd: `yarn test:${appName} && yarn build:${appName}`,
-        //publishCmd: `./docker/build.sh ${appName}`,
-      },
-    ],
     [
       '@semantic-release/git',
       {
