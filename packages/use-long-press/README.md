@@ -13,7 +13,19 @@
 - Highly customizable options
 - Thoroughly tested
 
-## Install
+# Table of Contents
+1. [Installation](#installation)
+2. [Live Examples](#live-examples)
+3. [Basic Usage](#basic-usage)
+4. [Advanced Usage](#advanced-usage) 
+   1. [Definition](#definition)
+   2. [Options](#options)
+   3. [Example](#example)
+5. [Migration](#migration)
+   1. [v1 to v2](#v1-to-v2)
+6. [License](#license)
+
+## Installation
 
 ```bash
 yarn add use-long-press
@@ -40,7 +52,7 @@ const Example = () => {
 };
 ```
 
-## Live example
+## Live Examples
 
 ### Version 1
 
@@ -49,6 +61,10 @@ const Example = () => {
 ### Version 2
 
 [![Edit useLongPress](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/uselongpress-v2-ekqecn?fontsize=14&hidenavigation=1&theme=dark)
+
+### Version 3
+
+_Coming soon..._
 
 ## Advanced usage
 
@@ -118,6 +134,48 @@ export default function AdvancedExample() {
   );
 }
 ```
+
+## Migration
+
+### v1 to v2
+#### [BREAKING CHANGE] Context support
+Now hook returns function which can be called with any context in order to access it in callbacks
+
+*Before*
+
+```typescript jsx
+const bind = useLongPress(() => console.log('Long pressed'));
+// ...
+return <button {...bind}>Click me</button>;
+```
+
+*After*
+```typescript jsx
+const bind = useLongPress((event, { context }) => console.log('Long pressed with', context));
+// ...
+return <button {...bind('I am context')}>Click me</button>;
+// Or just empty function call if you don't want to pass any context
+return <button {...bind()}>Click me</button>;
+```
+
+#### [NEW] Reason for cancellation
+Now `onCancel` receives cancellation context which can be either:
+- `LongPressEventReason.CANCELED_BY_TIMEOUT` (`'canceled-by-timeout'`)
+- `LongPressEventReason.CANCELED_BY_MOVEMENT` (`'canceled-by-movement'`)
+
+You can access it like this:
+
+```typescript jsx
+import { useLongPress } from "./use-long-press";
+
+const bind = useLongPress(() => console.log('Long pressed'), {
+  onCancel: (event, { reason }) => console.log('Cancellation reason:', reason) 
+})
+```
+
+### v2 to v3
+
+_Coming soon..._
 
 ## License
 
