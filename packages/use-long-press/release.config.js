@@ -1,4 +1,3 @@
-// npx semantic-release --no-ci --branch=mono-repo-scripts --extends=./apps/${appName}/release.config.js --debug
 const folder = 'packages/';
 const appName = 'use-long-press';
 
@@ -9,7 +8,8 @@ const commitAnalyzerOptions = {
     mergeCorrespondence: ['branch', 'id'],
   },
   releaseRules: [
-    // { type: 'docs', scope: 'README', release: 'patch' },
+    { breaking: true, release: 'major' },
+    { type: 'docs', scope: 'README', release: 'patch' },
     { type: 'refactor', release: 'patch' },
     { type: 'style', release: 'patch' },
     { type: 'perf', release: 'patch' },
@@ -22,7 +22,7 @@ module.exports = {
   pkgRoot: `dist/${folder}${appName}`,
   tagFormat: `${appName}-v$\{version}`,
   commitPaths: [`${folder}${appName}/*`, 'package.json', 'nx.json'],
-  extends: "../../release.config.js",
+  extends: '../../release.config.js',
   plugins: [
     ['@semantic-release/commit-analyzer', commitAnalyzerOptions],
     [
@@ -36,7 +36,7 @@ module.exports = {
             { type: 'chore', section: 'Chores' },
             { type: 'docs', hidden: true },
             { type: 'style', hidden: true },
-            { type: 'refactor', section: 'Refactoring' },
+            { type: 'refactor', section: 'Refactors' },
             { type: 'build', section: 'Build config' },
             { type: 'perf', hidden: true },
             { type: 'test', hidden: true },
@@ -46,11 +46,18 @@ module.exports = {
     ],
     ['@semantic-release/changelog', { changelogFile: `./${folder}${appName}/CHANGELOG.md` }],
     [
+      '@semantic-release/npm',
+      {
+        npmPublish: false,
+        pkgRoot: `./dist/${folder}${appName}`
+      }
+    ],
+    [
       '@semantic-release/git',
       {
-        assets: [`./${folder}${appName}/CHANGELOG.md`],
+        assets: [`./${folder}${appName}/CHANGELOG.md`, `./${folder}${appName}/package.json`],
         message: `chore(release): Release ${appName} v$\{nextRelease.version} [skip ci]`,
       },
-    ],
+    ]
   ],
 };
