@@ -36,9 +36,5 @@ export function createTestComponent(
 }
 
 export function getComponentElement(component: RenderResult): HTMLButtonElement {
-  const element = component.container.firstChild;
-  if (!element) {
-    throw new Error('Component is missing clickable element');
-  }
-  return element as HTMLButtonElement;
+  return component.container.firstChild as HTMLButtonElement;
 }

@@ -895,4 +895,22 @@ describe('Hook usability', () => {
       expect(onCancel).toBeCalledTimes(0);
     }
   );
+
+  test.each([
+    [LongPressEventType.MOUSE],
+    [LongPressEventType.TOUCH],
+  ])('Suppress multiple start callback calls, while using "%s" events', (eventType) => {
+    const onStart = vi.fn();
+    const element = createTestElement({ callback: vi.fn(), onStart, detect: eventType });
+    const event = longPressMockedEventCreatorMap[eventType]();
+    const longPressEvent = getDOMTestHandlersMap(eventType, element);
+
+    longPressEvent.start(event);
+    longPressEvent.start(event);
+    longPressEvent.start(event);
+    longPressEvent.start(event);
+    longPressEvent.start(event);
+
+    expect(onStart).toHaveBeenCalledTimes(1);
+  })
 });

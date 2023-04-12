@@ -15,7 +15,7 @@ import {
 import { getCurrentPosition, isMouseEvent, isTouchEvent } from "./use-long-press.utils";
 
 // Disabled callback
-export function  useLongPress<Target extends Element = Element, Context = unknown>(
+export function useLongPress<Target extends Element = Element, Context = unknown>(
   callback: null,
   options?: LongPressOptions<Target, Context>
 ): LongPressResult<LongPressEmptyHandlers, Context>;
@@ -42,9 +42,7 @@ export function useLongPress<
   Target extends Element = Element,
   Context = unknown,
   Callback extends LongPressCallback<Target, Context> = LongPressCallback<Target, Context>
->(
-  callback: Callback,
-): LongPressResult<LongPressMouseHandlers<Target>, Context>;
+>(callback: Callback): LongPressResult<LongPressMouseHandlers<Target>, Context>;
 // General
 export function useLongPress<
   Target extends Element = Element,
@@ -169,7 +167,7 @@ export function useLongPress<
       onMove?.(event, { context });
       if (cancelOnMovement && startPosition.current) {
         const currentPosition = getCurrentPosition(event);
-        /* istanbul ignore else */
+
         if (currentPosition) {
           const moveThreshold = cancelOnMovement === true ? 25 : cancelOnMovement;
           const movedDistance = {
@@ -206,22 +204,21 @@ export function useLongPress<
         return {};
       }
 
-      if (detect === LongPressEventType.MOUSE) {
-        return {
-          onMouseDown: start(context) as MouseEventHandler<Target>,
-          onMouseMove: handleMove(context) as MouseEventHandler<Target>,
-          onMouseUp: cancel(context) as MouseEventHandler<Target>,
-        };
-      }
+      switch (detect) {
+        case LongPressEventType.MOUSE:
+          return {
+            onMouseDown: start(context) as MouseEventHandler<Target>,
+            onMouseMove: handleMove(context) as MouseEventHandler<Target>,
+            onMouseUp: cancel(context) as MouseEventHandler<Target>,
+          };
 
-      if (detect === LongPressEventType.TOUCH) {
-        return {
-          onTouchStart: start(context) as TouchEventHandler<Target>,
-          onTouchMove: handleMove(context) as TouchEventHandler<Target>,
-          onTouchEnd: cancel(context) as TouchEventHandler<Target>,
-        };
+        case LongPressEventType.TOUCH:
+          return {
+            onTouchStart: start(context) as TouchEventHandler<Target>,
+            onTouchMove: handleMove(context) as TouchEventHandler<Target>,
+            onTouchEnd: cancel(context) as TouchEventHandler<Target>,
+          };
       }
-      return {};
     },
     [callback, cancel, detect, handleMove, start]
   );

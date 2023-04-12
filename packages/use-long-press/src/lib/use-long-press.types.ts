@@ -63,7 +63,11 @@ export type LongPressCallbackMeta<Context = unknown> = { context?: Context; reas
  ⌞____________________________________________________________________________________________________
 */
 
-export interface LongPressOptions<Target extends Element = Element, Context = unknown, EventType extends LongPressEventType = LongPressEventType> {
+export interface LongPressOptions<
+  Target extends Element = Element,
+  Context = unknown,
+  EventType extends LongPressEventType = LongPressEventType
+> {
   /**
    * Period of time that must elapse after detecting click or tap in order to trigger _callback_
    */
@@ -100,7 +104,11 @@ export interface LongPressOptions<Target extends Element = Element, Context = un
   onCancel?: LongPressCallback<Target, Context>;
 }
 
-export type LongPressResult<T extends LongPressHandlers<Target> | LongPressEmptyHandlers, Context = unknown, Target extends Element = Element> = (context?: Context) => T;
+export type LongPressResult<
+  T extends LongPressHandlers<Target> | LongPressEmptyHandlers,
+  Context = unknown,
+  Target extends Element = Element
+> = (context?: Context) => T;
 
 export type LongPressEmptyHandlers = Record<never, never>;
 
@@ -115,6 +123,7 @@ export interface LongPressTouchHandlers<Target extends Element = Element> {
   onTouchEnd: TouchEventHandler<Target>;
 }
 
-export type LongPressHandlers<
-  Target extends Element = Element,
-> = LongPressMouseHandlers<Target> | LongPressTouchHandlers<Target> | LongPressEmptyHandlers;
+export type LongPressHandlers<Target extends Element = Element> =
+  | LongPressMouseHandlers<Target>
+  | LongPressTouchHandlers<Target>
+  | LongPressEmptyHandlers;
