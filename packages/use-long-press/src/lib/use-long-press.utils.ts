@@ -1,4 +1,4 @@
-import { Coordinates, LongPressEvent } from './use-long-press.types';
+import { LongPressEvent } from './use-long-press.types';
 import { MouseEvent as ReactMouseEvent, TouchEvent as ReactTouchEvent } from 'react';
 
 export function isTouchEvent<Target>(event: LongPressEvent<Target>): event is ReactTouchEvent<Target> {
@@ -10,7 +10,10 @@ export function isMouseEvent<Target>(event: LongPressEvent<Target>): event is Re
   return event.nativeEvent instanceof MouseEvent;
 }
 
-export function getCurrentPosition<Target>(event: LongPressEvent<Target>): Coordinates {
+export function getCurrentPosition<Target>(event: LongPressEvent<Target>): {
+  x: number;
+  y: number;
+} | null {
   if (isTouchEvent(event)) {
     return {
       x: event.touches[0].pageX,
