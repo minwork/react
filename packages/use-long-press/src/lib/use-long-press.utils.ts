@@ -1,16 +1,16 @@
 import { LongPressEvent } from './use-long-press.types';
 import { MouseEvent as ReactMouseEvent, TouchEvent as ReactTouchEvent } from 'react';
 
-export function isTouchEvent<Target>(event: LongPressEvent<Target>): event is ReactTouchEvent<Target> {
+export function isTouchEvent<Target extends Element>(event: LongPressEvent<Target>): event is ReactTouchEvent<Target> {
   const { nativeEvent } = event;
   return window.TouchEvent ? nativeEvent instanceof TouchEvent : 'touches' in nativeEvent;
 }
 
-export function isMouseEvent<Target>(event: LongPressEvent<Target>): event is ReactMouseEvent<Target> {
+export function isMouseEvent<Target extends Element>(event: LongPressEvent<Target>): event is ReactMouseEvent<Target> {
   return event.nativeEvent instanceof MouseEvent;
 }
 
-export function getCurrentPosition<Target>(event: LongPressEvent<Target>): {
+export function getCurrentPosition<Target extends Element>(event: LongPressEvent<Target>): {
   x: number;
   y: number;
 } | null {
