@@ -143,14 +143,14 @@ Now hook returns function which can be called with any context in order to acces
 
 *Before*
 
-```typescript jsx
+```tsx
 const bind = useLongPress(() => console.log('Long pressed'));
 // ...
 return <button {...bind}>Click me</button>;
 ```
 
 *After*
-```typescript jsx
+```tsx
 const bind = useLongPress((event, { context }) => console.log('Long pressed with', context));
 // ...
 return <button {...bind('I am context')}>Click me</button>;
@@ -165,9 +165,7 @@ Now `onCancel` receives cancellation context which can be either:
 
 You can access it like this:
 
-```typescript jsx
-import { useLongPress } from "./use-long-press";
-
+```tsx
 const bind = useLongPress(() => console.log('Long pressed'), {
   onCancel: (event, { reason }) => console.log('Cancellation reason:', reason) 
 })
@@ -175,7 +173,39 @@ const bind = useLongPress(() => console.log('Long pressed'), {
 
 ### v2 to v3
 
-_Coming soon..._
+#### [BREAKING CHANGE] Drop support for `'both'` option in `detect` param
+Returning both mouse and touch handlers as a hook result caused unintended edge cases on touch devices that emulated clicks. Therefore `'both'` value was removed and hook is now using `'mouse'` as a default value for `detect` param.
+
+This also enables to support more type of events in the future (e.g. pointer or maybe even keyboard).
+
+Instead of using `'both'` you can programmatically detect if current device support touch events and set proper `detect` value based on that.
+
+*Before*
+```tsx
+const bind = useLongPress(() => console.log('Long pressed'), {
+  detect: 'both',
+})
+```
+*After*
+```tsx
+const bind = useLongPress(() => console.log('Long pressed'), {
+  detect: isTouchDevice ? 'touch' : 'mouse',
+})
+```
+
+#### [BREAKING CHANGE] Typings and param values
+TypeScript's typings were refactored to use more consistent and precise names. Also changed _reason_ values (see below)
+
+- Changed generics order from `useLongPress<Target, Callback, Context>` to `useLongPress<Target, Context, Callback>`
+- Renamed `LongPressDetectEvents` enum to `LongPressEventType`
+- Renamed `LongPressEventReason` enum to `LongPressCallbackReason`
+  - `LongPressEventReason.CANCELED_BY_MOVEMENT` ('cance**l**ed-by-movement') -> `LongPressCallbackReason.CancelledByMovement` ('cance**ll**ed-by-movement')
+  - `LongPressEventReason.CANCELED_BY_TIMEOUT` ('cance**l**ed-by-timeout') -> `LongPressCallbackReason.CancelledByTimeout` ('cance**ll**ed-by-timeout')
+- Removed `Coordinates` type
+- Renamed `EmptyObject` type to `LongPressEmptyHandlers`
+- Renamed `CallableContextResult` type to `LongPressResult`
+- Renamed `LongPressResult` type to `LongPressHandlers`
+- Added mouse and touch handlers types - `LongPressMouseHandlers` and `LongPressTouchHandlers` 
 
 ## License
 
