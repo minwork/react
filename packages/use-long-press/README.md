@@ -15,14 +15,24 @@
 
 # Table of Contents
 1. [Installation](#installation)
-2. [Live Examples](#live-examples)
-3. [Basic Usage](#basic-usage)
-4. [Advanced Usage](#advanced-usage) 
-   1. [Definition](#definition)
-   2. [Options](#options)
-   3. [Example](#example)
+2. [Basic Usage](#basic-usage)
+3. [Advanced Usage](#advanced-usage) 
+   1. [Definition](#hook-definition)
+   2. [Callback](#callback)
+   3. [Options](#options)
+   4. [Additional callbacks](#additional-callbacks)
+   5. [Result](#result)
+   6. [Context](#context)
+   7. [Handlers](#handlers)
+4. [Examples](#examples)
+   1. [Advanced usage example](#advanced-usage-example)
+   2. [Live Examples](#live-examples)
+      1. [Version 1](#version-1--deprecated-)
+      2. [Version 2](#version-2--deprecated-)
+      3. [Version 3](#version-3)
 5. [Migration](#migration)
    1. [v1 to v2](#v1-to-v2)
+   2. [v2 to v3](#v2-to-v3)
 6. [License](#license)
 
 ## Installation
@@ -52,54 +62,103 @@ const Example = () => {
 };
 ```
 
-## Live Examples
-
-### Version 1
-
-[![Edit useLongPress](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/uselongpress-gnej6?fontsize=14&hidenavigation=1&theme=dark)
-
-### Version 2
-
-[![Edit useLongPress](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/uselongpress-v2-ekqecn?fontsize=14&hidenavigation=1&theme=dark)
-
-### Version 3
-
-_Coming soon..._
-
 ## Advanced usage
 
+### Hook definition
+
+_Pseudocode_
+```
+useLongPress(callback [, options]): bindFn
+```
+_TypeScript_
+```ts
+declare function useLongPress<
+  Target extends Element = Element,
+  Context = unknown,
+  Callback extends LongPressCallback<Target, Context> = LongPressCallback<Target, Context>
+>(
+  callback: Callback | null,
+  options?: LongPressOptions<Target, Context>
+): LongPressResult<LongPressHandlers<Target>, Context>;
+```
+
+### Callback
 Hook first parameter, _callback_, can be either function or `null` (if you want to disable the hook).
 
-Additionally, you can supply _options_ object as a second parameter.
+### Options
+You can supply _options_ object as a hook second parameter. All options inside the object are optional.
 
-As a result hook returns object with various handlers (depending on _detect_ option), which can be spread to some element.
+| Name             |            Type            |  Default  | Description                                                                                                                                                                                                                                                                       |
+|------------------|:--------------------------:|:---------:|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| threshold        |          _number_          |    400    | Time user need to hold click or tap before long press _callback_ is triggered                                                                                                                                                                                                     |
+| captureEvent     |         _boolean_          |   false   | If React MouseEvent (or TouchEvent) should be supplied as first argument to callbacks                                                                                                                                                                                             |
+| detect           | _'mouse'_ &#x7c; _'touch'_ |  'mouse'  | Which event handlers should be returned from `bind` function. <br/><br/>TS enum: `LongPressEventType`                                                                                                                                                                             |
+| cancelOnMovement | _boolean_ &#x7c; _number_  |   false   | If long press should be cancelled when detected movement while pressing. Use _boolean_ value to turn it on / off or _number_ value to specify move tolerance in pixels.<br/><br/>For more information on how this option work check JSDoc.                                        |
+| filterEvents     |    _(event) => boolean_    | undefined | If provided, it gives you the ability to ignore long press detection on specified conditions (e.g. on right mouse click). <br/><br/>When function returns `false`, it will prevent ANY callbacks from triggering (including _onStart_ and _onCancel_) as well as capturing event. |
+| onStart          |  _(event, meta) => void_   | undefined | Called when element is initially pressed (before starting timer which detects long press)                                                                                                                                                                                         |
+| onMove           |  _(event, meta) => void_   | undefined | Called on move after pressing element. Since position is extracted from event after this callback is called, you can potentially make changes to event position.<br/><br/> Position is extracted using _getCurrentPosition_ method from `use-long-press.utils.ts`                 |
+| onFinish         |  _(event, meta) => void_   | undefined | Called when press is released AFTER _threshold_ time elapses, therefore after long press occurs and _callback_ is called.                                                                                                                                                         |
+| onCancel         |  _(event, meta) => void_   | undefined | Called when press is released BEFORE _threshold_ time elapses, therefore before long press could occur.                                                                                                                                                                           |
+
+### Additional callbacks
+All callbacks (including main _callback_ function) has same structure.
+
+_Pseudocode_
+```
+callbackFn(event, meta): void
+```
+_TypeScript_
+```ts
+type LongPressCallback<Target extends Element = Element, Context = unknown> = (
+  event: LongPressEvent<Target>,
+  meta: LongPressCallbackMeta<Context>
+) => void
+```
+
+As a first argument callback receives event from proper handler (e.g. `onMouseDown`) and as second receives _meta_ object with following structure:
+
+_Pseudocode_
+```
+{ [context: any], [reason: string] }
+```
+
+_TypeScript_
+```ts
+export type LongPressCallbackMeta<Context = unknown> = { context?: Context; reason?: LongPressCallbackReason };
+```
+
+Both object properties are optional.
+- `context` will be present if you pass it to _bind_ function. See [context](#context) for more info.
+- `reason` will be present in _onCancel_ callback to indicate why long press was cancelled
+  - `'cancelled-by-movement'` (TS: `LongPressCallbackReason.CancelledByMovement`) - when _cancelOnMovement_ option is enabled and moved outside specified tolerance
+  - `'cancelled-by-release'` (TS: `LongPressCallbackReason.CancelledByRelease`) - when press was released before _threshold_ time elapsed
+
+
+### Result
+
+As a result hook returns callable function (also referred as `bind`) in order to pass _context_ if necessary.
+`bind` function return object with various [handlers](#handlers).
+
+### Context
 
 You can supply custom context to the `bind` function like `bind(context)` and then access it from callbacks (`onStart`, `onFinish`, `onCancel`, `onMove`) second argument e.g.: `onStart: (event, { context }) => ...`.
 
-### Definition
+### Handlers
 
-```
-useLongPress(callback [, options]): handlers
-```
+Handlers are returned from `bind` function in a form of object which can be spread to react element. Contents of this object depend on _detect_ option value:
 
-### Options
+- `'mouse'`
+  - `onMouseDown`
+  - `onMouseMove`
+  - `onMouseUp`
+- `'touch'`
+  - `onTouchStart`
+  - `onTouchMove`
+  - `onTouchEnd`
 
-Long press hook can be adjusted using options object, which allow you to fit it to your needs.
+## Examples
 
-| Name             |                    Type                    |  Default  | Description                                                                                                                                                                                                                                                                                               |
-|------------------|:------------------------------------------:|:---------:|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| threshold        |                   number                   |    400    | Time user need to hold click or tap before long press _callback_ is triggered                                                                                                                                                                                                                             |
-| captureEvent     |                  boolean                   |   false   | If React MouseEvent (or TouchEvent) should be supplied as first argument to callbacks                                                                                                                                                                                                                     |
-| detect           | Enum('mouse' &#x7c; 'touch' &#x7c; 'both') |  'both'   | Which event handlers should be returned in `bind` object. In TS this enum is accessible through `LongPressDetectEvents`                                                                                                                                                                                   |
-| cancelOnMovement |           boolean &#x7c; number            |   false   | If long press should be cancelled when detected movement while pressing. Use _boolean_ value to turn it on / off or _number_ value to specify move tolerance in pixels.<br><br>For more information on how this prop work check JSDoc.                                                                    |
-| filterEvents     |             (event) => boolean             | undefined | If provided, it gives you the ability to ignore long press detection on specified conditions (for example on right mouse click). <br><br>When function returns `false`, it will prevent ANY callbacks from triggering (including _onStart_ and _onCancel_) as well as capturing event.                    |
-| onStart          |                  Function                  | undefined | Called when element is initially pressed (before starting timer which detects long press).<br><br>Can accept mouse or touch event if _captureEvents_ option is set to `true`.                                                                                                                             |
-| onFinish         |                  Function                  | undefined | Called when press is released (after triggering _callback_).<br><br>Can accept mouse or touch event if _captureEvents_ option is set to `true`.                                                                                                                                                           |
-| onCancel         |                  Function                  | undefined | Called when press is released before _threshold_ time elapses, therefore before long press occurs.<br><br>Can accept mouse or touch event if _captureEvents_ option is set to `true`. You can obtain reason for cancellation from a second callback argument e.g.: `onCancel: (event, { reason }) => ...` |
-| onMove           |                  Function                  | undefined | Handler for `onTouchMove` and `onMouseMove` props, also allowing to make some operations on event before triggering _cancelOnMovement_.<br><br>Can accept mouse or touch event if _captureEvents_ option is set to `true`.                                                                                |
-
-### Example
-
+### Advanced usage example
 ```jsx harmony
 import React, { useState, useCallback } from 'react';
 import { useLongPress } from 'use-long-press';
@@ -114,11 +173,11 @@ export default function AdvancedExample() {
     onFinish: event => console.log('Long press finished'),
     onCancel: event => console.log('Press cancelled'),
     onMove: event => console.log('Detected mouse or touch movement'),
-    filterEvents: event => true, // All events can potentially trigger long press
-    threshold: 500,
-    captureEvent: true,
-    cancelOnMovement: false,
-    detect: 'both',
+    filterEvents: event => true, // All events can potentially trigger long press (same as 'undefined')
+    threshold: 500, // In milliseconds
+    captureEvent: true, // Event won't get cleared after React finish processing it
+    cancelOnMovement: 25, // Square side size (in pixels) inside which movement won't cancel long press
+    detect: 'mouse',
   });
 
   return (
@@ -134,6 +193,21 @@ export default function AdvancedExample() {
   );
 }
 ```
+
+### Live Examples
+
+#### Version 1 (deprecated)
+
+[![Edit useLongPress](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/uselongpress-gnej6?fontsize=14&hidenavigation=1&theme=dark)
+
+#### Version 2 (deprecated)
+
+[![Edit useLongPress](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/uselongpress-v2-ekqecn?fontsize=14&hidenavigation=1&theme=dark)
+
+#### Version 3
+
+[![Edit useLongPress](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/uselongpress-v3-y5m335?fontsize=14&hidenavigation=1&theme=dark)
+
 
 ## Migration
 
@@ -200,7 +274,7 @@ TypeScript's typings were refactored to use more consistent and precise names. A
 - Renamed `LongPressDetectEvents` enum to `LongPressEventType`
 - Renamed `LongPressEventReason` enum to `LongPressCallbackReason`
   - `LongPressEventReason.CANCELED_BY_MOVEMENT` ('cance**l**ed-by-movement') -> `LongPressCallbackReason.CancelledByMovement` ('cance**ll**ed-by-movement')
-  - `LongPressEventReason.CANCELED_BY_TIMEOUT` ('cance**l**ed-by-timeout') -> `LongPressCallbackReason.CancelledByTimeout` ('cance**ll**ed-by-timeout')
+  - `LongPressEventReason.CANCELED_BY_TIMEOUT` ('cance**l**ed-by-timeout') -> `LongPressCallbackReason.CancelledByRelease` ('cance**ll**ed-by-release')
 - Removed `Coordinates` type
 - Renamed `EmptyObject` type to `LongPressEmptyHandlers`
 - Renamed `CallableContextResult` type to `LongPressResult`
