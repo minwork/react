@@ -153,7 +153,7 @@ export function useLongPress<
         onFinish?.(event, meta);
       } else if (isPressed.current) {
         // Otherwise, if not active trigger onCancel
-        onCancel?.(event, { ...meta, reason: reason ?? LongPressCallbackReason.CancelledByTimeout });
+        onCancel?.(event, { ...meta, reason: reason ?? LongPressCallbackReason.CancelledByRelease });
       }
       isLongPressActive.current = false;
       isPressed.current = false;

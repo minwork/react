@@ -275,7 +275,7 @@ describe('Detecting long press', () => {
       expect(onStart).toHaveBeenCalledWith(expectedEvent, emptyContext);
 
       expect(onCancel).toHaveBeenCalledTimes(1);
-      expect(onCancel).toHaveBeenCalledWith(expectedEvent, { reason: LongPressCallbackReason.CancelledByTimeout });
+      expect(onCancel).toHaveBeenCalledWith(expectedEvent, { reason: LongPressCallbackReason.CancelledByRelease });
 
       expect(onFinish).toHaveBeenCalledTimes(0);
     }
@@ -720,7 +720,7 @@ describe('Hook context', () => {
       expect(onCancel).toHaveBeenCalledTimes(1);
       expect(onCancel).toHaveBeenCalledWith(expect.objectContaining(event), {
         context,
-        reason: LongPressCallbackReason.CancelledByTimeout,
+        reason: LongPressCallbackReason.CancelledByRelease,
       });
     }
   );

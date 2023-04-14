@@ -33,7 +33,7 @@ export enum LongPressCallbackReason {
   /**
    * Returned when click / tap was released before long press detection time threshold
    */
-  CancelledByTimeout = 'cancelled-by-timeout',
+  CancelledByRelease = 'cancelled-by-release',
 }
 
 /*
