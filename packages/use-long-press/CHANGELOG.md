@@ -1,3 +1,15 @@
+## [3.0.0-alpha.2](https://github.com/minwork/react/compare/use-long-press-v3.0.0-alpha.1...use-long-press-v3.0.0-alpha.2) (2023-04-14)
+
+
+### Bug Fixes
+
+* **use-long-press:** Fix util functions typings ([e6f7fc2](https://github.com/minwork/react/commit/e6f7fc2bd7b20a07e18660b46a4560a2377f617d))
+
+
+### Build config
+
+* **project:** [react-2] Add GitHub actions for PRs and Releases ([8130f2b](https://github.com/minwork/react/commit/8130f2b6a0c851f013f2a10dc45ed962c0dd9f55))
+
 ## [3.0.0-alpha.1](https://github.com/minwork/react/compare/use-long-press-v2.0.3...use-long-press-v3.0.0-alpha.1) (2023-04-12)
 
 
