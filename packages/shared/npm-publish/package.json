@@ -1,0 +1,9 @@
+{
+  "name": "@react/shared/npm-publish",
+  "version": "0.0.1",
+  "type": "module",
+  "exports": "./index.js",
+  "engines": {
+    "node": ">=16"
+  }
+}

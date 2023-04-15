@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@react/shared/npm-publish": ["packages/shared/npm-publish/src/index.ts"],
       "use-long-press": ["packages/use-long-press/src/index.ts"]
     }
   },
