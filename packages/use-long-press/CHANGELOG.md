@@ -1,6 +1,18 @@
 ## [3.0.0-alpha.3](https://github.com/minwork/react/compare/use-long-press-v3.0.0-alpha.2...use-long-press-v3.0.0-alpha.3) (2023-04-15)
 
 
+### Features
+
+* **npm-publish:** Add npm-publish lib for publishing packages to npm using otp ([1de0c3c](https://github.com/minwork/react/commit/1de0c3c4dabbd0b25f8d50f3d2acf819d9f16099))
+
+
+### Refactors
+
+* **use-long-press:** Rename cancellation reason enum value ([3bc6f76](https://github.com/minwork/react/commit/3bc6f765aa2b3553f7810de80b8ef05061c5b24f))
+
+## [3.0.0-alpha.3](https://github.com/minwork/react/compare/use-long-press-v3.0.0-alpha.2...use-long-press-v3.0.0-alpha.3) (2023-04-15)
+
+
 ### Refactors
 
 * **use-long-press:** Rename cancellation reason enum value ([3bc6f76](https://github.com/minwork/react/commit/3bc6f765aa2b3553f7810de80b8ef05061c5b24f))
