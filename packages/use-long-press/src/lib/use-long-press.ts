@@ -26,7 +26,7 @@ export function useLongPress<
   Callback extends LongPressCallback<Target, Context> = LongPressCallback<Target, Context>
 >(
   callback: Callback,
-  options: LongPressOptions<Target, Context, LongPressEventType.TOUCH>
+  options: LongPressOptions<Target, Context, LongPressEventType.Touch>
 ): LongPressResult<LongPressTouchHandlers<Target>, Context>;
 // Mouse events
 export function useLongPress<
@@ -35,7 +35,7 @@ export function useLongPress<
   Callback extends LongPressCallback<Target, Context> = LongPressCallback<Target, Context>
 >(
   callback: Callback,
-  options: LongPressOptions<Target, Context, LongPressEventType.MOUSE>
+  options: LongPressOptions<Target, Context, LongPressEventType.Mouse>
 ): LongPressResult<LongPressMouseHandlers<Target>, Context>;
 // Default options
 export function useLongPress<
@@ -77,7 +77,7 @@ export function useLongPress<
   {
     threshold = 400,
     captureEvent = false,
-    detect = LongPressEventType.MOUSE,
+    detect = LongPressEventType.Mouse,
     cancelOnMovement = false,
     filterEvents,
     onStart,
@@ -205,14 +205,14 @@ export function useLongPress<
       }
 
       switch (detect) {
-        case LongPressEventType.MOUSE:
+        case LongPressEventType.Mouse:
           return {
             onMouseDown: start(context) as MouseEventHandler<Target>,
             onMouseMove: handleMove(context) as MouseEventHandler<Target>,
             onMouseUp: cancel(context) as MouseEventHandler<Target>,
           };
 
-        case LongPressEventType.TOUCH:
+        case LongPressEventType.Touch:
           return {
             onTouchStart: start(context) as TouchEventHandler<Target>,
             onTouchMove: handleMove(context) as TouchEventHandler<Target>,

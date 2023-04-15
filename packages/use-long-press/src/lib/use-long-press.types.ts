@@ -15,8 +15,8 @@ import {
  * Which event listeners should be returned from the hook
  */
 export enum LongPressEventType {
-  MOUSE = 'mouse',
-  TOUCH = 'touch',
+  Mouse = 'mouse',
+  Touch = 'touch',
 }
 
 /**

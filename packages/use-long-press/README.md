@@ -272,6 +272,8 @@ TypeScript's typings were refactored to use more consistent and precise names. A
 
 - Changed generics order from `useLongPress<Target, Callback, Context>` to `useLongPress<Target, Context, Callback>`
 - Renamed `LongPressDetectEvents` enum to `LongPressEventType`
+  - `LongPressDetectEvents.MOUSE` -> `LongPressEventType.Mouse`
+  - `LongPressDetectEvents.TOUCH` -> `LongPressEventType.Touch`
 - Renamed `LongPressEventReason` enum to `LongPressCallbackReason`
   - `LongPressEventReason.CANCELED_BY_MOVEMENT` ('cance**l**ed-by-movement') -> `LongPressCallbackReason.CancelledByMovement` ('cance**ll**ed-by-movement')
   - `LongPressEventReason.CANCELED_BY_TIMEOUT` ('cance**l**ed-by-timeout') -> `LongPressCallbackReason.CancelledByRelease` ('cance**ll**ed-by-release')

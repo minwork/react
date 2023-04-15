@@ -74,7 +74,7 @@ describe('Hook result', () => {
   test('Return appropriate handlers when called with detect param', () => {
     const { result: resultMouse } = renderHook(() =>
       useLongPress(noop, {
-        detect: LongPressEventType.MOUSE,
+        detect: LongPressEventType.Mouse,
       })
     );
     expect(resultMouse.current()).toStrictEqual<LongPressMouseHandlers>({
@@ -85,7 +85,7 @@ describe('Hook result', () => {
 
     const { result: resultTouch } = renderHook(() =>
       useLongPress(noop, {
-        detect: LongPressEventType.TOUCH,
+        detect: LongPressEventType.Touch,
       })
     );
     expect(resultTouch.current()).toMatchObject<LongPressTouchHandlers>({
@@ -98,8 +98,8 @@ describe('Hook result', () => {
 
 describe('Hook handlers', () => {
   test.each([
-    [LongPressEventType.MOUSE, new ErrorEvent('invalid') as unknown as React.MouseEvent],
-    [LongPressEventType.TOUCH, new ErrorEvent('invalid') as unknown as React.TouchEvent],
+    [LongPressEventType.Mouse, new ErrorEvent('invalid') as unknown as React.MouseEvent],
+    [LongPressEventType.Touch, new ErrorEvent('invalid') as unknown as React.TouchEvent],
   ])('Properly handle invalid event when using "%s" events', (eventType, event) => {
     vi.useFakeTimers();
     const callback = vi.fn();
@@ -169,7 +169,7 @@ describe('Browsers compatibility', () => {
       onFinish,
       onCancel,
       captureEvent: true,
-      detect: LongPressEventType.TOUCH,
+      detect: LongPressEventType.Touch,
     });
 
     fireEvent.touchStart(component, touchEvent);
@@ -214,7 +214,7 @@ describe('Detecting long press', () => {
     vi.clearAllTimers();
   });
 
-  test.each([[LongPressEventType.MOUSE], [LongPressEventType.TOUCH]])(
+  test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch]])(
     'Detect long press using "%s" events',
     (eventType) => {
       const component = createTestElement({
@@ -247,7 +247,7 @@ describe('Detecting long press', () => {
     }
   );
 
-  test.each([[LongPressEventType.MOUSE], [LongPressEventType.TOUCH]])(
+  test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch]])(
     'Detect cancelled long press using "%s" events',
     (eventType) => {
       const component = createTestElement({
@@ -295,7 +295,7 @@ describe('Hook options', () => {
       vi.clearAllMocks();
     });
 
-    test.each([[LongPressEventType.MOUSE], [LongPressEventType.TOUCH]])(
+    test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch]])(
       'should pass non-persistent "%s" events to callbacks when captureEvent flag is "false"',
       (eventType) => {
         const threshold = 400;
@@ -330,10 +330,10 @@ describe('Hook options', () => {
     );
 
     test.each([
-      [LongPressEventType.MOUSE, true],
-      [LongPressEventType.MOUSE, false],
-      [LongPressEventType.TOUCH, true],
-      [LongPressEventType.TOUCH, false],
+      [LongPressEventType.Mouse, true],
+      [LongPressEventType.Mouse, false],
+      [LongPressEventType.Touch, true],
+      [LongPressEventType.Touch, false],
     ])('should detect "%s" move event when captureEvent is set to "%s"', (eventType, captureEvent) => {
       const onMove = vi.fn();
       const event = longPressExpectedEventMap[eventType];
@@ -354,7 +354,7 @@ describe('Hook options', () => {
   });
 
   describe('threshold', () => {
-    test.each([[LongPressEventType.MOUSE], [LongPressEventType.TOUCH]])(
+    test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch]])(
       'Detect long press after timer lag is bigger than threshold when using "%s" events',
       (eventType) => {
         const callback = vi.fn();
@@ -373,7 +373,7 @@ describe('Hook options', () => {
   });
 
   describe('cancelOnMovement', () => {
-    test.each([[LongPressEventType.TOUCH], [LongPressEventType.MOUSE]])(
+    test.each([[LongPressEventType.Touch], [LongPressEventType.Mouse]])(
       'Do not cancel on movement when "cancelOnMovement" is set to false and using "%s" events',
       (eventType) => {
         const callback = vi.fn();
@@ -393,7 +393,7 @@ describe('Hook options', () => {
       }
     );
 
-    test.each([[LongPressEventType.MOUSE], [LongPressEventType.TOUCH]])(
+    test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch]])(
       'Cancel on movement when "cancelOnMovement" is set to true and using "%s" events',
       (eventType) => {
         const callback = vi.fn();
@@ -426,7 +426,7 @@ describe('Hook options', () => {
       }
     );
 
-    test.each([[LongPressEventType.MOUSE], [LongPressEventType.TOUCH]])(
+    test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch]])(
       'Do not cancel on movement when within explicitly set movement tolerance, while using "%s" events',
       (eventType) => {
         const tolerance = 10;
@@ -454,7 +454,7 @@ describe('Hook options', () => {
       }
     );
 
-    test.each([[LongPressEventType.MOUSE], [LongPressEventType.TOUCH]])(
+    test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch]])(
       'Cancel on movement when outside explicitly set movement tolerance, while using "%s" events',
       (eventType) => {
         const tolerance = 10;
@@ -497,8 +497,8 @@ describe('Hook options', () => {
     };
 
     test.each([
-      [LongPressEventType.MOUSE, createMockedMouseEvent({ button: 2 })],
-      [LongPressEventType.TOUCH, createMockedTouchEvent({ altKey: true })],
+      [LongPressEventType.Mouse, createMockedMouseEvent({ button: 2 })],
+      [LongPressEventType.Touch, createMockedTouchEvent({ altKey: true })],
     ])('Do not trigger callbacks when "%s" event is filtered out', (eventType, event) => {
       const callback = vi.fn();
       const onStart = vi.fn();
@@ -524,7 +524,7 @@ describe('Hook options', () => {
       expect(onCancel).toBeCalledTimes(0);
     });
 
-    test.each([[LongPressEventType.MOUSE], [LongPressEventType.TOUCH]])(
+    test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch]])(
       'Trigger callbacks when "%s" event is not filtered out',
       (eventType) => {
         const callback = vi.fn();
@@ -580,7 +580,7 @@ describe('Hook context', () => {
     vi.clearAllTimers();
   });
 
-  test.each([[LongPressEventType.MOUSE], [LongPressEventType.TOUCH]])(
+  test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch]])(
     'Retrieve passed context from callbacks when using "%s" events',
     (eventType) => {
       const context = {
@@ -623,7 +623,7 @@ describe('Hook context', () => {
     }
   );
 
-  test.each([[LongPressEventType.MOUSE], [LongPressEventType.TOUCH]])(
+  test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch]])(
     'Retrieve only last passed context from callbacks when using "%s" events',
     (eventType) => {
       let i = 1;
@@ -681,7 +681,7 @@ describe('Hook context', () => {
     }
   );
 
-  test.each([[LongPressEventType.MOUSE], [LongPressEventType.TOUCH]])(
+  test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch]])(
     'Pass context along with reason when "onCancel" is called, while using "%s" events',
     (eventType) => {
       const context = {
@@ -725,7 +725,7 @@ describe('Hook context', () => {
     }
   );
 
-  test.each([[LongPressEventType.MOUSE], [LongPressEventType.TOUCH]])(
+  test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch]])(
     'Pass context along with reason when "onCancel" is called because of a movement, while using "%s" events',
     (eventType) => {
       const context = {
@@ -784,7 +784,7 @@ describe('Hook usability', () => {
     vi.clearAllMocks();
   });
 
-  test.each([[LongPressEventType.MOUSE], [LongPressEventType.TOUCH]])(
+  test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch]])(
     'Callback is called repetitively on multiple long presses, while using "%s" events',
     (eventType) => {
       const callback = vi.fn();
@@ -812,7 +812,7 @@ describe('Hook usability', () => {
     }
   );
 
-  test.each([[LongPressEventType.MOUSE], [LongPressEventType.TOUCH]])(
+  test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch]])(
     'Timer is destroyed when component unmount, while using "%s" events',
     (eventType) => {
       const callback = vi.fn();
@@ -842,7 +842,7 @@ describe('Hook usability', () => {
     }
   );
 
-  test.each([[LongPressEventType.MOUSE], [LongPressEventType.TOUCH]])(
+  test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch]])(
     'Callbacks are not triggered when callback change to null after click / tap, while using "%s" events',
     (eventType) => {
       const callback = vi.fn();
@@ -877,7 +877,7 @@ describe('Hook usability', () => {
     }
   );
 
-  test.each([[LongPressEventType.MOUSE], [LongPressEventType.TOUCH]])(
+  test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch]])(
     'Cancel event is called only after starting press, while using "%s" events',
     (eventType) => {
       const callback = vi.fn();
@@ -897,8 +897,8 @@ describe('Hook usability', () => {
   );
 
   test.each([
-    [LongPressEventType.MOUSE],
-    [LongPressEventType.TOUCH],
+    [LongPressEventType.Mouse],
+    [LongPressEventType.Touch],
   ])('Suppress multiple start callback calls, while using "%s" events', (eventType) => {
     const onStart = vi.fn();
     const element = createTestElement({ callback: vi.fn(), onStart, detect: eventType });

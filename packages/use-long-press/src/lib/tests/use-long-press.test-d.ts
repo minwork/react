@@ -46,12 +46,12 @@ describe('useLongPress typings', () => {
   });
 
   test('Hook with "mouse" detect to return mouse handlers', () => {
-    const { result } = renderHook(() => useLongPress<HTMLDivElement>(noop, { detect: LongPressEventType.MOUSE }));
+    const { result } = renderHook(() => useLongPress<HTMLDivElement>(noop, { detect: LongPressEventType.Mouse }));
     expectTypeOf(result.current).returns.toMatchTypeOf<LongPressMouseHandlers<HTMLDivElement>>();
   });
 
   test('Hook with "touch" detect to return touch handlers', () => {
-    const { result } = renderHook(() => useLongPress<HTMLDivElement>(noop, { detect: LongPressEventType.TOUCH }));
+    const { result } = renderHook(() => useLongPress<HTMLDivElement>(noop, { detect: LongPressEventType.Touch }));
     expectTypeOf(result.current).returns.toMatchTypeOf<LongPressTouchHandlers<HTMLDivElement>>();
   });
 });

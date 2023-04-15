@@ -86,13 +86,13 @@ export function getTestHandlersMap(eventType: LongPressEventType, handlers: Long
 
 export function getDOMTestHandlersMap(eventType: LongPressEventType, element: Element): LongPressTestHandlersMap {
   switch (eventType) {
-    case LongPressEventType.MOUSE:
+    case LongPressEventType.Mouse:
       return {
         start: fireEvent.mouseDown.bind(null, element),
         move: fireEvent.mouseMove.bind(null, element),
         stop: fireEvent.mouseUp.bind(null, element),
       };
-    case LongPressEventType.TOUCH:
+    case LongPressEventType.Touch:
       return {
         start: fireEvent.touchStart.bind(null, element),
         move: fireEvent.touchMove.bind(null, element),

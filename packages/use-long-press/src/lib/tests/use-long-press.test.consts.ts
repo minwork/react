@@ -43,17 +43,17 @@ export const expectSpecificEvent = (event: Event) => expect.objectContaining({
 */
 
 export const longPressPositionedEventCreatorMap = {
-  [LongPressEventType.MOUSE]: createPositionedMouseEvent,
-  [LongPressEventType.TOUCH]: createPositionedTouchEvent,
+  [LongPressEventType.Mouse]: createPositionedMouseEvent,
+  [LongPressEventType.Touch]: createPositionedTouchEvent,
 } satisfies Record<LongPressEventType, (element: Element, eventType: EventType, x: number, y: number) => Event>;
 
 export const longPressTestHandlerNamesMap = {
-  [LongPressEventType.MOUSE]: {
+  [LongPressEventType.Mouse]: {
     start: 'onMouseDown',
     move: 'onMouseMove',
     stop: 'onMouseUp',
   },
-  [LongPressEventType.TOUCH]: {
+  [LongPressEventType.Touch]: {
     start: 'onTouchStart',
     move: 'onTouchMove',
     stop: 'onTouchEnd'
@@ -61,11 +61,11 @@ export const longPressTestHandlerNamesMap = {
 } satisfies Record<LongPressEventType, Record<LongPressTestHandlerType, keyof LongPressMouseHandlers | keyof LongPressTouchHandlers>>;
 
 export const longPressMockedEventCreatorMap = {
-  [LongPressEventType.MOUSE]: createMockedMouseEvent,
-  [LongPressEventType.TOUCH]: createMockedTouchEvent,
+  [LongPressEventType.Mouse]: createMockedMouseEvent,
+  [LongPressEventType.Touch]: createMockedTouchEvent,
 } satisfies Record<LongPressEventType, LongPressEventCreator>
 
 export const longPressExpectedEventMap = {
-  [LongPressEventType.MOUSE]: expectMouseEvent,
-  [LongPressEventType.TOUCH]: expectTouchEvent,
+  [LongPressEventType.Mouse]: expectMouseEvent,
+  [LongPressEventType.Touch]: expectTouchEvent,
 } satisfies Record<LongPressEventType, unknown>
