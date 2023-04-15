@@ -11,7 +11,7 @@ import {
   LongPressTouchHandlers,
 } from '../use-long-press.types';
 import { useLongPress } from '../use-long-press';
-import { noop } from './use-long-press.test-utils';
+import { noop } from './use-long-press.test.consts';
 
 describe('useLongPress typings', () => {
   test('General hook function typings', () => {
