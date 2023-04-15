@@ -55,6 +55,18 @@
           }
         ]
       }
+    },
+    "publish": {
+      "executor": "nx:run-commands",
+      "options": {
+        "parallel": false,
+        "commands": [
+          {
+            "command": "nx run shared-npm-publish:exec --path=dist/packages/use-long-press/",
+            "forwardAllArgs": true
+          }
+        ]
+      }
     }
   }
 }
