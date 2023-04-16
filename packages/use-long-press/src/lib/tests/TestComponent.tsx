@@ -13,25 +13,48 @@ let i = 1;
 export const TestComponent: React.FC<TestComponentProps> = ({ callback, context, ...options }) => {
   const bind = useLongPress<HTMLButtonElement>(callback, options);
   const key = useRef(i++);
+  const handlers = context === undefined ? bind() : bind(context);
 
   return (
-    <button key={key.current} type="button" {...(context === undefined ? bind() : bind(context))}>
+    <button
+      key={key.current}
+      type="button"
+      {...handlers}
+      onPointerDown={(event) => {
+        if ('onPointerDown' in handlers) {
+          event.nativeEvent = new PointerEvent('pointerdown');
+          handlers.onPointerDown(event);
+        }
+      }}
+      onPointerMove={(event) => {
+        if ('onPointerMove' in handlers) {
+          event.nativeEvent = new PointerEvent('pointermove');
+          Object.assign(event.nativeEvent, {
+            pageX: event.pageX,
+            pageY: event.pageY,
+          });
+          handlers.onPointerMove(event);
+        }
+      }}
+      onPointerUp={(event) => {
+        if ('onPointerUp' in handlers) {
+          event.nativeEvent = new PointerEvent('pointerup');
+          handlers.onPointerUp(event);
+        }
+      }}
+    >
       Click and hold
     </button>
   );
 };
 
-export function createTestElement(
-  props: TestComponentProps
-) {
+export function createTestElement(props: TestComponentProps) {
   const component = createTestComponent(props);
 
   return getComponentElement(component);
 }
 
-export function createTestComponent(
-  props: TestComponentProps
-) {
+export function createTestComponent(props: TestComponentProps) {
   return render(<TestComponent {...props} />);
 }
 

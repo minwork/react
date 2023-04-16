@@ -3,14 +3,17 @@ import {
   LongPressCallbackMeta,
   LongPressEventType,
   LongPressMouseHandlers,
+  LongPressPointerHandlers,
   LongPressTouchHandlers
 } from "../use-long-press.types";
 import { EventType } from "@testing-library/dom/types/events";
 import { LongPressEventCreator, LongPressTestHandlerType } from "./use-long-press.test.types";
 import {
   createMockedMouseEvent,
+  createMockedPointerEvent,
   createMockedTouchEvent,
   createPositionedMouseEvent,
+  createPositionedPointerEvent,
   createPositionedTouchEvent
 } from "./use-long-press.test.utils";
 
@@ -30,11 +33,12 @@ export const noop = () => {};
 */
 export const expectMouseEvent = expect.objectContaining({ nativeEvent: expect.any(MouseEvent) });
 export const expectTouchEvent = expect.objectContaining({ nativeEvent: expect.any(TouchEvent) });
-// export const expectPointerEvent = expect.objectContaining({ nativeEvent: expect.any(PointerEvent) });
+export const expectPointerEvent = expect.objectContaining({ nativeEvent: expect.any(PointerEvent) });
 
-export const expectSpecificEvent = (event: Event) => expect.objectContaining({
-  nativeEvent: event
-})
+export const expectSpecificEvent = (event: Event) =>
+  expect.objectContaining({
+    nativeEvent: event,
+  });
 
 /*
  ⌜‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
@@ -45,6 +49,7 @@ export const expectSpecificEvent = (event: Event) => expect.objectContaining({
 export const longPressPositionedEventCreatorMap = {
   [LongPressEventType.Mouse]: createPositionedMouseEvent,
   [LongPressEventType.Touch]: createPositionedTouchEvent,
+  [LongPressEventType.Pointer]: createPositionedPointerEvent,
 } satisfies Record<LongPressEventType, (element: Element, eventType: EventType, x: number, y: number) => Event>;
 
 export const longPressTestHandlerNamesMap = {
@@ -56,16 +61,29 @@ export const longPressTestHandlerNamesMap = {
   [LongPressEventType.Touch]: {
     start: 'onTouchStart',
     move: 'onTouchMove',
-    stop: 'onTouchEnd'
-  }
-} satisfies Record<LongPressEventType, Record<LongPressTestHandlerType, keyof LongPressMouseHandlers | keyof LongPressTouchHandlers>>;
+    stop: 'onTouchEnd',
+  },
+  [LongPressEventType.Pointer]: {
+    start: 'onPointerDown',
+    move: 'onPointerMove',
+    stop: 'onPointerUp',
+  },
+} satisfies Record<
+  LongPressEventType,
+  Record<
+    LongPressTestHandlerType,
+    keyof LongPressMouseHandlers | keyof LongPressTouchHandlers | keyof LongPressPointerHandlers
+  >
+>;
 
 export const longPressMockedEventCreatorMap = {
   [LongPressEventType.Mouse]: createMockedMouseEvent,
   [LongPressEventType.Touch]: createMockedTouchEvent,
-} satisfies Record<LongPressEventType, LongPressEventCreator>
+  [LongPressEventType.Pointer]: createMockedPointerEvent,
+} satisfies Record<LongPressEventType, LongPressEventCreator>;
 
 export const longPressExpectedEventMap = {
   [LongPressEventType.Mouse]: expectMouseEvent,
   [LongPressEventType.Touch]: expectTouchEvent,
-} satisfies Record<LongPressEventType, unknown>
+  [LongPressEventType.Pointer]: expectPointerEvent,
+} satisfies Record<LongPressEventType, unknown>;

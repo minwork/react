@@ -7,6 +7,7 @@ import {
   LongPressHandlers,
   LongPressMouseHandlers,
   LongPressOptions,
+  LongPressPointerHandlers,
   LongPressResult,
   LongPressTouchHandlers,
 } from '../use-long-press.types';
@@ -40,9 +41,9 @@ describe('useLongPress typings', () => {
     expectTypeOf(result.current).returns.toMatchTypeOf<LongPressEmptyHandlers>();
   });
 
-  test('Hook with default detect to return mouse handlers', () => {
+  test('Hook with default detect to return pointer handlers', () => {
     const { result } = renderHook(() => useLongPress<HTMLDivElement>(noop));
-    expectTypeOf(result.current).returns.toMatchTypeOf<LongPressMouseHandlers<HTMLDivElement>>();
+    expectTypeOf(result.current).returns.toMatchTypeOf<LongPressPointerHandlers<HTMLDivElement>>();
   });
 
   test('Hook with "mouse" detect to return mouse handlers', () => {
@@ -53,5 +54,10 @@ describe('useLongPress typings', () => {
   test('Hook with "touch" detect to return touch handlers', () => {
     const { result } = renderHook(() => useLongPress<HTMLDivElement>(noop, { detect: LongPressEventType.Touch }));
     expectTypeOf(result.current).returns.toMatchTypeOf<LongPressTouchHandlers<HTMLDivElement>>();
+  });
+
+  test('Hook with "pointer" detect to return pointer handlers', () => {
+    const { result } = renderHook(() => useLongPress<HTMLDivElement>(noop, { detect: LongPressEventType.Pointer }));
+    expectTypeOf(result.current).returns.toMatchTypeOf<LongPressPointerHandlers<HTMLDivElement>>();
   });
 });

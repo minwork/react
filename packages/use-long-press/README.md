@@ -88,17 +88,17 @@ Hook first parameter, _callback_, can be either function or `null` (if you want 
 ### Options
 You can supply _options_ object as a hook second parameter. All options inside the object are optional.
 
-| Name             |            Type            |  Default  | Description                                                                                                                                                                                                                                                                       |
-|------------------|:--------------------------:|:---------:|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| threshold        |          _number_          |    400    | Time user need to hold click or tap before long press _callback_ is triggered                                                                                                                                                                                                     |
-| captureEvent     |         _boolean_          |   false   | If React MouseEvent (or TouchEvent) should be supplied as first argument to callbacks                                                                                                                                                                                             |
-| detect           | _'mouse'_ &#x7c; _'touch'_ |  'mouse'  | Which event handlers should be returned from `bind` function. <br/><br/>TS enum: `LongPressEventType`                                                                                                                                                                             |
-| cancelOnMovement | _boolean_ &#x7c; _number_  |   false   | If long press should be cancelled when detected movement while pressing. Use _boolean_ value to turn it on / off or _number_ value to specify move tolerance in pixels.<br/><br/>For more information on how this option work check JSDoc.                                        |
-| filterEvents     |    _(event) => boolean_    | undefined | If provided, it gives you the ability to ignore long press detection on specified conditions (e.g. on right mouse click). <br/><br/>When function returns `false`, it will prevent ANY callbacks from triggering (including _onStart_ and _onCancel_) as well as capturing event. |
-| onStart          |  _(event, meta) => void_   | undefined | Called when element is initially pressed (before starting timer which detects long press)                                                                                                                                                                                         |
-| onMove           |  _(event, meta) => void_   | undefined | Called on move after pressing element. Since position is extracted from event after this callback is called, you can potentially make changes to event position.<br/><br/> Position is extracted using _getCurrentPosition_ method from `use-long-press.utils.ts`                 |
-| onFinish         |  _(event, meta) => void_   | undefined | Called when press is released AFTER _threshold_ time elapses, therefore after long press occurs and _callback_ is called.                                                                                                                                                         |
-| onCancel         |  _(event, meta) => void_   | undefined | Called when press is released BEFORE _threshold_ time elapses, therefore before long press could occur.                                                                                                                                                                           |
+| Name             |                     Type                      |   Default   | Description                                                                                                                                                                                                                                                                       |
+|------------------|:---------------------------------------------:|:-----------:|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| threshold        |                   _number_                    |    _400_    | Time user need to hold click or tap before long press _callback_ is triggered                                                                                                                                                                                                     |
+| captureEvent     |                   _boolean_                   |   _false_   | If React MouseEvent (or TouchEvent) should be supplied as first argument to callbacks                                                                                                                                                                                             |
+| detect           | _'mouse'_ &#x7c; _'touch'_ &#x7c; _'pointer'_ | _'pointer'_ | Which event handlers should be returned from `bind` function. <br/><br/>TS enum: `LongPressEventType`                                                                                                                                                                             |
+| cancelOnMovement |           _boolean_ &#x7c; _number_           |   _false_   | If long press should be cancelled when detected movement while pressing. Use _boolean_ value to turn it on / off or _number_ value to specify move tolerance in pixels.<br/><br/>For more information on how this option work check JSDoc.                                        |
+| filterEvents     |             _(event) => boolean_              | _undefined_ | If provided, it gives you the ability to ignore long press detection on specified conditions (e.g. on right mouse click). <br/><br/>When function returns `false`, it will prevent ANY callbacks from triggering (including _onStart_ and _onCancel_) as well as capturing event. |
+| onStart          |            _(event, meta) => void_            | _undefined_ | Called when element is initially pressed (before starting timer which detects long press)                                                                                                                                                                                         |
+| onMove           |            _(event, meta) => void_            | _undefined_ | Called on move after pressing element. Since position is extracted from event after this callback is called, you can potentially make changes to event position.<br/><br/> Position is extracted using _getCurrentPosition_ method from `use-long-press.utils.ts`                 |
+| onFinish         |            _(event, meta) => void_            | _undefined_ | Called when press is released AFTER _threshold_ time elapses, therefore after long press occurs and _callback_ is called.                                                                                                                                                         |
+| onCancel         |            _(event, meta) => void_            | _undefined_ | Called when press is released BEFORE _threshold_ time elapses, therefore before long press could occur.                                                                                                                                                                           |
 
 ### Additional callbacks
 All callbacks (including main _callback_ function) has same structure.
@@ -155,6 +155,10 @@ Handlers are returned from `bind` function in a form of object which can be spre
   - `onTouchStart`
   - `onTouchMove`
   - `onTouchEnd`
+- `'pointer'`
+  - `onPointerDown`
+  - `onPointerMove`
+  - `onPointerUp`
 
 ## Examples
 
@@ -177,7 +181,7 @@ export default function AdvancedExample() {
     threshold: 500, // In milliseconds
     captureEvent: true, // Event won't get cleared after React finish processing it
     cancelOnMovement: 25, // Square side size (in pixels) inside which movement won't cancel long press
-    detect: 'mouse',
+    detect: 'pointer', // Default option
   });
 
   return (
@@ -248,11 +252,11 @@ const bind = useLongPress(() => console.log('Long pressed'), {
 ### v2 to v3
 
 #### [BREAKING CHANGE] Drop support for `'both'` option in `detect` param
-Returning both mouse and touch handlers as a hook result caused unintended edge cases on touch devices that emulated clicks. Therefore `'both'` value was removed and hook is now using `'mouse'` as a default value for `detect` param.
+Returning both mouse and touch handlers as a hook result caused unintended edge cases on touch devices that emulated clicks. Therefore `'both'` value was removed and hook is now using `'pointer'` as a default value for `detect` param.
 
-This also enables to support more type of events in the future (e.g. pointer or maybe even keyboard).
+This also enables to support more type of events in the future.
 
-Instead of using `'both'` you can programmatically detect if current device support touch events and set proper `detect` value based on that.
+Pointer events should be sufficient replacement for `'both'` option, but you can also programmatically detect if current device support touch events and set proper `detect` value based on that.
 
 *Before*
 ```tsx
@@ -263,17 +267,18 @@ const bind = useLongPress(() => console.log('Long pressed'), {
 *After*
 ```tsx
 const bind = useLongPress(() => console.log('Long pressed'), {
-  detect: isTouchDevice ? 'touch' : 'mouse',
+  detect: 'pointer',
 })
 ```
 
 #### [BREAKING CHANGE] Typings and param values
-TypeScript's typings were refactored to use more consistent and precise names. Also changed _reason_ values (see below)
+TypeScript's typings were refactored to use more consistent and precise names. Also changed callback _reason_ values (see `LongPressEventReason`)
 
 - Changed generics order from `useLongPress<Target, Callback, Context>` to `useLongPress<Target, Context, Callback>`
 - Renamed `LongPressDetectEvents` enum to `LongPressEventType`
   - `LongPressDetectEvents.MOUSE` -> `LongPressEventType.Mouse`
   - `LongPressDetectEvents.TOUCH` -> `LongPressEventType.Touch`
+- Added `LongPressEventType.Pointer`
 - Renamed `LongPressEventReason` enum to `LongPressCallbackReason`
   - `LongPressEventReason.CANCELED_BY_MOVEMENT` ('cance**l**ed-by-movement') -> `LongPressCallbackReason.CancelledByMovement` ('cance**ll**ed-by-movement')
   - `LongPressEventReason.CANCELED_BY_TIMEOUT` ('cance**l**ed-by-timeout') -> `LongPressCallbackReason.CancelledByRelease` ('cance**ll**ed-by-release')

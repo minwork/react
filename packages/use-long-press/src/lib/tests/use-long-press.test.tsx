@@ -6,6 +6,7 @@ import {
   LongPressCallbackReason,
   LongPressEventType,
   LongPressMouseHandlers,
+  LongPressPointerHandlers,
   LongPressTouchHandlers
 } from "../use-long-press.types";
 import {
@@ -27,8 +28,9 @@ import {
 } from "./use-long-press.test.consts";
 import {
   createMockedMouseEvent,
+  createMockedPointerEvent,
   createMockedTouchEvent,
-  createPositionedEventFactory,
+  createPositionedDomEventFactory,
   getDOMTestHandlersMap,
   getTestHandlersMap
 } from "./use-long-press.test.utils";
@@ -62,12 +64,12 @@ describe('Hook result', () => {
     expect(result.current()).toStrictEqual({});
   });
 
-  test('Return object with mouse handlers when options are not specified', () => {
+  test('Return object with pointer handlers when options are not specified', () => {
     const { result } = renderHook(() => useLongPress(noop));
-    expect(result.current()).toStrictEqual<LongPressMouseHandlers>({
-      onMouseDown: expect.any(Function),
-      onMouseMove: expect.any(Function),
-      onMouseUp: expect.any(Function),
+    expect(result.current()).toStrictEqual<LongPressPointerHandlers>({
+      onPointerDown: expect.any(Function),
+      onPointerMove: expect.any(Function),
+      onPointerUp: expect.any(Function),
     });
   });
 
@@ -100,6 +102,7 @@ describe('Hook handlers', () => {
   test.each([
     [LongPressEventType.Mouse, new ErrorEvent('invalid') as unknown as React.MouseEvent],
     [LongPressEventType.Touch, new ErrorEvent('invalid') as unknown as React.TouchEvent],
+    [LongPressEventType.Pointer, new ErrorEvent('invalid') as unknown as React.PointerEvent],
   ])('Properly handle invalid event when using "%s" events', (eventType, event) => {
     vi.useFakeTimers();
     const callback = vi.fn();
@@ -214,7 +217,7 @@ describe('Detecting long press', () => {
     vi.clearAllTimers();
   });
 
-  test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch]])(
+  test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch], [LongPressEventType.Pointer]])(
     'Detect long press using "%s" events',
     (eventType) => {
       const component = createTestElement({
@@ -247,7 +250,7 @@ describe('Detecting long press', () => {
     }
   );
 
-  test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch]])(
+  test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch], [LongPressEventType.Pointer]])(
     'Detect cancelled long press using "%s" events',
     (eventType) => {
       const component = createTestElement({
@@ -295,7 +298,7 @@ describe('Hook options', () => {
       vi.clearAllMocks();
     });
 
-    test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch]])(
+    test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch], [LongPressEventType.Pointer]])(
       'should pass non-persistent "%s" events to callbacks when captureEvent flag is "false"',
       (eventType) => {
         const threshold = 400;
@@ -334,6 +337,8 @@ describe('Hook options', () => {
       [LongPressEventType.Mouse, false],
       [LongPressEventType.Touch, true],
       [LongPressEventType.Touch, false],
+      [LongPressEventType.Pointer, true],
+      [LongPressEventType.Pointer, false],
     ])('should detect "%s" move event when captureEvent is set to "%s"', (eventType, captureEvent) => {
       const onMove = vi.fn();
       const event = longPressExpectedEventMap[eventType];
@@ -354,7 +359,7 @@ describe('Hook options', () => {
   });
 
   describe('threshold', () => {
-    test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch]])(
+    test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch], [LongPressEventType.Pointer]])(
       'Detect long press after timer lag is bigger than threshold when using "%s" events',
       (eventType) => {
         const callback = vi.fn();
@@ -373,7 +378,7 @@ describe('Hook options', () => {
   });
 
   describe('cancelOnMovement', () => {
-    test.each([[LongPressEventType.Touch], [LongPressEventType.Mouse]])(
+    test.each([[LongPressEventType.Touch], [LongPressEventType.Mouse], [LongPressEventType.Pointer]])(
       'Do not cancel on movement when "cancelOnMovement" is set to false and using "%s" events',
       (eventType) => {
         const callback = vi.fn();
@@ -382,7 +387,7 @@ describe('Hook options', () => {
           cancelOnMovement: false,
           detect: eventType,
         });
-        const eventFactory = createPositionedEventFactory(eventType, component);
+        const eventFactory = createPositionedDomEventFactory(eventType, component);
 
         fireEvent(component, eventFactory.start(0, 0));
         fireEvent(component, eventFactory.move(Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER));
@@ -393,7 +398,7 @@ describe('Hook options', () => {
       }
     );
 
-    test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch]])(
+    test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch], [LongPressEventType.Pointer]])(
       'Cancel on movement when "cancelOnMovement" is set to true and using "%s" events',
       (eventType) => {
         const callback = vi.fn();
@@ -407,14 +412,16 @@ describe('Hook options', () => {
           cancelOnMovement: true,
         });
 
-        const eventFactory = createPositionedEventFactory(eventType, component);
+        const eventFactory = createPositionedDomEventFactory(eventType, component);
 
+        const startEvent = eventFactory.start(0, 0);
         const moveEvent = eventFactory.move(Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER);
+        const stopEvent = eventFactory.stop(0, 0);
 
-        fireEvent(component, eventFactory.start(0, 0));
+        fireEvent(component, startEvent);
         fireEvent(component, moveEvent);
         vi.runOnlyPendingTimers();
-        fireEvent(component, eventFactory.stop(0, 0));
+        fireEvent(component, stopEvent);
 
         expect(callback).toBeCalledTimes(0);
         expect(onMove).toBeCalledTimes(1);
@@ -426,7 +433,7 @@ describe('Hook options', () => {
       }
     );
 
-    test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch]])(
+    test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch], [LongPressEventType.Pointer]])(
       'Do not cancel on movement when within explicitly set movement tolerance, while using "%s" events',
       (eventType) => {
         const tolerance = 10;
@@ -439,7 +446,7 @@ describe('Hook options', () => {
           cancelOnMovement: tolerance,
           detect: eventType,
         });
-        const eventFactory = createPositionedEventFactory(eventType, component);
+        const eventFactory = createPositionedDomEventFactory(eventType, component);
 
         const moveEvent = eventFactory.move(tolerance, tolerance);
 
@@ -454,7 +461,7 @@ describe('Hook options', () => {
       }
     );
 
-    test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch]])(
+    test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch], [LongPressEventType.Pointer]])(
       'Cancel on movement when outside explicitly set movement tolerance, while using "%s" events',
       (eventType) => {
         const tolerance = 10;
@@ -467,9 +474,9 @@ describe('Hook options', () => {
           onMove,
           onCancel,
           cancelOnMovement: tolerance,
-          detect: eventType
+          detect: eventType,
         });
-        const eventFactory = createPositionedEventFactory(eventType, component);
+        const eventFactory = createPositionedDomEventFactory(eventType, component);
 
         const moveEvent = eventFactory.move(tolerance + 1, tolerance);
 
@@ -489,6 +496,8 @@ describe('Hook options', () => {
     );
   });
   describe('filterEvents', () => {
+    vi.useFakeTimers();
+
     const filterEvents = (event: LongPressReactEvents) => {
       if ('button' in event && event.button === 2) {
         return false;
@@ -499,6 +508,7 @@ describe('Hook options', () => {
     test.each([
       [LongPressEventType.Mouse, createMockedMouseEvent({ button: 2 })],
       [LongPressEventType.Touch, createMockedTouchEvent({ altKey: true })],
+      [LongPressEventType.Pointer, createMockedPointerEvent()],
     ])('Do not trigger callbacks when "%s" event is filtered out', (eventType, event) => {
       const callback = vi.fn();
       const onStart = vi.fn();
@@ -510,7 +520,8 @@ describe('Hook options', () => {
         onStart,
         onFinish,
         onCancel,
-        filterEvents,
+        // Add pointer event options and check by it when jsdom start supporting pointer events
+        filterEvents: (event) => filterEvents(event) && !(event.nativeEvent instanceof PointerEvent),
       });
 
       const longPressEvent = getDOMTestHandlersMap(eventType, component);
@@ -524,7 +535,7 @@ describe('Hook options', () => {
       expect(onCancel).toBeCalledTimes(0);
     });
 
-    test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch]])(
+    test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch], [LongPressEventType.Pointer]])(
       'Trigger callbacks when "%s" event is not filtered out',
       (eventType) => {
         const callback = vi.fn();
@@ -580,7 +591,7 @@ describe('Hook context', () => {
     vi.clearAllTimers();
   });
 
-  test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch]])(
+  test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch], [LongPressEventType.Pointer]])(
     'Retrieve passed context from callbacks when using "%s" events',
     (eventType) => {
       const context = {
@@ -623,7 +634,7 @@ describe('Hook context', () => {
     }
   );
 
-  test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch]])(
+  test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch], [LongPressEventType.Pointer]])(
     'Retrieve only last passed context from callbacks when using "%s" events',
     (eventType) => {
       let i = 1;
@@ -665,14 +676,14 @@ describe('Hook context', () => {
 
       longPressEvent.stop(event);
 
-      expect(callback).toHaveBeenCalledTimes(1);
-      expect(callback).toHaveBeenCalledWith(expect.objectContaining(event), { context: context1 });
-
       expect(onStart).toHaveBeenCalledTimes(1);
       expect(onStart).toHaveBeenCalledWith(expect.objectContaining(event), { context: context1 });
 
       expect(onMove).toHaveBeenCalledTimes(1);
       expect(onMove).toHaveBeenCalledWith(expect.objectContaining(event), { context: context2 });
+
+      expect(callback).toHaveBeenCalledTimes(1);
+      expect(callback).toHaveBeenCalledWith(expect.objectContaining(event), { context: context2 });
 
       expect(onFinish).toHaveBeenCalledTimes(1);
       expect(onFinish).toHaveBeenCalledWith(expect.objectContaining(event), { context: context3 });
@@ -681,7 +692,7 @@ describe('Hook context', () => {
     }
   );
 
-  test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch]])(
+  test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch], [LongPressEventType.Pointer]])(
     'Pass context along with reason when "onCancel" is called, while using "%s" events',
     (eventType) => {
       const context = {
@@ -725,7 +736,7 @@ describe('Hook context', () => {
     }
   );
 
-  test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch]])(
+  test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch], [LongPressEventType.Pointer]])(
     'Pass context along with reason when "onCancel" is called because of a movement, while using "%s" events',
     (eventType) => {
       const context = {
@@ -745,7 +756,7 @@ describe('Hook context', () => {
         cancelOnMovement: true,
         detect: eventType,
       });
-      const eventsFactory = createPositionedEventFactory(eventType, component);
+      const eventsFactory = createPositionedDomEventFactory(eventType, component);
       const expectEvent = longPressExpectedEventMap[eventType];
 
       const moveEvent = eventsFactory.move(Infinity, Infinity);
@@ -784,7 +795,7 @@ describe('Hook usability', () => {
     vi.clearAllMocks();
   });
 
-  test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch]])(
+  test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch], [LongPressEventType.Pointer]])(
     'Callback is called repetitively on multiple long presses, while using "%s" events',
     (eventType) => {
       const callback = vi.fn();
@@ -812,7 +823,7 @@ describe('Hook usability', () => {
     }
   );
 
-  test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch]])(
+  test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch], [LongPressEventType.Pointer]])(
     'Timer is destroyed when component unmount, while using "%s" events',
     (eventType) => {
       const callback = vi.fn();
@@ -842,7 +853,7 @@ describe('Hook usability', () => {
     }
   );
 
-  test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch]])(
+  test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch], [LongPressEventType.Pointer]])(
     'Callbacks are not triggered when callback change to null after click / tap, while using "%s" events',
     (eventType) => {
       const callback = vi.fn();
@@ -877,7 +888,7 @@ describe('Hook usability', () => {
     }
   );
 
-  test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch]])(
+  test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch], [LongPressEventType.Pointer]])(
     'Cancel event is called only after starting press, while using "%s" events',
     (eventType) => {
       const callback = vi.fn();
@@ -896,21 +907,21 @@ describe('Hook usability', () => {
     }
   );
 
-  test.each([
-    [LongPressEventType.Mouse],
-    [LongPressEventType.Touch],
-  ])('Suppress multiple start callback calls, while using "%s" events', (eventType) => {
-    const onStart = vi.fn();
-    const element = createTestElement({ callback: vi.fn(), onStart, detect: eventType });
-    const event = longPressMockedEventCreatorMap[eventType]();
-    const longPressEvent = getDOMTestHandlersMap(eventType, element);
+  test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch], [LongPressEventType.Pointer]])(
+    'Suppress multiple start callback calls, while using "%s" events',
+    (eventType) => {
+      const onStart = vi.fn();
+      const element = createTestElement({ callback: vi.fn(), onStart, detect: eventType });
+      const event = longPressMockedEventCreatorMap[eventType]();
+      const longPressEvent = getDOMTestHandlersMap(eventType, element);
 
-    longPressEvent.start(event);
-    longPressEvent.start(event);
-    longPressEvent.start(event);
-    longPressEvent.start(event);
-    longPressEvent.start(event);
+      longPressEvent.start(event);
+      longPressEvent.start(event);
+      longPressEvent.start(event);
+      longPressEvent.start(event);
+      longPressEvent.start(event);
 
-    expect(onStart).toHaveBeenCalledTimes(1);
-  })
+      expect(onStart).toHaveBeenCalledTimes(1);
+    }
+  );
 });

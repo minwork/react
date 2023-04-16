@@ -1,6 +1,8 @@
 import {
   MouseEvent as ReactMouseEvent,
   MouseEventHandler,
+  PointerEvent as ReactPointerEvent,
+  PointerEventHandler,
   TouchEvent as ReactTouchEvent,
   TouchEventHandler
 } from "react";
@@ -17,6 +19,7 @@ import {
 export enum LongPressEventType {
   Mouse = 'mouse',
   Touch = 'touch',
+  Pointer = 'pointer',
 }
 
 /**
@@ -54,7 +57,10 @@ export type LongPressCallback<Target extends Element = Element, Context = unknow
   meta: LongPressCallbackMeta<Context>
 ) => void;
 
-export type LongPressEvent<Target extends Element = Element> = ReactMouseEvent<Target> | ReactTouchEvent<Target>;
+export type LongPressEvent<Target extends Element = Element> =
+  | ReactMouseEvent<Target>
+  | ReactTouchEvent<Target>
+  | ReactPointerEvent<Target>;
 export type LongPressCallbackMeta<Context = unknown> = { context?: Context; reason?: LongPressCallbackReason };
 
 /*
@@ -77,7 +83,7 @@ export interface LongPressOptions<
    */
   captureEvent?: boolean;
   /**
-   * Which type of events should be detected ('mouse' | 'touch'). For TS use *LongPressEventType* enum.
+   * Which type of events should be detected ('mouse' | 'touch' | 'pointer'). For TS use *LongPressEventType* enum.
    * @see LongPressEventType
    */
   detect?: EventType;
@@ -123,7 +129,14 @@ export interface LongPressTouchHandlers<Target extends Element = Element> {
   onTouchEnd: TouchEventHandler<Target>;
 }
 
+export interface LongPressPointerHandlers<Target extends Element = Element> {
+  onPointerDown: PointerEventHandler<Target>;
+  onPointerMove: PointerEventHandler<Target>;
+  onPointerUp: PointerEventHandler<Target>;
+}
+
 export type LongPressHandlers<Target extends Element = Element> =
   | LongPressMouseHandlers<Target>
   | LongPressTouchHandlers<Target>
+  | LongPressPointerHandlers<Target>
   | LongPressEmptyHandlers;
