@@ -1,3 +1,10 @@
+## [3.0.0-alpha.5](https://github.com/minwork/react/compare/use-long-press-v3.0.0-alpha.4...use-long-press-v3.0.0-alpha.5) (2023-04-17)
+
+
+### Features
+
+* **use-long-press:** Handle when mouse / touch / pointer is released outside element ([9e7381c](https://github.com/minwork/react/commit/9e7381c5082ab78b9e0d6f0e17b3331f496d31d8))
+
 ## [3.0.0-alpha.4](https://github.com/minwork/react/compare/use-long-press-v3.0.0-alpha.3...use-long-press-v3.0.0-alpha.4) (2023-04-17)
 
 
