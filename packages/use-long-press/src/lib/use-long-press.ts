@@ -64,16 +64,30 @@ export function useLongPress<
 ): LongPressResult<LongPressHandlers<Target>, Context>;
 /**
  * Detect click / tap and hold event
- * @param {Function|null} callback - Function to call when long press is detected (click or tap lasts for <i>threshold</i> amount of time or longer)
- * @param threshold
- * @param captureEvent
- * @param detect
- * @param cancelOnMovement
- * @param filterEvents
- * @param onStart
- * @param onMove
- * @param onFinish
- * @param onCancel
+ * @param {useLongPress~callback|null} callback - Function to call when long press is detected (click or tap lasts for <i>threshold</i> amount of time or longer)
+ *
+ * @param {number} threshold - Period of time that must elapse after detecting click or tap in order to trigger _callback_
+ *
+ * @param {boolean} captureEvent - If `event.persist()` should be called on react event
+ *
+ * @param {string} detect - Which type of events should be detected (`'mouse'` | `'touch'` | `'pointer'`). For TS use *LongPressEventType* enum.
+ *
+ * @param {boolean} cancelOnMovement - If long press should be canceled on mouse / touch move. Possible values:<ul>
+ * <li>`false` - [default] Disable cancelling on movement</li>
+ * <li>`true` - Enable cancelling on movement and use default 25px threshold</li>
+ * <li>`number` - Set a specific tolerance value in pixels (square side size inside which movement won't cancel long press)</li>
+ * </ul>
+ *
+ * @param {(event:Object)=>boolean} filterEvents - Function to filter incoming events. Function should return `false` for events that will be ignored (e.g. right mouse clicks)
+ *
+ * @param {useLongPress~callback} onStart - Called after detecting initial click / tap / point event. Allows to change event position before registering it for the purpose of `cancelOnMovement`.
+ *
+ * @param {useLongPress~callback} onMove - Called on every move event. Allows to change event position before calculating distance for the purpose of `cancelOnMovement`.
+ *
+ * @param {useLongPress~callback} onFinish - Called when releasing click / tap / point if long press **was** triggered.
+ *
+ * @param {useLongPress~callback} onCancel - Called when releasing click / tap / point if long press **was not** triggered
+ *
  * @see LongPressCallback
  * @see LongPressOptions
  * @see LongPressResult

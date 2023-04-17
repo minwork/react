@@ -48,8 +48,8 @@ export enum LongPressCallbackReason {
 /**
  * Function to call when long press event is detected
  *
- * @callback longPressCallback
- * @param {Object} event React mouse or touch event (depends on *detect* param)
+ * @callback useLongPress~callback
+ * @param {Object} event React mouse, touch or pointer event (depends on *detect* param)
  * @param {Object} meta Object containing *context* and / or *reason* (if applicable)
  */
 export type LongPressCallback<Target extends Element = Element, Context = unknown> = (
@@ -80,7 +80,7 @@ export interface LongPressOptions<
    */
   threshold?: number;
   /**
-   * If React Event will be supplied as first argument to all callbacks
+   * If `event.persist()` should be called on react event
    */
   captureEvent?: boolean;
   /**
@@ -88,25 +88,33 @@ export interface LongPressOptions<
    * @see LongPressEventType
    */
   detect?: EventType;
+  /**
+   * Function to filter incoming events. Function should return `false` for events that will be ignored (e.g. right mouse clicks)
+   * @param {Object} event React event coming from handlers
+   * @see LongPressReactEvents
+   */
   filterEvents?: (event: LongPressReactEvents<Target>) => boolean;
   /**
    * If long press should be canceled on mouse / touch move. Possible values:
-   * - `*false*: [default] Disable cancelling on movement
-   * - *true*: Enable cancelling on movement and use default 25px threshold
-   * - *number*: Set a specific tolerance value in pixels (square side size inside which movement won't cancel long press)
+   * - `false`: [default] Disable cancelling on movement
+   * - `true`: Enable cancelling on movement and use default 25px threshold
+   * - `number`: Set a specific tolerance value in pixels (square side size inside which movement won't cancel long press)
    */
   cancelOnMovement?: boolean | number;
   /**
-   * Called right after detecting click / tap event (e.g. onMouseDown or onTouchStart)
+   * Called after detecting initial click / tap / point event. Allows to change event position before registering it for the purpose of `cancelOnMovement`.
    */
   onStart?: LongPressCallback<Target, Context>;
+  /**
+   * Called on every move event. Allows to change event position before calculating distance for the purpose of `cancelOnMovement`.
+   */
   onMove?: LongPressCallback<Target, Context>;
   /**
-   * Called, only if long press was triggered, on releasing click or tap (e.g. onMouseUp, onMouseLeave or onTouchEnd)
+   * Called when releasing click / tap / point if long press **was** triggered.
    */
   onFinish?: LongPressCallback<Target, Context>;
   /**
-   * Called (if long press <u>was <b>not</b> triggered</u>) on releasing click or tap (e.g. onMouseUp, onMouseLeave or onTouchEnd)
+   * Called when releasing click / tap / point if long press **was not** triggered
    */
   onCancel?: LongPressCallback<Target, Context>;
 }
