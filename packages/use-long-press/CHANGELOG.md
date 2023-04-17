@@ -1,3 +1,20 @@
+## [3.0.0-alpha.4](https://github.com/minwork/react/compare/use-long-press-v3.0.0-alpha.3...use-long-press-v3.0.0-alpha.4) (2023-04-17)
+
+
+### Features
+
+* **use-long-press:** Add support for PointerEvents ([ac315ec](https://github.com/minwork/react/commit/ac315ec56e8522c502ab39d02f47fce4219acc1b))
+
+
+### Build config
+
+* **use-long-press:** Create command for releasing use-long-press ([8c9d58e](https://github.com/minwork/react/commit/8c9d58ebf3a160c2d497897bfb7fbb0c501c5778))
+
+
+### Refactors
+
+* **use-long-press:** Change LongPressEventType enum key from upper case to sentence case ([c82f530](https://github.com/minwork/react/commit/c82f53012ed5714a15a839cfd5c64843bf563f37))
+
 ## [3.0.0-alpha.3](https://github.com/minwork/react/compare/use-long-press-v3.0.0-alpha.2...use-long-press-v3.0.0-alpha.3) (2023-04-15)
 
 
