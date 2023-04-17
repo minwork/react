@@ -1,21 +1,15 @@
-import {
-  MouseEvent as ReactMouseEvent,
-  PointerEvent as ReactPointerEvent,
-  TouchEvent as ReactTouchEvent,
-  UIEvent,
-} from 'react';
+import { UIEvent } from 'react';
+import { LongPressDomEvents, LongPressReactEvents } from '../use-long-press.types';
 
-export type LongPressDomEvents = MouseEvent | TouchEvent | PointerEvent;
-export type LongPressReactEvents = ReactMouseEvent | ReactTouchEvent | ReactPointerEvent;
 export type LongPressTestHandlerType = 'start' | 'move' | 'stop';
-export type LongPressTestHandler = (event: LongPressReactEvents) => void;
+export type LongPressTestHandler = (event: LongPressReactEvents | LongPressDomEvents) => void;
 export type LongPressTestHandlersMap = Record<LongPressTestHandlerType, LongPressTestHandler>;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type LongPressEventCreator = (options?: object) => UIEvent<Element, any>;
-export type LongPressPositionedEventCreator<E extends Event> = (x: number, y: number) => E;
+export type LongPressTestEventCreator = (options?: object) => UIEvent<Element, any>;
+export type LongPressTestPositionedEventCreator<E extends Event> = (x: number, y: number) => E;
 
-export type LongPressPositionedEventFactory<E extends Event> = Record<
+export type LongPressTestPositionedEventFactory<E extends Event> = Record<
   LongPressTestHandlerType,
-  LongPressPositionedEventCreator<E>
+  LongPressTestPositionedEventCreator<E>
 >;

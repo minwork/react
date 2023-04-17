@@ -1,14 +1,13 @@
 import { MouseEvent as ReactMouseEvent, PointerEvent as ReactPointerEvent, TouchEvent as ReactTouchEvent } from "react";
 import { createEvent, fireEvent } from "@testing-library/react";
 import { EventType } from "@testing-library/dom/types/events";
-import { LongPressEventType, LongPressHandlers } from "../use-long-press.types";
+import { LongPressDomEvents, LongPressEventType, LongPressHandlers } from "../use-long-press.types";
 import {
-  LongPressPositionedEventCreator,
-  LongPressPositionedEventFactory,
-  LongPressReactEvents,
   LongPressTestHandler,
   LongPressTestHandlersMap,
-  LongPressTestHandlerType
+  LongPressTestHandlerType,
+  LongPressTestPositionedEventCreator,
+  LongPressTestPositionedEventFactory
 } from "./use-long-press.test.types";
 import { convertHandlerNameToEventName } from "./use-long-press.test.functions";
 import { longPressPositionedEventCreatorMap, longPressTestHandlerNamesMap, noop } from "./use-long-press.test.consts";
@@ -46,15 +45,14 @@ export function createMockedPointerEvent(
   } as ReactPointerEvent;
 }
 
-export function createMockedReactEventFactory(
+export function createMockedDomEventFactory(
   eventType: LongPressEventType
-): (event: MouseEvent | TouchEvent | PointerEvent) => LongPressReactEvents {
-  return {
-    [LongPressEventType.Mouse]: (event: MouseEvent): ReactMouseEvent => createMockedMouseEvent({ nativeEvent: event }),
-    [LongPressEventType.Touch]: (event: TouchEvent): ReactTouchEvent => createMockedTouchEvent({ nativeEvent: event }),
-    [LongPressEventType.Pointer]: (event: PointerEvent): ReactPointerEvent =>
-      createMockedPointerEvent({ nativeEvent: event }),
-  }[eventType] as (event: MouseEvent | TouchEvent | PointerEvent) => LongPressReactEvents;
+): Record<LongPressTestHandlerType, (options?: EventInit) => LongPressDomEvents> {
+  return (['start', 'move', 'stop'] as const).reduce((result, handlerName) => {
+    const eventName = convertHandlerNameToEventName(longPressTestHandlerNamesMap[eventType][handlerName]) as EventType;
+    result[handlerName] = (options?: EventInit) => createEvent[eventName](window, options) as LongPressDomEvents;
+    return result;
+  }, {} as Record<LongPressTestHandlerType, (options?: EventInit) => LongPressDomEvents>);
 }
 /*
  ⌜‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
@@ -98,17 +96,17 @@ export function createPositionedTouchEvent(element: Element, eventType: EventTyp
 export function createPositionedDomEventFactory<E extends MouseEvent | TouchEvent | PointerEvent>(
   eventType: LongPressEventType,
   element: Element
-): LongPressPositionedEventFactory<E> {
+): LongPressTestPositionedEventFactory<E> {
   return (['start', 'move', 'stop'] as LongPressTestHandlerType[]).reduce((result, handlerType) => {
     const handlerName = longPressTestHandlerNamesMap[eventType][handlerType];
     const eventName = convertHandlerNameToEventName(handlerName) as EventType;
     const creator = longPressPositionedEventCreatorMap[eventType];
 
     result[handlerType] = ((x: number, y: number) =>
-      creator(element, eventName, x, y)) as LongPressPositionedEventCreator<E>;
+      creator(element, eventName, x, y)) as LongPressTestPositionedEventCreator<E>;
 
     return result;
-  }, {} as LongPressPositionedEventFactory<E>);
+  }, {} as LongPressTestPositionedEventFactory<E>);
 }
 /*
  ⌜‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
@@ -133,7 +131,10 @@ export function getTestHandlersMap(
   ) as Record<LongPressTestHandlerType, LongPressTestHandler>;
 }
 
-export function getDOMTestHandlersMap(eventType: LongPressEventType, element: Element): LongPressTestHandlersMap {
+export function getDOMTestHandlersMap(
+  eventType: LongPressEventType,
+  element: Window | Element | Node | Document
+): LongPressTestHandlersMap {
   switch (eventType) {
     case LongPressEventType.Mouse:
       return {

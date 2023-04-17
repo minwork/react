@@ -53,11 +53,12 @@ export enum LongPressCallbackReason {
  * @param {Object} meta Object containing *context* and / or *reason* (if applicable)
  */
 export type LongPressCallback<Target extends Element = Element, Context = unknown> = (
-  event: LongPressEvent<Target>,
+  event: LongPressReactEvents<Target>,
   meta: LongPressCallbackMeta<Context>
 ) => void;
 
-export type LongPressEvent<Target extends Element = Element> =
+export type LongPressDomEvents = MouseEvent | TouchEvent | PointerEvent;
+export type LongPressReactEvents<Target extends Element = Element> =
   | ReactMouseEvent<Target>
   | ReactTouchEvent<Target>
   | ReactPointerEvent<Target>;
@@ -87,7 +88,7 @@ export interface LongPressOptions<
    * @see LongPressEventType
    */
   detect?: EventType;
-  filterEvents?: (event: LongPressEvent<Target>) => boolean;
+  filterEvents?: (event: LongPressReactEvents<Target>) => boolean;
   /**
    * If long press should be canceled on mouse / touch move. Possible values:
    * - `*false*: [default] Disable cancelling on movement

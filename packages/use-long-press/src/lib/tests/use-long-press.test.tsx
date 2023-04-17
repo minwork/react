@@ -7,6 +7,7 @@ import {
   LongPressEventType,
   LongPressMouseHandlers,
   LongPressPointerHandlers,
+  LongPressReactEvents,
   LongPressTouchHandlers
 } from "../use-long-press.types";
 import {
@@ -17,7 +18,7 @@ import {
   TestComponentProps
 } from "./TestComponent";
 import React from "react";
-import { describe, expect, MockedFunction } from "vitest";
+import { describe, expect, MockedFunction, test } from "vitest";
 import {
   emptyContext,
   expectSpecificEvent,
@@ -27,6 +28,7 @@ import {
   noop
 } from "./use-long-press.test.consts";
 import {
+  createMockedDomEventFactory,
   createMockedMouseEvent,
   createMockedPointerEvent,
   createMockedTouchEvent,
@@ -34,17 +36,6 @@ import {
   getDOMTestHandlersMap,
   getTestHandlersMap
 } from "./use-long-press.test.utils";
-import { LongPressReactEvents } from "./use-long-press.test.types";
-
-/*
- ⌜‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
- ⎹ Common
- ⌞____________________________________________________________________________________________________
-*/
-afterEach(() => {
-  vi.restoreAllMocks();
-  vi.resetAllMocks();
-});
 
 /*
  ⌜‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
@@ -271,6 +262,75 @@ describe('Detecting long press', () => {
       longPressEvent.start(event);
       vi.advanceTimersByTime(Math.round(threshold / 2));
       longPressEvent.stop(event);
+
+      expect(callback).toHaveBeenCalledTimes(0);
+
+      expect(onStart).toHaveBeenCalledTimes(1);
+      expect(onStart).toHaveBeenCalledWith(expectedEvent, emptyContext);
+
+      expect(onCancel).toHaveBeenCalledTimes(1);
+      expect(onCancel).toHaveBeenCalledWith(expectedEvent, { reason: LongPressCallbackReason.CancelledByRelease });
+
+      expect(onFinish).toHaveBeenCalledTimes(0);
+    }
+  );
+
+  test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch], [LongPressEventType.Pointer]])(
+    'Detect long press when "long press stop" is called on window using "%s" events',
+    (eventType) => {
+      const component = createTestElement({
+        callback,
+        onStart,
+        onFinish,
+        onCancel,
+        threshold,
+        captureEvent: true,
+        detect: eventType,
+      });
+      const event = longPressMockedEventCreatorMap[eventType]();
+      const longPressEvent = getDOMTestHandlersMap(eventType, component);
+      const domEventFactory = createMockedDomEventFactory(eventType);
+      const expectedEvent = longPressExpectedEventMap[eventType];
+
+      longPressEvent.start(event);
+      vi.runOnlyPendingTimers();
+      fireEvent(window, domEventFactory.stop());
+
+      expect(callback).toHaveBeenCalledTimes(1);
+      expect(callback).toHaveBeenCalledWith(expectedEvent, emptyContext);
+
+      expect(onStart).toHaveBeenCalledTimes(1);
+      expect(onStart).toHaveBeenCalledWith(expectedEvent, emptyContext);
+
+      expect(onFinish).toHaveBeenCalledTimes(1);
+      expect(onFinish).toHaveBeenCalledWith(expectedEvent, emptyContext);
+
+      expect(onCancel).toHaveBeenCalledTimes(0);
+    }
+  );
+
+  test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch], [LongPressEventType.Pointer]])(
+    'Detect cancelled long press when "long press stop" is called on window using "%s" events',
+    (eventType) => {
+      const component = createTestElement({
+        callback,
+        onStart,
+        onFinish,
+        onCancel,
+        threshold,
+        captureEvent: true,
+        detect: eventType,
+      });
+      const event = longPressMockedEventCreatorMap[eventType]();
+      const longPressEvent = getDOMTestHandlersMap(eventType, component);
+      const domEventFactory = createMockedDomEventFactory(eventType);
+      const expectedEvent = longPressExpectedEventMap[eventType];
+
+      vi.clearAllMocks();
+
+      longPressEvent.start(event);
+      vi.advanceTimersByTime(Math.round(threshold / 2));
+      fireEvent(window, domEventFactory.stop());
 
       expect(callback).toHaveBeenCalledTimes(0);
 
@@ -792,7 +852,6 @@ describe('Hook usability', () => {
 
   afterEach(() => {
     vi.clearAllTimers();
-    vi.clearAllMocks();
   });
 
   test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch], [LongPressEventType.Pointer]])(
@@ -854,6 +913,123 @@ describe('Hook usability', () => {
   );
 
   test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch], [LongPressEventType.Pointer]])(
+    'Window listeners are unregistered on component unmount when using "%s" events',
+    (eventType) => {
+      const onAddEventListener = vi.spyOn(window, 'addEventListener');
+      const onRemoveEventListener = vi.spyOn(window, 'removeEventListener');
+
+      const callback = vi.fn();
+      const onStart = vi.fn();
+      const threshold = 1000;
+      const thresholdHalf = Math.round(threshold / 2);
+
+      const component = createTestComponent({ callback, threshold, onStart, detect: eventType });
+      const element = getComponentElement(component);
+      const event = longPressMockedEventCreatorMap[eventType]();
+      const longPressEvent = getDOMTestHandlersMap(eventType, element);
+
+      longPressEvent.start(event);
+      expect(onStart).toHaveBeenCalledTimes(1);
+
+      vi.advanceTimersByTime(thresholdHalf);
+
+      component.unmount();
+      // Trigger useEffect unmount handler
+      act(() => {
+        vi.runAllTimers();
+      });
+
+      expect(callback).toHaveBeenCalledTimes(0);
+      vi.advanceTimersByTime(thresholdHalf + 1);
+      expect(callback).toHaveBeenCalledTimes(0);
+
+      expect(onAddEventListener).toHaveBeenCalledWith('mouseup', expect.any(Function));
+      expect(onAddEventListener).toHaveBeenCalledWith('touchend', expect.any(Function));
+      expect(onAddEventListener).toHaveBeenCalledWith('pointerup', expect.any(Function));
+      expect(onRemoveEventListener).toHaveBeenCalledWith('mouseup', expect.any(Function));
+      expect(onRemoveEventListener).toHaveBeenCalledWith('touchend', expect.any(Function));
+      expect(onRemoveEventListener).toHaveBeenCalledWith('pointerup', expect.any(Function));
+
+      onAddEventListener.mockRestore();
+      onRemoveEventListener.mockRestore();
+    }
+  );
+
+  test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch], [LongPressEventType.Pointer]])(
+    'Window listeners are updated when onCancel or onFinish callback changes when using "%s" events',
+    (eventType) => {
+      const onAddEventListener = vi.spyOn(window, 'addEventListener');
+      const onRemoveEventListener = vi.spyOn(window, 'removeEventListener');
+
+      const callback = vi.fn();
+      const onCancel1 = vi.fn();
+      const onCancel2 = vi.fn();
+      const onFinish1 = vi.fn();
+      const onFinish2 = vi.fn();
+
+      const props: TestComponentProps = {
+        callback,
+        onCancel: onCancel1,
+        onFinish: onFinish1,
+        detect: eventType,
+      };
+      const component = render(<TestComponent {...props} />);
+      const element = getComponentElement(component);
+
+      const event = longPressMockedEventCreatorMap[eventType]();
+      const longPressEvent = getDOMTestHandlersMap(eventType, element);
+      const domEventFactory = createMockedDomEventFactory(eventType);
+
+      longPressEvent.start(event);
+      fireEvent(window, domEventFactory.stop());
+
+      expect(onCancel1).toHaveBeenCalledTimes(1);
+      expect(onCancel2).toHaveBeenCalledTimes(0);
+      expect(onFinish1).toHaveBeenCalledTimes(0);
+      expect(onFinish2).toHaveBeenCalledTimes(0);
+
+      // Update cancel callback
+      component.rerender(<TestComponent {...{ ...props, onCancel: onCancel2 }} />);
+
+      longPressEvent.start(event);
+      fireEvent(window, domEventFactory.stop());
+      expect(onCancel1).toHaveBeenCalledTimes(1);
+      expect(onCancel2).toHaveBeenCalledTimes(1);
+      expect(onFinish1).toHaveBeenCalledTimes(0);
+      expect(onFinish2).toHaveBeenCalledTimes(0);
+
+      longPressEvent.start(event);
+      vi.runOnlyPendingTimers();
+      fireEvent(window, domEventFactory.stop());
+      expect(onCancel1).toHaveBeenCalledTimes(1);
+      expect(onCancel2).toHaveBeenCalledTimes(1);
+      expect(onFinish1).toHaveBeenCalledTimes(1);
+      expect(onFinish2).toHaveBeenCalledTimes(0);
+
+      // Update callback
+      component.rerender(<TestComponent {...{ ...props, onFinish: onFinish2 }} />);
+
+      longPressEvent.start(event);
+      vi.runOnlyPendingTimers();
+      fireEvent(window, domEventFactory.stop());
+      expect(onCancel1).toHaveBeenCalledTimes(1);
+      expect(onCancel2).toHaveBeenCalledTimes(1);
+      expect(onFinish1).toHaveBeenCalledTimes(1);
+      expect(onFinish2).toHaveBeenCalledTimes(1);
+
+      expect(onAddEventListener).toHaveBeenCalledWith('mouseup', expect.any(Function));
+      expect(onAddEventListener).toHaveBeenCalledWith('touchend', expect.any(Function));
+      expect(onAddEventListener).toHaveBeenCalledWith('pointerup', expect.any(Function));
+      expect(onRemoveEventListener).toHaveBeenCalledWith('mouseup', expect.any(Function));
+      expect(onRemoveEventListener).toHaveBeenCalledWith('touchend', expect.any(Function));
+      expect(onRemoveEventListener).toHaveBeenCalledWith('pointerup', expect.any(Function));
+
+      onAddEventListener.mockRestore();
+      onRemoveEventListener.mockRestore();
+    }
+  );
+
+  test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch], [LongPressEventType.Pointer]])(
     'Callbacks are not triggered when callback change to null after click / tap, while using "%s" events',
     (eventType) => {
       const callback = vi.fn();
@@ -908,7 +1084,7 @@ describe('Hook usability', () => {
   );
 
   test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch], [LongPressEventType.Pointer]])(
-    'Suppress multiple start callback calls, while using "%s" events',
+    'Suppress multiple "long press start" callback calls, while using "%s" events',
     (eventType) => {
       const onStart = vi.fn();
       const element = createTestElement({ callback: vi.fn(), onStart, detect: eventType });
@@ -922,6 +1098,27 @@ describe('Hook usability', () => {
       longPressEvent.start(event);
 
       expect(onStart).toHaveBeenCalledTimes(1);
+    }
+  );
+
+  test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch], [LongPressEventType.Pointer]])(
+    'Suppress multiple "long press stop" callback calls, while using "%s" events',
+    (eventType) => {
+      const onCancel = vi.fn();
+      const onFinish = vi.fn();
+      const element = createTestElement({ callback: vi.fn(), onCancel, onFinish, detect: eventType });
+      const event = longPressMockedEventCreatorMap[eventType]();
+      const longPressEvent = getDOMTestHandlersMap(eventType, element);
+
+      longPressEvent.start(event);
+      longPressEvent.stop(event);
+      longPressEvent.stop(event);
+      longPressEvent.stop(event);
+      longPressEvent.stop(event);
+      longPressEvent.stop(event);
+
+      expect(onCancel).toHaveBeenCalledTimes(1);
+      expect(onFinish).toHaveBeenCalledTimes(0);
     }
   );
 });

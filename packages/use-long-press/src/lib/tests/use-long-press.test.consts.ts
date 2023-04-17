@@ -7,7 +7,7 @@ import {
   LongPressTouchHandlers
 } from "../use-long-press.types";
 import { EventType } from "@testing-library/dom/types/events";
-import { LongPressEventCreator, LongPressTestHandlerType } from "./use-long-press.test.types";
+import { LongPressTestEventCreator, LongPressTestHandlerType } from "./use-long-press.test.types";
 import {
   createMockedMouseEvent,
   createMockedPointerEvent,
@@ -80,7 +80,7 @@ export const longPressMockedEventCreatorMap = {
   [LongPressEventType.Mouse]: createMockedMouseEvent,
   [LongPressEventType.Touch]: createMockedTouchEvent,
   [LongPressEventType.Pointer]: createMockedPointerEvent,
-} satisfies Record<LongPressEventType, LongPressEventCreator>;
+} satisfies Record<LongPressEventType, LongPressTestEventCreator>;
 
 export const longPressExpectedEventMap = {
   [LongPressEventType.Mouse]: expectMouseEvent,

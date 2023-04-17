@@ -2,17 +2,18 @@ import { MouseEventHandler, PointerEventHandler, TouchEventHandler, useCallback,
 import {
   LongPressCallback,
   LongPressCallbackReason,
+  LongPressDomEvents,
   LongPressEmptyHandlers,
-  LongPressEvent,
   LongPressEventType,
   LongPressHandlers,
   LongPressMouseHandlers,
   LongPressOptions,
   LongPressPointerHandlers,
+  LongPressReactEvents,
   LongPressResult,
   LongPressTouchHandlers
 } from "./use-long-press.types";
-import { getCurrentPosition, isRecognisableEvent } from "./use-long-press.utils";
+import { createArtificialReactEvent, getCurrentPosition, isRecognisableEvent } from "./use-long-press.utils";
 
 // Disabled callback
 export function useLongPress<Target extends Element = Element, Context = unknown>(
@@ -97,7 +98,6 @@ export function useLongPress<
 ): LongPressResult<LongPressHandlers<Target>, Context> {
   const isLongPressActive = useRef(false);
   const isPressed = useRef(false);
-  const target = useRef<Target>();
   const context = useRef<Context>();
   const timer = useRef<ReturnType<typeof setTimeout>>();
   const savedCallback = useRef(callback);
@@ -107,7 +107,7 @@ export function useLongPress<
   } | null>(null);
 
   const start = useCallback(
-    (event: LongPressEvent<Target>) => {
+    (event: LongPressReactEvents<Target>) => {
       // Prevent multiple start triggers
       if (isPressed.current) {
         return;
@@ -132,7 +132,6 @@ export function useLongPress<
 
       // Calculate position after calling 'onStart' so it can potentially change it
       startPosition.current = getCurrentPosition(event);
-      target.current = event.currentTarget;
       isPressed.current = true;
 
       timer.current = setTimeout(() => {
@@ -146,9 +145,14 @@ export function useLongPress<
   );
 
   const cancel = useCallback(
-    (event: LongPressEvent<Target>, reason?: LongPressCallbackReason) => {
+    (event: LongPressReactEvents<Target>, reason?: LongPressCallbackReason) => {
       // Ignore unrecognised events
       if (!isRecognisableEvent(event)) {
+        return;
+      }
+
+      // Ignore when element is not pressed anymore
+      if (!isPressed.current) {
         return;
       }
 
@@ -166,7 +170,6 @@ export function useLongPress<
         onCancel?.(event, { context: context.current, reason: reason ?? LongPressCallbackReason.CancelledByRelease });
       }
 
-      if (event.currentTarget) target.current = undefined;
       isLongPressActive.current = false;
       isPressed.current = false;
       timer.current !== undefined && clearTimeout(timer.current);
@@ -175,7 +178,7 @@ export function useLongPress<
   );
 
   const handleMove = useCallback(
-    (event: LongPressEvent<Target>) => {
+    (event: LongPressReactEvents<Target>) => {
       // First call callback to allow modifying event position
       onMove?.(event, { context: context.current });
 
@@ -198,6 +201,24 @@ export function useLongPress<
     },
     [cancel, cancelOnMovement, onMove]
   );
+
+  // Listen to long press stop events on window
+  useEffect(() => {
+    function onLongPressStop(event: LongPressDomEvents) {
+      const reactEvent = createArtificialReactEvent<Target>(event);
+      cancel(reactEvent);
+    }
+
+    window.addEventListener('mouseup', onLongPressStop);
+    window.addEventListener('touchend', onLongPressStop);
+    window.addEventListener('pointerup', onLongPressStop);
+
+    return () => {
+      window.removeEventListener('mouseup', onLongPressStop);
+      window.removeEventListener('touchend', onLongPressStop);
+      window.removeEventListener('pointerup', onLongPressStop);
+    };
+  }, [cancel]);
 
   // Clear timer on unmount
   useEffect(

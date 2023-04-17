@@ -1,4 +1,4 @@
-import { LongPressEvent } from './use-long-press.types';
+import { LongPressDomEvents, LongPressReactEvents } from './use-long-press.types';
 import {
   MouseEvent as ReactMouseEvent,
   PointerEvent as ReactPointerEvent,
@@ -32,12 +32,12 @@ export function isPointerEvent<Target extends Element>(
 
 export function isRecognisableEvent<Target extends Element>(
   event: SyntheticEvent<Target>
-): event is LongPressEvent<Target> {
+): event is LongPressReactEvents<Target> {
   return isMouseEvent(event) || isTouchEvent(event) || isPointerEvent(event);
 }
 
 export function getCurrentPosition<Target extends Element>(
-  event: LongPressEvent<Target>
+  event: LongPressReactEvents<Target>
 ): {
   x: number;
   y: number;
@@ -59,4 +59,16 @@ export function getCurrentPosition<Target extends Element>(
 
   /* istanbul ignore next */
   return null;
+}
+
+export function createArtificialReactEvent<Target extends Element = Element>(
+  event: LongPressDomEvents
+): LongPressReactEvents<Target> {
+  return {
+    target: event.target,
+    currentTarget: event.currentTarget,
+    nativeEvent: event,
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    persist: () => {},
+  } as LongPressReactEvents<Target>;
 }
