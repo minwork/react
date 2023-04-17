@@ -33,9 +33,10 @@
 5. [Migration](#migration)
    1. [v1 to v2](#v1-to-v2)
    2. [v2 to v3](#v2-to-v3)
-6. [License](#license)
+6. [Changelog](#changelog)
+7. [License](#license)
 
-## Installation
+# Installation
 
 ```bash
 yarn add use-long-press
@@ -47,7 +48,7 @@ or
 npm install --save use-long-press
 ```
 
-## Basic Usage
+# Basic Usage
 
 ```tsx
 import React from 'react';
@@ -62,9 +63,9 @@ const Example = () => {
 };
 ```
 
-## Advanced usage
+# Advanced usage
 
-### Hook definition
+## Hook definition
 
 _Pseudocode_
 ```
@@ -82,10 +83,10 @@ declare function useLongPress<
 ): LongPressResult<LongPressHandlers<Target>, Context>;
 ```
 
-### Callback
+## Callback
 Hook first parameter, _callback_, can be either function or `null` (if you want to disable the hook).
 
-### Options
+## Options
 You can supply _options_ object as a hook second parameter. All options inside the object are optional.
 
 | Name             |                     Type                      |   Default   | Description                                                                                                                                                                                                                                                                       |
@@ -100,7 +101,7 @@ You can supply _options_ object as a hook second parameter. All options inside t
 | onFinish         |            _(event, meta) => void_            | _undefined_ | Called when press is released AFTER _threshold_ time elapses, therefore after long press occurs and _callback_ is called.                                                                                                                                                         |
 | onCancel         |            _(event, meta) => void_            | _undefined_ | Called when press is released BEFORE _threshold_ time elapses, therefore before long press could occur.                                                                                                                                                                           |
 
-### Additional callbacks
+## Additional callbacks
 All callbacks (including main _callback_ function) has same structure.
 
 _Pseudocode_
@@ -134,16 +135,16 @@ Both object properties are optional.
   - `'cancelled-by-release'` (TS: `LongPressCallbackReason.CancelledByRelease`) - when press was released before _threshold_ time elapsed
 
 
-### Result
+## Result
 
 As a result hook returns callable function (also referred as `bind`) in order to pass _context_ if necessary.
 `bind` function return object with various [handlers](#handlers).
 
-### Context
+## Context
 
 You can supply custom context to the `bind` function like `bind(context)` and then access it from callbacks (`onStart`, `onFinish`, `onCancel`, `onMove`) second argument e.g.: `onStart: (event, { context }) => ...`.
 
-### Handlers
+## Handlers
 
 Handlers are returned from `bind` function in a form of object which can be spread to react element. Contents of this object depend on _detect_ option value:
 
@@ -160,9 +161,9 @@ Handlers are returned from `bind` function in a form of object which can be spre
   - `onPointerMove`
   - `onPointerUp`
 
-## Examples
+# Examples
 
-### Advanced usage example
+## Advanced usage example
 ```jsx harmony
 import React, { useState, useCallback } from 'react';
 import { useLongPress } from 'use-long-press';
@@ -198,25 +199,25 @@ export default function AdvancedExample() {
 }
 ```
 
-### Live Examples
+## Live Examples
 
-#### Version 1 (deprecated)
+### Version 1 (deprecated)
 
 [![Edit useLongPress](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/uselongpress-gnej6?fontsize=14&hidenavigation=1&theme=dark)
 
-#### Version 2 (deprecated)
+### Version 2 (deprecated)
 
 [![Edit useLongPress](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/uselongpress-v2-ekqecn?fontsize=14&hidenavigation=1&theme=dark)
 
-#### Version 3
+### Version 3
 
 [![Edit useLongPress](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/uselongpress-v3-y5m335?fontsize=14&hidenavigation=1&theme=dark)
 
 
-## Migration
+# Migration
 
-### v1 to v2
-#### [BREAKING CHANGE] Context support
+## v1 to v2
+### [BREAKING CHANGE] Context support
 Now hook returns function which can be called with any context in order to access it in callbacks
 
 *Before*
@@ -236,7 +237,7 @@ return <button {...bind('I am context')}>Click me</button>;
 return <button {...bind()}>Click me</button>;
 ```
 
-#### [NEW] Reason for cancellation
+### [NEW] Reason for cancellation
 Now `onCancel` receives cancellation context which can be either:
 - `LongPressEventReason.CANCELED_BY_TIMEOUT` (`'canceled-by-timeout'`)
 - `LongPressEventReason.CANCELED_BY_MOVEMENT` (`'canceled-by-movement'`)
@@ -249,9 +250,9 @@ const bind = useLongPress(() => console.log('Long pressed'), {
 })
 ```
 
-### v2 to v3
+## v2 to v3
 
-#### [BREAKING CHANGE] Drop support for `'both'` option in `detect` param
+### [BREAKING CHANGE] Drop support for `'both'` option in `detect` param
 Returning both mouse and touch handlers as a hook result caused unintended edge cases on touch devices that emulated clicks. Therefore `'both'` value was removed and hook is now using `'pointer'` as a default value for `detect` param.
 
 This also enables to support more type of events in the future.
@@ -271,7 +272,7 @@ const bind = useLongPress(() => console.log('Long pressed'), {
 })
 ```
 
-#### [BREAKING CHANGE] Typings and param values
+### [BREAKING CHANGE] Typings and param values
 TypeScript's typings were refactored to use more consistent and precise names. Also changed callback _reason_ values (see `LongPressEventReason`)
 
 - Changed generics order from `useLongPress<Target, Callback, Context>` to `useLongPress<Target, Context, Callback>`
@@ -288,6 +289,10 @@ TypeScript's typings were refactored to use more consistent and precise names. A
 - Renamed `LongPressResult` type to `LongPressHandlers`
 - Added mouse and touch handlers types - `LongPressMouseHandlers` and `LongPressTouchHandlers` 
 
-## License
+# Changelog
+
+List of changes made with each version can be found [here](CHANGELOG.md)
+
+# License
 
 MIT © [minwork](https://github.com/minwork)
