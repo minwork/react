@@ -1,6 +1,6 @@
 # React Long Press Hook :point_down:
 
-> React hook for detecting click (or tap) and hold event.
+> React hook for detecting _click_, _tap_ or _point_ and _hold_ event
 
 [![Build Status](https://travis-ci.com/minwork/use-long-press.svg?branch=master)](https://travis-ci.com/minwork/use-long-press)
 ![Codecov](https://img.shields.io/codecov/c/gh/minwork/use-long-press)
@@ -12,6 +12,14 @@
 - Easy to use
 - Highly customizable options
 - Thoroughly tested
+
+# Main features
+- Mouse, Touch and Pointer events support
+- Pass custom context and access it in callback
+- Cancel long press if moved too far from the target
+- Flexible callbacks: `onStart`, `onMove`, `onFinish`, `onCancel`
+- Disable hook when necessary
+- Adjustable long press detection threshold
 
 # Table of Contents
 1. [Installation](#installation)
