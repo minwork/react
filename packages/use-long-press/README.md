@@ -39,7 +39,9 @@
    1. [v1 to v2](#v1-to-v2)
    2. [v2 to v3](#v2-to-v3)
 6. [Changelog](#changelog)
-7. [License](#license)
+7. [FAQ](#faq)
+8. [Support us](#support-us)
+9. [License](#license)
 
 # Installation
 
@@ -297,6 +299,27 @@ TypeScript's typings were refactored to use more consistent and precise names. A
 # Changelog
 
 List of changes made with each version can be found [here](CHANGELOG.md)
+
+# FAQ
+
+## Why deprecate v1 and v2 and move to new repo?
+
+### v1 and v2 deprecation
+Using both mouse and touch handlers on same element was a good idea at the beginning to enable out of the box support for all device types without the need to manually control which events should be detected. After adding support for pointer events that is no longer necessary because they are better suited to handle this case. 
+
+All tests had to be rewritten because while supporting React 17 and 18, using Enzyme for tests was no longer possible due to the lack of official adapters. Therefore, every test was rewritten to `react-testing-library` and generalised in order to be able to test each type of events (mouse, touch and pointer) without repeating the same code all over again. 
+
+Overall considering the reasons mentioned above, maintaining old versions was no longer a viable option hence why the deprecation. 
+
+### Moving to new repository
+
+Old repository structure was causing false positives on package vulnerabilities because of building / testing tools in dev dependencies. New monorepo architecture solves that problem by separating repository package.json from `use-long-press` package.json
+
+Using monorepo is much easier for maintaining multiple packages and I plan to move `use-double-tap` and `react-interval-hook` to this repository as well as add new packages in the future.
+
+# Support us
+
+If you like my work, consider making a [donation](https://github.com/sponsors/minwork) through Github Sponsors.
 
 # License
 
