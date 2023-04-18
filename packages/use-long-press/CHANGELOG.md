@@ -1,3 +1,10 @@
+## [3.0.0-rc.2](https://github.com/minwork/react/compare/use-long-press-v3.0.0-rc.1...use-long-press-v3.0.0-rc.2) (2023-04-18)
+
+
+### Build config
+
+* **use-long-press:** Drop "node>=16" requirement in package.json ([7307bf9](https://github.com/minwork/react/commit/7307bf9cb0126ebefa0618bae044bd31ea3a7ee9))
+
 ## [3.0.0-rc.1](https://github.com/minwork/react/compare/use-long-press-v2.0.3...use-long-press-v3.0.0-rc.1) (2023-04-17)
 
 
