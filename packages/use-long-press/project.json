@@ -50,7 +50,7 @@
             "forwardAllArgs": false
           },
           {
-            "command": "cp ./packages/use-long-press/{README.md} ./dist/packages/use-long-press",
+            "command": "cp ./packages/use-long-press/README.md ./dist/packages/use-long-press",
             "forwardAllArgs": false
           },
           {
