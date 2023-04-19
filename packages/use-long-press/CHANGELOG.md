@@ -1,3 +1,17 @@
+## [3.0.2](https://github.com/minwork/react/compare/use-long-press-v3.0.1...use-long-press-v3.0.2) (2023-04-19)
+
+
+### Bug Fixes
+
+* **use-long-press:** Add README.md and CHANGELOG.md to package build output ([a292243](https://github.com/minwork/react/commit/a2922435f809a30ae11c3f2a7ee45476a5aa7ec7))
+* **use-long-press:** Fix link to changelog in README.md ([c8d52f7](https://github.com/minwork/react/commit/c8d52f7373f9ec0241f0a376d45deaf37fe78908))
+
+
+### Chores
+
+* **release:** Release use-long-press v3.0.2-alpha.1 [skip ci] ([f05ef6c](https://github.com/minwork/react/commit/f05ef6c50700a0840cd9081a02d7c175bb2467bf))
+* **release:** Release use-long-press v3.0.2-alpha.2 [skip ci] ([d3b8de3](https://github.com/minwork/react/commit/d3b8de35a591ad5c63f7f84e5932af3b3a6219e6))
+
 ## [3.0.2-alpha.2](https://github.com/minwork/react/compare/use-long-press-v3.0.2-alpha.1...use-long-press-v3.0.2-alpha.2) (2023-04-19)
 
 
