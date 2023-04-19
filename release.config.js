@@ -3,7 +3,7 @@ module.exports = {
   branches: [
     {
       name: 'main',
-      channel: 'main',
+      channel: 'latest',
     },
     {
       name: 'next',
