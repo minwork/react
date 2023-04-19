@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "lint": "nx run-many --target=lint",
-    "test": "nx run-many --target=test",
-    "build": "nx run-many --target=build"
+    "lint": "nx run use-long-press:lint",
+    "test": "nx run use-long-press:test",
+    "build": "nx run use-long-press:build"
   },
   "private": true,
   "dependencies": {
