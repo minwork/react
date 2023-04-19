@@ -195,7 +195,7 @@ describe('Detecting long press', () => {
     // Use fake timers for detecting long press
     vi.useFakeTimers();
 
-    threshold = Math.round(Math.random() * 1000);
+    threshold = Math.round(500 + Math.random() * 500);
 
     callback = vi.fn();
     onStart = vi.fn();
@@ -638,7 +638,7 @@ describe('Hook context', () => {
     // Use fake timers for detecting long press
     vi.useFakeTimers();
     // Setup common variables
-    threshold = Math.round(Math.random() * 1000);
+    threshold = Math.round(500 + Math.random() * 500);
     callback = vi.fn();
     onStart = vi.fn();
     onMove = vi.fn();
