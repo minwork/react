@@ -309,7 +309,7 @@ Using both mouse and touch handlers on same element was a good idea at the begin
 
 All tests had to be rewritten because while supporting React 17 and 18, using Enzyme for tests was no longer possible due to the lack of official adapters. Therefore, every test was rewritten to `react-testing-library` and generalised in order to be able to test each type of events (mouse, touch and pointer) without repeating the same code all over again. 
 
-Overall considering the reasons mentioned above, maintaining old versions was no longer a viable option hence why the deprecation. 
+Overall considering the reasons mentioned above, maintaining old versions was no longer a viable option hence why the deprecation. If you want to upgrade from v1 or v2 see [migration guide](#migration).
 
 ### Moving to new repository
 
