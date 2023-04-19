@@ -5,7 +5,7 @@ name: Build and coverage
 
 on:
   push:
-    branches: [ "main", "next", "develop" ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main", "next", "develop" ]
 
