@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react';
 import viteTsConfigPaths from 'vite-tsconfig-paths';
 import dts from 'vite-plugin-dts';
 import { join } from 'path';
+import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 export default defineConfig({
   cacheDir: '../../node_modules/.vite/use-long-press',
@@ -17,6 +18,18 @@ export default defineConfig({
     react(),
     viteTsConfigPaths({
       root: '../../',
+    }),
+    viteStaticCopy({
+      targets: [
+        {
+          src: 'README.md',
+          dest: '.',
+        },
+        {
+          src: 'images/logo-horizontal.png',
+          dest: 'images',
+        },
+      ],
     }),
   ],
 
