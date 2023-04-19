@@ -1,3 +1,10 @@
+## [3.0.2-alpha.2](https://github.com/minwork/react/compare/use-long-press-v3.0.2-alpha.1...use-long-press-v3.0.2-alpha.2) (2023-04-19)
+
+
+### Bug Fixes
+
+* **use-long-press:** Fix link to changelog in README.md ([c8d52f7](https://github.com/minwork/react/commit/c8d52f7373f9ec0241f0a376d45deaf37fe78908))
+
 ## [3.0.2-alpha.1](https://github.com/minwork/react/compare/use-long-press-v3.0.1...use-long-press-v3.0.2-alpha.1) (2023-04-19)
 
 
