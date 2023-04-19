@@ -1,6 +1,6 @@
 # React Long Press Hook :point_down:
 
-> React hook for detecting _click_, _tap_ or _point_ and _hold_ event
+> React hook for detecting _click_ / _tap_ / _point_ and _hold_ event
 
 ![npm type definitions](https://img.shields.io/npm/types/use-long-press)
 ![npm bundle size](https://img.shields.io/bundlephobia/min/use-long-press)
