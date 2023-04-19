@@ -1,3 +1,15 @@
+## [3.0.1](https://github.com/minwork/react/compare/use-long-press-v3.0.0...use-long-press-v3.0.1) (2023-04-19)
+
+
+### Bug Fixes
+
+* **use-long-press:** Update readme and homepage in package.json ([7aafa63](https://github.com/minwork/react/commit/7aafa639e4d94448a69d67fd74bc198daf2c885f))
+
+
+### Chores
+
+* **project:** Change main branch channel from "main" to "latest" ([8beded9](https://github.com/minwork/react/commit/8beded914b590e4946cfb77161c465eafe415047))
+
 ## [3.0.0](https://github.com/minwork/react/compare/use-long-press-v2.0.3...use-long-press-v3.0.0) (2023-04-19)
 
 
