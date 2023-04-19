@@ -59,7 +59,12 @@ export function createMockedDomEventFactory(
  ⎹ Mocked positioned events (with 'x' and 'y' coordinates)
  ⌞____________________________________________________________________________________________________
 */
-export function createPositionedMouseEvent(element: Element, eventType: EventType, x: number, y: number): MouseEvent {
+export function createPositionedMouseEvent(
+  element: Document | Element | Window | Node,
+  eventType: EventType,
+  x: number,
+  y: number
+): MouseEvent {
   const event = createEvent[eventType](element) as unknown as MouseEvent;
   Object.assign(event, {
     pageX: x,
@@ -70,13 +75,14 @@ export function createPositionedMouseEvent(element: Element, eventType: EventTyp
 }
 
 export function createPositionedPointerEvent(
-  element: Element,
+  element: Document | Element | Window | Node,
   eventType: EventType,
   x: number,
   y: number
 ): PointerEvent {
   const event = createEvent[eventType]({
     ...element,
+    // Remove this after jsdom add support for pointer events
     ownerDocument: { ...document, defaultView: window },
   }) as PointerEvent;
   Object.assign(event, {
@@ -87,7 +93,12 @@ export function createPositionedPointerEvent(
   return event;
 }
 
-export function createPositionedTouchEvent(element: Element, eventType: EventType, x: number, y: number): TouchEvent {
+export function createPositionedTouchEvent(
+  element: Document | Element | Window | Node,
+  eventType: EventType,
+  x: number,
+  y: number
+): TouchEvent {
   return createEvent[eventType](element, {
     touches: [{ pageX: x, pageY: y } as Touch],
   }) as TouchEvent;
