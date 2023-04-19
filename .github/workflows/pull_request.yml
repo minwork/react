@@ -37,8 +37,11 @@ jobs:
             ${{ runner.os }}-yarn-
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-        # TODO run only current package tests and build
-      - name: Run test
-        run: yarn nx run-many -t test
-      - name: Run build
-        run: yarn nx run-many -t build
+      - name: Lint all packages
+        run: yarn lint
+      - name: Test all packages
+        run: yarn test
+      - name: Build all packages
+        run: yarn build
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
