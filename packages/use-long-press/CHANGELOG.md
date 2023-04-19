@@ -1,3 +1,10 @@
+## [3.0.2-alpha.1](https://github.com/minwork/react/compare/use-long-press-v3.0.1...use-long-press-v3.0.2-alpha.1) (2023-04-19)
+
+
+### Bug Fixes
+
+* **use-long-press:** Add README.md and CHANGELOG.md to package build output ([a292243](https://github.com/minwork/react/commit/a2922435f809a30ae11c3f2a7ee45476a5aa7ec7))
+
 ## [3.0.1](https://github.com/minwork/react/compare/use-long-press-v3.0.0...use-long-press-v3.0.1) (2023-04-19)
 
 
