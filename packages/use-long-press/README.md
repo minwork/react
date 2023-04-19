@@ -298,7 +298,7 @@ TypeScript's typings were refactored to use more consistent and precise names. A
 
 # Changelog
 
-List of changes made with each version can be found [here](CHANGELOG.md)
+List of changes made with each version can be found [here](https://github.com/minwork/react/blob/main/packages/use-long-press/CHANGELOG.md)
 
 # FAQ
 
