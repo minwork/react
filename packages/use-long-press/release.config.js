@@ -9,7 +9,7 @@ const commitAnalyzerOptions = {
   },
   releaseRules: [
     { breaking: true, release: 'major' },
-    { type: 'docs', scope: 'README', release: 'patch' },
+    { type: 'docs', release: 'patch' },
     { type: 'refactor', release: 'patch' },
     { type: 'style', release: 'patch' },
     { type: 'perf', release: 'patch' },
@@ -49,8 +49,8 @@ module.exports = {
       '@semantic-release/npm',
       {
         npmPublish: false,
-        pkgRoot: `./dist/${folder}${appName}`
-      }
+        pkgRoot: `./dist/${folder}${appName}`,
+      },
     ],
     [
       '@semantic-release/git',
@@ -58,6 +58,6 @@ module.exports = {
         assets: [`./${folder}${appName}/CHANGELOG.md`, `./${folder}${appName}/package.json`],
         message: `chore(release): Release ${appName} v$\{nextRelease.version} [skip ci]`,
       },
-    ]
+    ],
   ],
 };
