@@ -16,7 +16,7 @@ export function isTouchEvent<Target extends Element>(event: SyntheticEvent<Targe
 }
 
 export function isMouseEvent<Target extends Element>(event: SyntheticEvent<Target>): event is ReactMouseEvent<Target> {
-  return event.nativeEvent instanceof MouseEvent;
+  return event.nativeEvent instanceof MouseEvent && !(event.nativeEvent instanceof PointerEvent);
 }
 
 export function isPointerEvent<Target extends Element>(
@@ -49,7 +49,6 @@ export function getCurrentPosition<Target extends Element>(
     };
   }
 
-  /* istanbul ignore else */
   if (isMouseEvent(event) || isPointerEvent(event)) {
     return {
       x: event.pageX,
@@ -57,7 +56,6 @@ export function getCurrentPosition<Target extends Element>(
     };
   }
 
-  /* istanbul ignore next */
   return null;
 }
 

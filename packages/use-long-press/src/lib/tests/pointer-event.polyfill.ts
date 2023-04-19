@@ -22,6 +22,7 @@ export class PointerEvent extends MouseEvent {
     this.pointerType = params.pointerType;
     this.isPrimary = params.isPrimary;
   }
+  /* c8 ignore next 1 */
 }
 
 if (!global.PointerEvent) {

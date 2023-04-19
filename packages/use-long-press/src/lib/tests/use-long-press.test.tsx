@@ -1,5 +1,5 @@
 import { act, renderHook } from "@testing-library/react-hooks";
-import { fireEvent, render } from "@testing-library/react";
+import { createEvent, fireEvent, render } from "@testing-library/react";
 import { useLongPress } from "../use-long-press";
 import {
   LongPressCallback,
@@ -33,9 +33,13 @@ import {
   createMockedPointerEvent,
   createMockedTouchEvent,
   createPositionedDomEventFactory,
+  createPositionedMouseEvent,
+  createPositionedPointerEvent,
+  createPositionedTouchEvent,
   getDOMTestHandlersMap,
   getTestHandlersMap
 } from "./use-long-press.test.utils";
+import { isMouseEvent, isPointerEvent, isTouchEvent } from "../use-long-press.utils";
 
 /*
  ⌜‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
@@ -1121,4 +1125,81 @@ describe('Hook usability', () => {
       expect(onFinish).toHaveBeenCalledTimes(0);
     }
   );
+});
+
+describe('Utils', () => {
+  test.each([
+    [{ nativeEvent: new MouseEvent('mousedown') }, true],
+    [{ nativeEvent: new MouseEvent('mousemove') }, true],
+    [{ nativeEvent: new MouseEvent('mouseup') }, true],
+
+    [createMockedMouseEvent(), true],
+    [createMockedTouchEvent(), false],
+    [createMockedPointerEvent(), false],
+
+    [{ nativeEvent: createPositionedMouseEvent(window, 'mouseMove', 1, 2) }, true],
+    [{ nativeEvent: createPositionedTouchEvent(window, 'touchMove', 1, 2) }, false],
+    [{ nativeEvent: createPositionedPointerEvent(window, 'pointerMove', 1, 2) }, false],
+
+    [{ nativeEvent: new MouseEvent('mousedown') }, true],
+    [{ nativeEvent: new TouchEvent('touchstart') }, false],
+    [{ nativeEvent: new PointerEvent('pointerdown') }, false],
+    [{ nativeEvent: new Event('blur') }, false],
+
+    [{ nativeEvent: createEvent.mouseUp(window) }, true],
+    [{ nativeEvent: createEvent.touchEnd(window) }, false],
+    [{ nativeEvent: createEvent.pointerUp(window) }, false],
+  ])('isMouseEvent treat %s as mouse event: %s', (event, isProperEvent) => {
+    expect(isMouseEvent(event as LongPressReactEvents)).toBe(isProperEvent);
+  });
+
+  test.each([
+    [{ nativeEvent: new TouchEvent('touchstart') }, true],
+    [{ nativeEvent: new TouchEvent('touchmove') }, true],
+    [{ nativeEvent: new TouchEvent('touchend') }, true],
+
+    [createMockedMouseEvent(), false],
+    [createMockedTouchEvent(), true],
+    [createMockedPointerEvent(), false],
+
+    [{ nativeEvent: createPositionedMouseEvent(window, 'mouseMove', 1, 2) }, false],
+    [{ nativeEvent: createPositionedTouchEvent(window, 'touchMove', 1, 2) }, true],
+    [{ nativeEvent: createPositionedPointerEvent(window, 'pointerMove', 1, 2) }, false],
+
+    [{ nativeEvent: new MouseEvent('mousedown') }, false],
+    [{ nativeEvent: new TouchEvent('touchstart') }, true],
+    [{ nativeEvent: new PointerEvent('pointerdown') }, false],
+    [{ nativeEvent: new Event('blur') }, false],
+
+    [{ nativeEvent: createEvent.mouseUp(window) }, false],
+    [{ nativeEvent: createEvent.touchEnd(window) }, true],
+    [{ nativeEvent: createEvent.pointerUp(window) }, false],
+  ])('isTouchEvent treat %s as touch event: %s', (event, isProperEvent) => {
+    expect(isTouchEvent(event as LongPressReactEvents)).toBe(isProperEvent);
+  });
+
+  test.each([
+    [{ nativeEvent: new PointerEvent('pointerdown') }, true],
+    [{ nativeEvent: new PointerEvent('pointermove') }, true],
+    [{ nativeEvent: new PointerEvent('pointerup') }, true],
+
+    [createMockedMouseEvent(), false],
+    [createMockedTouchEvent(), false],
+    [createMockedPointerEvent(), true],
+
+    [{ nativeEvent: createPositionedMouseEvent(window, 'mouseMove', 1, 2) }, false],
+    [{ nativeEvent: createPositionedTouchEvent(window, 'touchMove', 1, 2) }, false],
+    [{ nativeEvent: createPositionedPointerEvent(window, 'pointerMove', 1, 2) }, true],
+
+    [{ nativeEvent: new MouseEvent('mousedown') }, false],
+    [{ nativeEvent: new TouchEvent('touchstart') }, false],
+    [{ nativeEvent: new PointerEvent('pointerdown') }, true],
+    [{ nativeEvent: new Event('blur') }, false],
+
+    [{ nativeEvent: createEvent.mouseUp(window) }, false],
+    [{ nativeEvent: createEvent.touchEnd(window) }, false],
+    [{ nativeEvent: createEvent.pointerUp(window) }, true],
+  ])('isPointerEvent treat %s as pointer event: %s', (event, isProperEvent) => {
+    expect(isPointerEvent(event as LongPressReactEvents)).toBe(isProperEvent);
+  });
 });
