@@ -5,15 +5,12 @@
   "author": "minwork",
   "license": "MIT",
   "keywords": [
-    "react",
     "long press",
     "hook",
+    "react",
     "click and hold",
     "tap and hold",
-    "point and hold",
-    "mouse",
-    "touch",
-    "pointer"
+    "point and hold"
   ],
   "scripts": {
     "postversion": "cp package.json ../../../packages/use-long-press"
