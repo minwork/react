@@ -25,10 +25,6 @@ export default defineConfig({
           src: 'README.md',
           dest: '.',
         },
-        {
-          src: 'images/logo-horizontal.png',
-          dest: 'images',
-        },
       ],
     }),
   ],
