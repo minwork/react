@@ -1,3 +1,26 @@
+## [3.0.3](https://github.com/minwork/react/compare/use-long-press-v3.0.2...use-long-press-v3.0.3) (2023-04-19)
+
+
+### Chores
+
+* **use-long-press:** Re-organise package tags ([3983118](https://github.com/minwork/react/commit/39831184473eda2caadebb9c4820422aaf7c5f48))
+* **use-long-press:** Rephrase main library description in README.md ([0601e82](https://github.com/minwork/react/commit/0601e82bdb8c41fd8507607a495ec99fb6363d3f))
+* **use-long-press:** Skip copying CHANGELOG.md on build ([f12b883](https://github.com/minwork/react/commit/f12b883b01eb89935beb823ad2b17be579b66106))
+
+
+### Build config
+
+* **project:** Add lint and Codecov step to PR pipeline ([a957423](https://github.com/minwork/react/commit/a9574235ead8dd02b2b14ebee236afde5c8ddade))
+* **project:** Build only on push to main branch ([e0020fa](https://github.com/minwork/react/commit/e0020fadbad7e938a2330ba66184ca30d26339d2))
+* **project:** Drop node v14 and v16 for build workflow ([05c910d](https://github.com/minwork/react/commit/05c910dab9b54c5efa53f1d07ee6c217d33b5e96))
+* **project:** Narrow build to use-long-press and fix coverage step ([e9fb14a](https://github.com/minwork/react/commit/e9fb14afbe17478c0f49ce9359c02a7a0a24e853))
+* **project:** Remove verbose and fail_ci_if_error on coverage action ([61b15cc](https://github.com/minwork/react/commit/61b15cc09e637c1e464b409fb75b22a5ee6c5277))
+* **project:** Replace old workflows with one build workflow ([fc554a6](https://github.com/minwork/react/commit/fc554a67df0f60a3b97abcfd8d8a8033a0c4d5b1))
+* **project:** Update build workflow actions from v2 to v3 ([3c8059c](https://github.com/minwork/react/commit/3c8059cf38033aece47400bceb0d19f13018ae08))
+* **project:** Use built-in setup-node cache for yarn ([fa42d7f](https://github.com/minwork/react/commit/fa42d7f6098d14f936115a223a1c4faa040394e1))
+* **use-long-press:** Fix copying README command on 'release' target ([68016f2](https://github.com/minwork/react/commit/68016f2cbc019fa4c6859004bac3f4108215cb37))
+* **use-long-press:** Publish new version on docs changes ([2d61db1](https://github.com/minwork/react/commit/2d61db135d6c24c5d9a337f0609d780b65940cdb))
+
 ## [3.0.2](https://github.com/minwork/react/compare/use-long-press-v3.0.1...use-long-press-v3.0.2) (2023-04-19)
 
 
