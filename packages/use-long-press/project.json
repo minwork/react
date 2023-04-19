@@ -50,6 +50,10 @@
             "forwardAllArgs": false
           },
           {
+            "command": "cp ./packages/use-long-press/{README.md,CHANGELOG.md} ./dist/packages/use-long-press",
+            "forwardAllArgs": false
+          },
+          {
             "command": "yarn run semantic-release --extends=./packages/use-long-press/release.config.js --no-ci",
             "forwardAllArgs": true
           }
