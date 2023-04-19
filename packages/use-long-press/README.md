@@ -2,6 +2,7 @@
 
 > React hook for detecting _click_ / _tap_ / _point_ and _hold_ event
 
+[![codecov](https://codecov.io/gh/minwork/react/branch/main/graph/badge.svg?token=2KPMMSLDOM)](https://codecov.io/gh/minwork/react)
 ![npm type definitions](https://img.shields.io/npm/types/use-long-press)
 ![npm bundle size](https://img.shields.io/bundlephobia/min/use-long-press)
 [![npm](https://img.shields.io/npm/v/use-long-press)](https://www.npmjs.com/package/use-long-press)
