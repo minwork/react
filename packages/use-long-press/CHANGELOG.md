@@ -1,3 +1,11 @@
+## [3.0.4](https://github.com/minwork/react/compare/use-long-press-v3.0.3...use-long-press-v3.0.4) (2023-04-19)
+
+
+### Chores
+
+* **release:** Release use-long-press v3.0.4-alpha.1 [skip ci] ([86cf4f9](https://github.com/minwork/react/commit/86cf4f99c557ae52c6b69bb784cc0944b9a89d8f))
+* **release:** Release use-long-press v3.0.4-alpha.2 [skip ci] ([c985d1f](https://github.com/minwork/react/commit/c985d1ffc3b4b2774ff951659ec9775e9e66f685))
+
 ## [3.0.4-alpha.2](https://github.com/minwork/react/compare/use-long-press-v3.0.4-alpha.1...use-long-press-v3.0.4-alpha.2) (2023-04-19)
 
 ## [3.0.4-alpha.1](https://github.com/minwork/react/compare/use-long-press-v3.0.3...use-long-press-v3.0.4-alpha.1) (2023-04-19)
