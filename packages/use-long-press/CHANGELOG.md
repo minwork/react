@@ -1,3 +1,10 @@
+## [3.1.0-alpha.1](https://github.com/minwork/react/compare/use-long-press-v3.0.4...use-long-press-v3.1.0-alpha.1) (2023-04-22)
+
+
+### Features
+
+* **use-long-press:** Add option to cancel long press when moved outside element ([34b6892](https://github.com/minwork/react/commit/34b6892abda8eb28a8178842dd2776a372d7bed0))
+
 ## [3.0.4](https://github.com/minwork/react/compare/use-long-press-v3.0.3...use-long-press-v3.0.4) (2023-04-19)
 
 
