@@ -95,12 +95,18 @@ export interface LongPressOptions<
    */
   filterEvents?: (event: LongPressReactEvents<Target>) => boolean;
   /**
-   * If long press should be canceled on mouse / touch move. Possible values:
+   * If long press should be canceled on mouse / touch / pointer move. Possible values:
    * - `false`: [default] Disable cancelling on movement
    * - `true`: Enable cancelling on movement and use default 25px threshold
    * - `number`: Set a specific tolerance value in pixels (square side size inside which movement won't cancel long press)
    */
   cancelOnMovement?: boolean | number;
+  /**
+   * If long press should be canceled when moving mouse / touch / pointer outside the element to which it was bound.
+   *
+   * Works for mouse and pointer events, touch events will be supported in the future.
+   */
+  cancelOutsideElement?: boolean;
   /**
    * Called after detecting initial click / tap / point event. Allows to change event position before registering it for the purpose of `cancelOnMovement`.
    */
@@ -131,6 +137,7 @@ export interface LongPressMouseHandlers<Target extends Element = Element> {
   onMouseDown: MouseEventHandler<Target>;
   onMouseMove: MouseEventHandler<Target>;
   onMouseUp: MouseEventHandler<Target>;
+  onMouseLeave?: MouseEventHandler<Target>;
 }
 export interface LongPressTouchHandlers<Target extends Element = Element> {
   onTouchStart: TouchEventHandler<Target>;
@@ -142,6 +149,7 @@ export interface LongPressPointerHandlers<Target extends Element = Element> {
   onPointerDown: PointerEventHandler<Target>;
   onPointerMove: PointerEventHandler<Target>;
   onPointerUp: PointerEventHandler<Target>;
+  onPointerLeave?: PointerEventHandler<Target>;
 }
 
 export type LongPressHandlers<Target extends Element = Element> =

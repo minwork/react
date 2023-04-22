@@ -72,11 +72,13 @@ export function useLongPress<
  *
  * @param {string} detect - Which type of events should be detected (`'mouse'` | `'touch'` | `'pointer'`). For TS use *LongPressEventType* enum.
  *
- * @param {boolean} cancelOnMovement - If long press should be canceled on mouse / touch move. Possible values:<ul>
+ * @param {boolean|number} cancelOnMovement - If long press should be canceled on mouse / touch / pointer move. Possible values:<ul>
  * <li>`false` - [default] Disable cancelling on movement</li>
  * <li>`true` - Enable cancelling on movement and use default 25px threshold</li>
  * <li>`number` - Set a specific tolerance value in pixels (square side size inside which movement won't cancel long press)</li>
  * </ul>
+ *
+ * @param {boolean} cancelOutsideElement If long press should be canceled when moving mouse / touch / pointer outside the element to which it was bound. Works for mouse and pointer events, touch events will be supported in the future.
  *
  * @param {(event:Object)=>boolean} filterEvents - Function to filter incoming events. Function should return `false` for events that will be ignored (e.g. right mouse clicks)
  *
@@ -103,6 +105,7 @@ export function useLongPress<
     captureEvent = false,
     detect = LongPressEventType.Pointer,
     cancelOnMovement = false,
+    cancelOutsideElement = false,
     filterEvents,
     onStart,
     onMove,
@@ -256,12 +259,19 @@ export function useLongPress<
       }
 
       switch (detect) {
-        case LongPressEventType.Mouse:
-          return {
+        case LongPressEventType.Mouse: {
+          const result: LongPressMouseHandlers = {
             onMouseDown: start as MouseEventHandler<Target>,
             onMouseMove: handleMove as MouseEventHandler<Target>,
             onMouseUp: cancel as MouseEventHandler<Target>,
           };
+
+          if (cancelOutsideElement) {
+            result.onMouseLeave = cancel as MouseEventHandler<Target>;
+          }
+
+          return result;
+        }
 
         case LongPressEventType.Touch:
           return {
@@ -270,12 +280,19 @@ export function useLongPress<
             onTouchEnd: cancel as TouchEventHandler<Target>,
           };
 
-        case LongPressEventType.Pointer:
-          return {
+        case LongPressEventType.Pointer: {
+          const result: LongPressPointerHandlers = {
             onPointerDown: start as PointerEventHandler<Target>,
             onPointerMove: handleMove as PointerEventHandler<Target>,
             onPointerUp: cancel as PointerEventHandler<Target>,
           };
+
+          if (cancelOutsideElement) {
+            result.onPointerLeave = cancel as PointerEventHandler<Target>;
+          }
+
+          return result;
+        }
       }
     },
     [callback, cancel, detect, handleMove, start]
