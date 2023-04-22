@@ -15,7 +15,7 @@
 - Cancel long press if moved too far from the target
 - Flexible callbacks: `onStart`, `onMove`, `onFinish`, `onCancel`
 - Disable hook when necessary
-- Adjustable long press detection threshold
+- Filter undesired events (like mouse right clicks)
 
 # Table of Contents
 1. [Installation](#installation)
