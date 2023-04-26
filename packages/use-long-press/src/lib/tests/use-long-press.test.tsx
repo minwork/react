@@ -628,6 +628,39 @@ describe('Hook options', () => {
         expect(onFinish).toHaveBeenCalledTimes(1);
       }
     );
+
+    test.each([[LongPressEventType.Mouse] /*, [LongPressEventType.Touch]*/, [LongPressEventType.Pointer]])(
+      'Do not cancel when "%s" left element if option is set to false',
+      (eventType) => {
+        const callback = vi.fn();
+        const onCancel = vi.fn();
+        const onFinish = vi.fn();
+        const threshold = 1000;
+
+        const element = createTestElement({
+          callback,
+          onCancel,
+          onFinish,
+          detect: eventType,
+          cancelOutsideElement: false,
+          threshold,
+        });
+        const longPressEvent = getDOMTestHandlersMap(eventType, element);
+        const event = longPressMockedEventCreatorMap[eventType]();
+
+        longPressEvent.start(event);
+        longPressEvent.leave?.(event);
+        expect(callback).toHaveBeenCalledTimes(0);
+        expect(onFinish).toHaveBeenCalledTimes(0);
+
+        vi.advanceTimersByTime(threshold + 1);
+        longPressEvent.stop(event);
+
+        expect(callback).toHaveBeenCalledTimes(1);
+        expect(onCancel).toHaveBeenCalledTimes(0);
+        expect(onFinish).toHaveBeenCalledTimes(1);
+      }
+    );
   });
 
   describe('filterEvents', () => {
