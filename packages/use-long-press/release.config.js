@@ -34,7 +34,7 @@ module.exports = {
             { type: 'feat', section: 'Features' },
             { type: 'fix', section: 'Bug Fixes' },
             { type: 'chore', section: 'Chores' },
-            { type: 'docs', hidden: true },
+            { type: 'docs', section: 'Documentation' },
             { type: 'style', hidden: true },
             { type: 'refactor', section: 'Refactors' },
             { type: 'build', section: 'Build config' },
