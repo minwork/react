@@ -1,3 +1,28 @@
+## [3.1.0](https://github.com/minwork/react/compare/use-long-press-v3.0.4...use-long-press-v3.1.0) (2023-04-26)
+
+
+### Features
+
+* **use-long-press:** Add option to cancel long press when moved outside element ([34b6892](https://github.com/minwork/react/commit/34b6892abda8eb28a8178842dd2776a372d7bed0))
+
+
+### Bug Fixes
+
+* **use-long-press:** Change cancelOutsideElement option default value and adjust tests ([fc0e1a9](https://github.com/minwork/react/commit/fc0e1a9e465e0fac6ae49fdbeadf95e0949188a1))
+
+
+### Build config
+
+* **use-long-press:** Add 'Documentation' section to changelog ([68c1616](https://github.com/minwork/react/commit/68c1616b777be3fe562bfc53df87d1cd5357f93f))
+* **use-long-press:** Add GitHub plugin to semantic-release config ([9a5ab95](https://github.com/minwork/react/commit/9a5ab95f3c3f76a951a07a3337ad37775394dd35))
+
+
+### Documentation
+
+* **use-long-press:** Add documentation for 'cancelOutsideElement' option ([d8d9b7e](https://github.com/minwork/react/commit/d8d9b7ee28e3d760ef93a7bf5fd92ee8a28875ed))
+* **use-long-press:** Add missing section link to ToC ([e06f2eb](https://github.com/minwork/react/commit/e06f2eb5567150b05f412945a4b42a154ab7e374))
+* **use-long-press:** Update main features list ([585eb38](https://github.com/minwork/react/commit/585eb388bb7c4974bf14a3967e7da2d248b52705))
+
 ## [3.1.0-alpha.3](https://github.com/minwork/react/compare/use-long-press-v3.1.0-alpha.2...use-long-press-v3.1.0-alpha.3) (2023-04-26)
 
 
