@@ -65,6 +65,7 @@ describe('Hook result', () => {
       onPointerDown: expect.any(Function),
       onPointerMove: expect.any(Function),
       onPointerUp: expect.any(Function),
+      onPointerLeave: expect.any(Function),
     });
   });
 
@@ -78,6 +79,7 @@ describe('Hook result', () => {
       onMouseDown: expect.any(Function),
       onMouseUp: expect.any(Function),
       onMouseMove: expect.any(Function),
+      onMouseLeave: expect.any(Function),
     });
 
     const { result: resultTouch } = renderHook(() =>
@@ -570,7 +572,7 @@ describe('Hook options', () => {
     });
 
     test.each([[LongPressEventType.Mouse] /*, [LongPressEventType.Touch]*/, [LongPressEventType.Pointer]])(
-      'Cancel with proper reason when "%s" leaves element',
+      'By default cancel with proper reason when "%s" leaves element',
       (eventType) => {
         const onCancel = vi.fn();
         const onFinish = vi.fn();
@@ -580,7 +582,6 @@ describe('Hook options', () => {
           callback: vi.fn(),
           onCancel,
           detect: eventType,
-          cancelOutsideElement: true,
           threshold,
         });
         const longPressEvent = getDOMTestHandlersMap(eventType, element);

@@ -114,7 +114,7 @@ export function useLongPress<
     captureEvent = false,
     detect = LongPressEventType.Pointer,
     cancelOnMovement = false,
-    cancelOutsideElement = false,
+    cancelOutsideElement = true,
     filterEvents,
     onStart,
     onMove,
