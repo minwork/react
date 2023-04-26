@@ -37,6 +37,7 @@
 5. [Migration](#migration)
    1. [v1 to v2](#v1-to-v2)
    2. [v2 to v3](#v2-to-v3)
+   3. [Long press outside element](#-mouse--pointer-leaving-element-while-pressing)
 6. [Changelog](#changelog)
 7. [FAQ](#faq)
 8. [Support us](#support-us)
