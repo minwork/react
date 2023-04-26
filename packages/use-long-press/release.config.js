@@ -59,5 +59,6 @@ module.exports = {
         message: `chore(release): Release ${appName} v$\{nextRelease.version} [skip ci]`,
       },
     ],
+    '@semantic-release/github',
   ],
 };
