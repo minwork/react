@@ -1,3 +1,15 @@
+## [3.1.0-alpha.3](https://github.com/minwork/react/compare/use-long-press-v3.1.0-alpha.2...use-long-press-v3.1.0-alpha.3) (2023-04-26)
+
+
+### Bug Fixes
+
+* **use-long-press:** Change cancelOutsideElement option default value and adjust tests ([fc0e1a9](https://github.com/minwork/react/commit/fc0e1a9e465e0fac6ae49fdbeadf95e0949188a1))
+
+
+### Documentation
+
+* **use-long-press:** Add missing section link to ToC ([e06f2eb](https://github.com/minwork/react/commit/e06f2eb5567150b05f412945a4b42a154ab7e374))
+
 ## [3.1.0-alpha.2](https://github.com/minwork/react/compare/use-long-press-v3.1.0-alpha.1...use-long-press-v3.1.0-alpha.2) (2023-04-26)
 
 
