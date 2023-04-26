@@ -1,3 +1,16 @@
+## [3.1.0-alpha.2](https://github.com/minwork/react/compare/use-long-press-v3.1.0-alpha.1...use-long-press-v3.1.0-alpha.2) (2023-04-26)
+
+
+### Documentation
+
+* **use-long-press:** Add documentation for 'cancelOutsideElement' option ([d8d9b7e](https://github.com/minwork/react/commit/d8d9b7ee28e3d760ef93a7bf5fd92ee8a28875ed))
+
+
+### Build config
+
+* **use-long-press:** Add 'Documentation' section to changelog ([68c1616](https://github.com/minwork/react/commit/68c1616b777be3fe562bfc53df87d1cd5357f93f))
+* **use-long-press:** Add GitHub plugin to semantic-release config ([9a5ab95](https://github.com/minwork/react/commit/9a5ab95f3c3f76a951a07a3337ad37775394dd35))
+
 ## [3.1.0-alpha.1](https://github.com/minwork/react/compare/use-long-press-v3.0.4...use-long-press-v3.1.0-alpha.1) (2023-04-22)
 
 
