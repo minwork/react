@@ -33,7 +33,7 @@ module.exports = {
           types: [
             { type: 'feat', section: 'Features' },
             { type: 'fix', section: 'Bug Fixes' },
-            { type: 'chore', section: 'Chores' },
+            { type: 'chore', hidden: true },
             { type: 'docs', section: 'Documentation' },
             { type: 'style', hidden: true },
             { type: 'refactor', section: 'Refactors' },
