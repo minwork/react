@@ -74,7 +74,7 @@ export const longPressTestHandlerNamesMap = {
 } satisfies Record<
   LongPressEventType,
   Record<
-    LongPressTestHandlerType,
+    LongPressTestHandlerType | 'leave',
     keyof LongPressMouseHandlers | keyof LongPressTouchHandlers | keyof LongPressPointerHandlers
   >
 >;
