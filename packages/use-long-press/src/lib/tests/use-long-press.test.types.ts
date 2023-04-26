@@ -3,7 +3,12 @@ import { LongPressDomEvents, LongPressReactEvents } from '../use-long-press.type
 
 export type LongPressTestHandlerType = 'start' | 'move' | 'stop';
 export type LongPressTestHandler = (event: LongPressReactEvents | LongPressDomEvents) => void;
-export type LongPressTestHandlersMap = Record<LongPressTestHandlerType, LongPressTestHandler>;
+export type LongPressTestHandlersMap = {
+  start: LongPressTestHandler;
+  move: LongPressTestHandler;
+  stop: LongPressTestHandler;
+  leave?: LongPressTestHandler;
+};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type LongPressTestEventCreator = (options?: object) => UIEvent<Element, any>;

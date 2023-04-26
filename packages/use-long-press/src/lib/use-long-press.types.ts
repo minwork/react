@@ -30,13 +30,17 @@ export enum LongPressEventType {
  */
 export enum LongPressCallbackReason {
   /**
-   * Returned when mouse / touch was moved outside initial press area when `cancelOnMovement` is active
+   * Returned when mouse / touch / pointer was moved outside initial press area when `cancelOnMovement` is active
    */
   CancelledByMovement = 'cancelled-by-movement',
   /**
-   * Returned when click / tap was released before long press detection time threshold
+   * Returned when click / tap / point was released before long press detection time threshold
    */
   CancelledByRelease = 'cancelled-by-release',
+  /**
+   * Returned when mouse / touch / pointer was moved outside element and _cancelOutsideElement_ option was set to `true`
+   */
+  CancelledOutsideElement = 'cancelled-outside-element',
 }
 
 /*

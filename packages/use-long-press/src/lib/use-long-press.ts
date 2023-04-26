@@ -1,4 +1,13 @@
-import { MouseEventHandler, PointerEventHandler, TouchEventHandler, useCallback, useEffect, useRef } from "react";
+import {
+  MouseEvent,
+  MouseEventHandler,
+  PointerEvent,
+  PointerEventHandler,
+  TouchEventHandler,
+  useCallback,
+  useEffect,
+  useRef
+} from "react";
 import {
   LongPressCallback,
   LongPressCallbackReason,
@@ -116,6 +125,7 @@ export function useLongPress<
   const isLongPressActive = useRef(false);
   const isPressed = useRef(false);
   const context = useRef<Context>();
+  const target = useRef<Target>();
   const timer = useRef<ReturnType<typeof setTimeout>>();
   const savedCallback = useRef(callback);
   const startPosition = useRef<{
@@ -150,6 +160,7 @@ export function useLongPress<
       // Calculate position after calling 'onStart' so it can potentially change it
       startPosition.current = getCurrentPosition(event);
       isPressed.current = true;
+      target.current = event.currentTarget;
 
       timer.current = setTimeout(() => {
         if (savedCallback.current) {
@@ -267,7 +278,9 @@ export function useLongPress<
           };
 
           if (cancelOutsideElement) {
-            result.onMouseLeave = cancel as MouseEventHandler<Target>;
+            result.onMouseLeave = (event: MouseEvent<Target>) => {
+              cancel(event, LongPressCallbackReason.CancelledOutsideElement);
+            };
           }
 
           return result;
@@ -288,13 +301,14 @@ export function useLongPress<
           };
 
           if (cancelOutsideElement) {
-            result.onPointerLeave = cancel as PointerEventHandler<Target>;
+            result.onPointerLeave = (event: PointerEvent<Target>) =>
+              cancel(event, LongPressCallbackReason.CancelledOutsideElement);
           }
 
           return result;
         }
       }
     },
-    [callback, cancel, detect, handleMove, start]
+    [callback, cancel, cancelOutsideElement, detect, handleMove, start]
   );
 }

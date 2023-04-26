@@ -57,16 +57,19 @@ export const longPressTestHandlerNamesMap = {
     start: 'onMouseDown',
     move: 'onMouseMove',
     stop: 'onMouseUp',
+    leave: 'onMouseLeave',
   },
   [LongPressEventType.Touch]: {
     start: 'onTouchStart',
     move: 'onTouchMove',
     stop: 'onTouchEnd',
+    leave: undefined as unknown as keyof LongPressTouchHandlers,
   },
   [LongPressEventType.Pointer]: {
     start: 'onPointerDown',
     move: 'onPointerMove',
     stop: 'onPointerUp',
+    leave: 'onPointerLeave',
   },
 } satisfies Record<
   LongPressEventType,

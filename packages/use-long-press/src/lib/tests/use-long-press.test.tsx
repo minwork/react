@@ -18,7 +18,7 @@ import {
   TestComponentProps
 } from "./TestComponent";
 import React from "react";
-import { describe, expect, MockedFunction, test } from "vitest";
+import { afterEach, beforeEach, describe, expect, MockedFunction, test } from "vitest";
 import {
   emptyContext,
   expectSpecificEvent,
@@ -559,6 +559,76 @@ describe('Hook options', () => {
       }
     );
   });
+
+  describe('cancelOutsideElement', () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.clearAllTimers();
+    });
+
+    test.each([[LongPressEventType.Mouse] /*, [LongPressEventType.Touch]*/, [LongPressEventType.Pointer]])(
+      'Cancel with proper reason when "%s" leaves element',
+      (eventType) => {
+        const onCancel = vi.fn();
+        const onFinish = vi.fn();
+        const threshold = 1000;
+
+        const element = createTestElement({
+          callback: vi.fn(),
+          onCancel,
+          detect: eventType,
+          cancelOutsideElement: true,
+          threshold,
+        });
+        const longPressEvent = getDOMTestHandlersMap(eventType, element);
+        const event = longPressMockedEventCreatorMap[eventType]();
+        const expectedEvent = longPressExpectedEventMap[eventType];
+
+        longPressEvent.start(event);
+        vi.advanceTimersByTime(threshold / 2);
+        longPressEvent.leave?.(event);
+
+        expect(onFinish).toHaveBeenCalledTimes(0);
+        expect(onCancel).toHaveBeenCalledTimes(1);
+        expect(onCancel).toHaveBeenCalledWith(expectedEvent, {
+          reason: LongPressCallbackReason.CancelledOutsideElement,
+        });
+      }
+    );
+
+    test.each([[LongPressEventType.Mouse] /*, [LongPressEventType.Touch]*/, [LongPressEventType.Pointer]])(
+      'Do not cancel when "%s" left element after long press',
+      (eventType) => {
+        const callback = vi.fn();
+        const onCancel = vi.fn();
+        const onFinish = vi.fn();
+        const threshold = 1000;
+
+        const element = createTestElement({
+          callback,
+          onCancel,
+          onFinish,
+          detect: eventType,
+          cancelOutsideElement: true,
+          threshold,
+        });
+        const longPressEvent = getDOMTestHandlersMap(eventType, element);
+        const event = longPressMockedEventCreatorMap[eventType]();
+
+        longPressEvent.start(event);
+        vi.advanceTimersByTime(threshold + 1);
+        longPressEvent.leave?.(event);
+
+        expect(callback).toHaveBeenCalledTimes(1);
+        expect(onCancel).toHaveBeenCalledTimes(0);
+        expect(onFinish).toHaveBeenCalledTimes(1);
+      }
+    );
+  });
+
   describe('filterEvents', () => {
     vi.useFakeTimers();
 

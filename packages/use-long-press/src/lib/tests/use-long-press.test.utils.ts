@@ -152,6 +152,7 @@ export function getDOMTestHandlersMap(
         start: fireEvent.mouseDown.bind(null, element),
         move: fireEvent.mouseMove.bind(null, element),
         stop: fireEvent.mouseUp.bind(null, element),
+        leave: fireEvent.mouseLeave.bind(null, element),
       };
     case LongPressEventType.Touch:
       return {
@@ -164,6 +165,7 @@ export function getDOMTestHandlersMap(
         start: fireEvent.pointerDown.bind(null, element),
         move: fireEvent.pointerMove.bind(null, element),
         stop: fireEvent.pointerUp.bind(null, element),
+        leave: fireEvent.pointerLeave.bind(null, element),
       };
     }
   }

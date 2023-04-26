@@ -42,6 +42,12 @@ export const TestComponent: React.FC<TestComponentProps> = ({ callback, context,
           handlers.onPointerUp(event);
         }
       }}
+      onPointerLeave={(event) => {
+        if ('onPointerLeave' in handlers && handlers.onPointerLeave) {
+          event.nativeEvent = new PointerEvent('pointerleave');
+          handlers.onPointerLeave(event);
+        }
+      }}
     >
       Click and hold
     </button>
