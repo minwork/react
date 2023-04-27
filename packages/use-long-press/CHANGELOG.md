@@ -1,3 +1,10 @@
+## [3.1.1-alpha.1](https://github.com/minwork/react/compare/use-long-press-v3.1.0...use-long-press-v3.1.1-alpha.1) (2023-04-27)
+
+
+### Refactors
+
+* **use-long-press:** Handle environments where PointerEvent is not present ([77a2c9d](https://github.com/minwork/react/commit/77a2c9d4098766045a066515e47c71df4fcf3ca6))
+
 ## [3.1.0](https://github.com/minwork/react/compare/use-long-press-v3.0.4...use-long-press-v3.1.0) (2023-04-26)
 
 
