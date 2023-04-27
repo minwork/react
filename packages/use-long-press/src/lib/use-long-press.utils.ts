@@ -6,6 +6,8 @@ import {
   TouchEvent as ReactTouchEvent,
 } from 'react';
 
+const PointerEvent = window.PointerEvent ?? null;
+
 export function isTouchEvent<Target extends Element>(event: SyntheticEvent<Target>): event is ReactTouchEvent<Target> {
   const { nativeEvent } = event;
   if (!nativeEvent) {
@@ -16,7 +18,7 @@ export function isTouchEvent<Target extends Element>(event: SyntheticEvent<Targe
 }
 
 export function isMouseEvent<Target extends Element>(event: SyntheticEvent<Target>): event is ReactMouseEvent<Target> {
-  return event.nativeEvent instanceof MouseEvent && !(event.nativeEvent instanceof PointerEvent);
+  return event.nativeEvent instanceof MouseEvent && !(PointerEvent && event.nativeEvent instanceof PointerEvent);
 }
 
 export function isPointerEvent<Target extends Element>(
@@ -27,7 +29,7 @@ export function isPointerEvent<Target extends Element>(
     return false;
   }
 
-  return (window.PointerEvent && nativeEvent instanceof PointerEvent) || 'pointerId' in nativeEvent;
+  return (PointerEvent && nativeEvent instanceof PointerEvent) || 'pointerId' in nativeEvent;
 }
 
 export function isRecognisableEvent<Target extends Element>(
