@@ -1,3 +1,10 @@
+## [3.1.2](https://github.com/minwork/react/compare/use-long-press-v3.1.1...use-long-press-v3.1.2) (2023-04-28)
+
+
+### Bug Fixes
+
+* **use-long-press:** Handle case when 'window' is not present ([58a7a95](https://github.com/minwork/react/commit/58a7a95d0b739e9c87535b1647ac6f41353735dc))
+
 ## [3.1.2-rc.1](https://github.com/minwork/react/compare/use-long-press-v3.1.1...use-long-press-v3.1.2-rc.1) (2023-04-28)
 
 
