@@ -6,19 +6,21 @@ import {
   TouchEvent as ReactTouchEvent,
 } from 'react';
 
-const PointerEvent = global?.PointerEvent ?? window?.PointerEvent ?? null;
-const TouchEvent = global?.TouchEvent ?? window?.TouchEvent ?? null;
+const getPointerEvent = () => global?.PointerEvent ?? window?.PointerEvent ?? null;
+const getTouchEvent = () => global?.TouchEvent ?? window?.TouchEvent ?? null;
 
 export function isTouchEvent<Target extends Element>(event: SyntheticEvent<Target>): event is ReactTouchEvent<Target> {
   const { nativeEvent } = event;
   if (!nativeEvent) {
     return false;
   }
+  const TouchEvent = getTouchEvent();
 
   return (TouchEvent && nativeEvent instanceof TouchEvent) || 'touches' in nativeEvent;
 }
 
 export function isMouseEvent<Target extends Element>(event: SyntheticEvent<Target>): event is ReactMouseEvent<Target> {
+  const PointerEvent = getPointerEvent();
   return event.nativeEvent instanceof MouseEvent && !(PointerEvent && event.nativeEvent instanceof PointerEvent);
 }
 
@@ -30,6 +32,7 @@ export function isPointerEvent<Target extends Element>(
     return false;
   }
 
+  const PointerEvent = getPointerEvent();
   return (PointerEvent && nativeEvent instanceof PointerEvent) || 'pointerId' in nativeEvent;
 }
 
