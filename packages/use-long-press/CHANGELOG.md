@@ -1,3 +1,10 @@
+## [3.1.3](https://github.com/minwork/react/compare/use-long-press-v3.1.2...use-long-press-v3.1.3) (2023-04-28)
+
+
+### Bug Fixes
+
+* **use-long-press:** Remove accessing "global" for pointer and touch events ([5ee5b0c](https://github.com/minwork/react/commit/5ee5b0c0f49f658b63d3f4417435df41dd136b27))
+
 ## [3.1.2](https://github.com/minwork/react/compare/use-long-press-v3.1.1...use-long-press-v3.1.2) (2023-04-28)
 
 
