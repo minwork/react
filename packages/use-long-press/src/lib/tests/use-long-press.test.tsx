@@ -184,12 +184,13 @@ describe('Different environments compatibility', () => {
   test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch], [LongPressEventType.Pointer]])(
     'Using hook will not throw error when rendered in SSR context, using "%s" events',
     (eventType) => {
-      const originalWindow = global.window;
+      const originalWindow = window;
 
       // Temporary delete window
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      delete global.window;
+      // eslint-disable-next-line no-global-assign
+      window = undefined;
 
       const callback = vi.fn();
       const onStart = vi.fn();
@@ -212,7 +213,8 @@ describe('Different environments compatibility', () => {
       expect(callback).toHaveBeenCalledTimes(1);
 
       // Restore window
-      global.window = originalWindow;
+      // eslint-disable-next-line no-global-assign
+      window = originalWindow;
     }
   );
 });
