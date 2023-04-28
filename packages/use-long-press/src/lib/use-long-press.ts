@@ -237,15 +237,18 @@ export function useLongPress<
       cancel(reactEvent);
     }
 
-    window.addEventListener('mouseup', onLongPressStop);
-    window.addEventListener('touchend', onLongPressStop);
-    window.addEventListener('pointerup', onLongPressStop);
+    // If not SSR, add window listeners
+    if (window) {
+      window.addEventListener('mouseup', onLongPressStop);
+      window.addEventListener('touchend', onLongPressStop);
+      window.addEventListener('pointerup', onLongPressStop);
 
-    return () => {
-      window.removeEventListener('mouseup', onLongPressStop);
-      window.removeEventListener('touchend', onLongPressStop);
-      window.removeEventListener('pointerup', onLongPressStop);
-    };
+      return () => {
+        window.removeEventListener('mouseup', onLongPressStop);
+        window.removeEventListener('touchend', onLongPressStop);
+        window.removeEventListener('pointerup', onLongPressStop);
+      };
+    }
   }, [cancel]);
 
   // Clear timer on unmount

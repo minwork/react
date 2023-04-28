@@ -6,7 +6,8 @@ import {
   TouchEvent as ReactTouchEvent,
 } from 'react';
 
-const PointerEvent = window.PointerEvent ?? null;
+const PointerEvent = global?.PointerEvent ?? window?.PointerEvent ?? null;
+const TouchEvent = global?.TouchEvent ?? window?.TouchEvent ?? null;
 
 export function isTouchEvent<Target extends Element>(event: SyntheticEvent<Target>): event is ReactTouchEvent<Target> {
   const { nativeEvent } = event;
@@ -14,7 +15,7 @@ export function isTouchEvent<Target extends Element>(event: SyntheticEvent<Targe
     return false;
   }
 
-  return (window.TouchEvent && nativeEvent instanceof TouchEvent) || 'touches' in nativeEvent;
+  return (TouchEvent && nativeEvent instanceof TouchEvent) || 'touches' in nativeEvent;
 }
 
 export function isMouseEvent<Target extends Element>(event: SyntheticEvent<Target>): event is ReactMouseEvent<Target> {
