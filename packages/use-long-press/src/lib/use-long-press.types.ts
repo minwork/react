@@ -161,3 +161,5 @@ export type LongPressHandlers<Target extends Element = Element> =
   | LongPressTouchHandlers<Target>
   | LongPressPointerHandlers<Target>
   | LongPressEmptyHandlers;
+
+export type LongPressWindowListener = (event: LongPressDomEvents) => void;

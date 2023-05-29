@@ -124,7 +124,6 @@ export function useLongPress<
 ): LongPressResult<LongPressHandlers<Target>, Context> {
   const isLongPressActive = useRef(false);
   const isPressed = useRef(false);
-  const context = useRef<Context>();
   const target = useRef<Target>();
   const timer = useRef<ReturnType<typeof setTimeout>>();
   const savedCallback = useRef(callback);
@@ -134,7 +133,7 @@ export function useLongPress<
   } | null>(null);
 
   const start = useCallback(
-    (event: LongPressReactEvents<Target>) => {
+    (context?: Context) => (event: LongPressReactEvents<Target>) => {
       // Prevent multiple start triggers
       if (isPressed.current) {
         return;
@@ -155,7 +154,7 @@ export function useLongPress<
       }
 
       // When touched trigger onStart and start timer
-      onStart?.(event, { context: context.current });
+      onStart?.(event, { context });
 
       // Calculate position after calling 'onStart' so it can potentially change it
       startPosition.current = getCurrentPosition(event);
@@ -164,7 +163,7 @@ export function useLongPress<
 
       timer.current = setTimeout(() => {
         if (savedCallback.current) {
-          savedCallback.current(event, { context: context.current });
+          savedCallback.current(event, { context });
           isLongPressActive.current = true;
         }
       }, threshold);
@@ -173,7 +172,7 @@ export function useLongPress<
   );
 
   const cancel = useCallback(
-    (event: LongPressReactEvents<Target>, reason?: LongPressCallbackReason) => {
+    (context?: Context) => (event: LongPressReactEvents<Target>, reason?: LongPressCallbackReason) => {
       // Ignore unrecognised events
       if (!isRecognisableEvent(event)) {
         return;
@@ -192,10 +191,10 @@ export function useLongPress<
 
       // Trigger onFinish callback only if timer was active
       if (isLongPressActive.current) {
-        onFinish?.(event, { context: context.current });
+        onFinish?.(event, { context });
       } else if (isPressed.current) {
         // If not active but pressed, trigger onCancel
-        onCancel?.(event, { context: context.current, reason: reason ?? LongPressCallbackReason.CancelledByRelease });
+        onCancel?.(event, { context, reason: reason ?? LongPressCallbackReason.CancelledByRelease });
       }
 
       isLongPressActive.current = false;
@@ -205,10 +204,10 @@ export function useLongPress<
     [captureEvent, onFinish, onCancel]
   );
 
-  const handleMove = useCallback(
-    (event: LongPressReactEvents<Target>) => {
+  const move = useCallback(
+    (context?: Context) => (event: LongPressReactEvents<Target>) => {
       // First call callback to allow modifying event position
-      onMove?.(event, { context: context.current });
+      onMove?.(event, { context });
 
       if (cancelOnMovement && startPosition.current) {
         const currentPosition = getCurrentPosition(event);
@@ -222,7 +221,7 @@ export function useLongPress<
 
           // If moved outside move tolerance box then cancel long press
           if (movedDistance.x > moveThreshold || movedDistance.y > moveThreshold) {
-            cancel(event, LongPressCallbackReason.CancelledByMovement);
+            cancel(context)(event, LongPressCallbackReason.CancelledByMovement);
           }
         }
       }
@@ -230,25 +229,91 @@ export function useLongPress<
     [cancel, cancelOnMovement, onMove]
   );
 
+  /*const unregisterWindowListeners = useCallback((context: Context | undefined) => {
+    // Skip if SSR
+    if (!window) return;
+
+    const contextHash = hashContext(context);
+    const listener = windowListeners.current.get(contextHash);
+
+    if (listener) {
+      window.removeEventListener('mouseup', listener);
+      window.removeEventListener('touchend', listener);
+      window.removeEventListener('pointerup', listener);
+
+      windowListeners.current.delete(contextHash);
+    }
+  }, []);*/
+
+  const binder = useCallback<LongPressResult<LongPressHandlers<Target>, Context>>(
+    (ctx?: Context) => {
+      if (callback === null) {
+        return {};
+      }
+
+      switch (detect) {
+        case LongPressEventType.Mouse: {
+          const result: LongPressMouseHandlers = {
+            onMouseDown: start(ctx) as MouseEventHandler<Target>,
+            onMouseMove: move(ctx) as MouseEventHandler<Target>,
+            onMouseUp: cancel(ctx) as MouseEventHandler<Target>,
+          };
+
+          if (cancelOutsideElement) {
+            result.onMouseLeave = (event: MouseEvent<Target>) => {
+              cancel(ctx)(event, LongPressCallbackReason.CancelledOutsideElement);
+            };
+          }
+
+          return result;
+        }
+
+        case LongPressEventType.Touch:
+          return {
+            onTouchStart: start(ctx) as TouchEventHandler<Target>,
+            onTouchMove: move(ctx) as TouchEventHandler<Target>,
+            onTouchEnd: cancel(ctx) as TouchEventHandler<Target>,
+          };
+
+        case LongPressEventType.Pointer: {
+          const result: LongPressPointerHandlers = {
+            onPointerDown: start(ctx) as PointerEventHandler<Target>,
+            onPointerMove: move(ctx) as PointerEventHandler<Target>,
+            onPointerUp: cancel(ctx) as PointerEventHandler<Target>,
+          };
+
+          if (cancelOutsideElement) {
+            result.onPointerLeave = (event: PointerEvent<Target>) =>
+              cancel(ctx)(event, LongPressCallbackReason.CancelledOutsideElement);
+          }
+
+          return result;
+        }
+      }
+    },
+    [callback, cancel, cancelOutsideElement, detect, move, start]
+  );
+
   // Listen to long press stop events on window
   useEffect(() => {
-    function onLongPressStop(event: LongPressDomEvents) {
+    // Do nothing if SSR
+    if (!window) return;
+
+    function listener(event: LongPressDomEvents) {
       const reactEvent = createArtificialReactEvent<Target>(event);
-      cancel(reactEvent);
+      cancel()(reactEvent);
     }
 
-    // If not SSR, add window listeners
-    if (window) {
-      window.addEventListener('mouseup', onLongPressStop);
-      window.addEventListener('touchend', onLongPressStop);
-      window.addEventListener('pointerup', onLongPressStop);
+    window.addEventListener('mouseup', listener);
+    window.addEventListener('touchend', listener);
+    window.addEventListener('pointerup', listener);
 
-      return () => {
-        window.removeEventListener('mouseup', onLongPressStop);
-        window.removeEventListener('touchend', onLongPressStop);
-        window.removeEventListener('pointerup', onLongPressStop);
-      };
-    }
+    // Unregister all listeners on unmount
+    return () => {
+      window.removeEventListener('mouseup', listener);
+      window.removeEventListener('touchend', listener);
+      window.removeEventListener('pointerup', listener);
+    };
   }, [cancel]);
 
   // Clear timer on unmount
@@ -264,54 +329,5 @@ export function useLongPress<
     savedCallback.current = callback;
   }, [callback]);
 
-  return useCallback<LongPressResult<LongPressHandlers<Target>, Context>>(
-    (ctx?: Context) => {
-      context.current = ctx;
-
-      if (callback === null) {
-        return {};
-      }
-
-      switch (detect) {
-        case LongPressEventType.Mouse: {
-          const result: LongPressMouseHandlers = {
-            onMouseDown: start as MouseEventHandler<Target>,
-            onMouseMove: handleMove as MouseEventHandler<Target>,
-            onMouseUp: cancel as MouseEventHandler<Target>,
-          };
-
-          if (cancelOutsideElement) {
-            result.onMouseLeave = (event: MouseEvent<Target>) => {
-              cancel(event, LongPressCallbackReason.CancelledOutsideElement);
-            };
-          }
-
-          return result;
-        }
-
-        case LongPressEventType.Touch:
-          return {
-            onTouchStart: start as TouchEventHandler<Target>,
-            onTouchMove: handleMove as TouchEventHandler<Target>,
-            onTouchEnd: cancel as TouchEventHandler<Target>,
-          };
-
-        case LongPressEventType.Pointer: {
-          const result: LongPressPointerHandlers = {
-            onPointerDown: start as PointerEventHandler<Target>,
-            onPointerMove: handleMove as PointerEventHandler<Target>,
-            onPointerUp: cancel as PointerEventHandler<Target>,
-          };
-
-          if (cancelOutsideElement) {
-            result.onPointerLeave = (event: PointerEvent<Target>) =>
-              cancel(event, LongPressCallbackReason.CancelledOutsideElement);
-          }
-
-          return result;
-        }
-      }
-    },
-    [callback, cancel, cancelOutsideElement, detect, handleMove, start]
-  );
+  return binder;
 }

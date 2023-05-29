@@ -1,16 +1,16 @@
-import { MouseEvent as ReactMouseEvent, PointerEvent as ReactPointerEvent, TouchEvent as ReactTouchEvent } from "react";
-import { createEvent, fireEvent } from "@testing-library/react";
-import { EventType } from "@testing-library/dom/types/events";
-import { LongPressDomEvents, LongPressEventType, LongPressHandlers } from "../use-long-press.types";
+import { MouseEvent as ReactMouseEvent, PointerEvent as ReactPointerEvent, TouchEvent as ReactTouchEvent } from 'react';
+import { createEvent, fireEvent } from '@testing-library/react';
+import { EventType } from '@testing-library/dom/types/events';
+import { LongPressDomEvents, LongPressEventType, LongPressHandlers } from '../use-long-press.types';
 import {
   LongPressTestHandler,
   LongPressTestHandlersMap,
   LongPressTestHandlerType,
   LongPressTestPositionedEventCreator,
-  LongPressTestPositionedEventFactory
-} from "./use-long-press.test.types";
-import { convertHandlerNameToEventName } from "./use-long-press.test.functions";
-import { longPressPositionedEventCreatorMap, longPressTestHandlerNamesMap, noop } from "./use-long-press.test.consts";
+  LongPressTestPositionedEventFactory,
+} from './use-long-press.test.types';
+import { convertHandlerNameToEventName } from './use-long-press.test.functions';
+import { longPressPositionedEventCreatorMap, longPressTestHandlerNamesMap, noop } from './use-long-press.test.consts';
 
 /*
  ⌜‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾

@@ -7,6 +7,7 @@ import {
   LongPressCallbackReason,
   LongPressEventType,
   LongPressMouseHandlers,
+  LongPressOptions,
   LongPressPointerHandlers,
   LongPressReactEvents,
   LongPressTouchHandlers
@@ -858,8 +859,7 @@ describe('Hook context', () => {
 
       const component = render(<TestComponent {...props} />);
       const event = longPressMockedEventCreatorMap[eventType]();
-      const element = getComponentElement(component);
-      const longPressEvent = getDOMTestHandlersMap(eventType, element);
+      const longPressEvent = getDOMTestHandlersMap(eventType, getComponentElement(component));
 
       longPressEvent.start(event);
 
@@ -881,12 +881,79 @@ describe('Hook context', () => {
       expect(onMove).toHaveBeenCalledWith(expect.objectContaining(event), { context: context2 });
 
       expect(callback).toHaveBeenCalledTimes(1);
-      expect(callback).toHaveBeenCalledWith(expect.objectContaining(event), { context: context2 });
+      // Callback receive context as it was when long press started
+      expect(callback).toHaveBeenCalledWith(expect.objectContaining(event), { context: context1 });
 
       expect(onFinish).toHaveBeenCalledTimes(1);
       expect(onFinish).toHaveBeenCalledWith(expect.objectContaining(event), { context: context3 });
 
       expect(onCancel).toHaveBeenCalledTimes(0);
+    }
+  );
+
+  test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch], [LongPressEventType.Pointer]])(
+    'Each binder call should have its own context when using "%s" events',
+    (eventType) => {
+      let i = 1;
+      const getContext = () => ({
+        data: {
+          test: i++,
+        },
+      });
+
+      const context1 = getContext();
+      const context2 = getContext();
+      const context3 = getContext();
+
+      const options: LongPressOptions = {
+        onStart,
+        onMove,
+        onFinish,
+        onCancel,
+        detect: eventType,
+        cancelOnMovement: false,
+      };
+
+      const { result } = renderHook(() => useLongPress(callback, options));
+
+      const event = longPressMockedEventCreatorMap[eventType]();
+      const expectedEvent = longPressExpectedEventMap[eventType];
+
+      const handlers1 = getTestHandlersMap(eventType, result.current(context1));
+      const handlers2 = getTestHandlersMap(eventType, result.current(context2));
+      const handlers3 = getTestHandlersMap(eventType, result.current(context3));
+
+      handlers1.start(event);
+      vi.runOnlyPendingTimers();
+      handlers1.stop(event);
+
+      expect(onStart).toHaveBeenLastCalledWith(expectedEvent, { context: context1 });
+      expect(callback).toHaveBeenLastCalledWith(expectedEvent, { context: context1 });
+      expect(onFinish).toHaveBeenLastCalledWith(expectedEvent, { context: context1 });
+
+      handlers2.start(event);
+      handlers2.stop(event);
+
+      expect(onStart).toHaveBeenLastCalledWith(expectedEvent, { context: context2 });
+      expect(onCancel).toHaveBeenLastCalledWith(expectedEvent, {
+        context: context2,
+        reason: LongPressCallbackReason.CancelledByRelease,
+      });
+
+      const domEventFactory = createMockedDomEventFactory(eventType);
+
+      handlers3.start(event);
+      handlers3.move(event);
+      fireEvent(window, domEventFactory.stop());
+
+      expect(onStart).toHaveBeenLastCalledWith(expectedEvent, { context: context3 });
+      expect(onMove).toHaveBeenLastCalledWith(expectedEvent, { context: context3 });
+
+      // Undefined context when cancelled on window
+      expect(onCancel).toHaveBeenLastCalledWith(expectedEvent, {
+        context: undefined,
+        reason: LongPressCallbackReason.CancelledByRelease,
+      });
     }
   );
 

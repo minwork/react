@@ -150,7 +150,37 @@ As a result hook returns callable function (also referred as `bind`) in order to
 
 ## Context
 
-You can supply custom context to the `bind` function like `bind(context)` and then access it from callbacks (`onStart`, `onFinish`, `onCancel`, `onMove`) second argument e.g.: `onStart: (event, { context }) => ...`.
+You can supply custom context to the `bind` function like `bind(context)` and then access it from callbacks (`onStart`, `callback`, `onFinish`, `onCancel`, `onMove`) second argument e.g.: `onStart: (event, { context }) => ...`.
+
+### Context changes during component lifecycle
+All callbacks but long press `callback` will use latest provided context. `callback` will receive context as it was when long press started.
+
+To better understand how component updates affect context let's analyze example below
+
+1. Initial render
+```tsx
+import { useLongPress } from "./use-long-press";
+
+const MyComponent: FC = () => {
+  const bind = useLongPress();
+
+  return <div {...bind('context 1')}/>;
+}
+```
+2. Div is clicked, triggering `onStart` with `'context 1'`
+3. Context changed to `'context 2'`
+```tsx
+// ...
+<div {...bind('context 2')}/>
+// ...
+```
+4. `threshold` time elapses triggering `callback` with `'context 1'` as it was when long press started
+5. Click finish triggering `onFinish` with `'context 2'` since it changed
+
+### Context value when long press finish outside element
+When `cancelOutsideElement` option is set to `false` long press finish will be detected on `window` therefore it won't be possible to determine which context was used.
+
+Let's say we use `...bind('test')`, therefore `onStart` and `callback` will receive context `'test'` but `onCancel` or `onFinish` if triggered outside element will receive context `undefined`
 
 ## Handlers
 
