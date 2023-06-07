@@ -1,7 +1,7 @@
-import { act, renderHook } from "@testing-library/react-hooks";
-import { renderHook as renderHookSSR } from "@testing-library/react-hooks/server";
-import { createEvent, fireEvent, render } from "@testing-library/react";
-import { useLongPress } from "../use-long-press";
+import { act, renderHook } from '@testing-library/react-hooks';
+import { renderHook as renderHookSSR } from '@testing-library/react-hooks/server';
+import { createEvent, fireEvent, render } from '@testing-library/react';
+import { useLongPress } from '../use-long-press';
 import {
   LongPressCallback,
   LongPressCallbackReason,
@@ -10,25 +10,25 @@ import {
   LongPressOptions,
   LongPressPointerHandlers,
   LongPressReactEvents,
-  LongPressTouchHandlers
-} from "../use-long-press.types";
+  LongPressTouchHandlers,
+} from '../use-long-press.types';
 import {
   createTestComponent,
   createTestElement,
   getComponentElement,
   TestComponent,
-  TestComponentProps
-} from "./TestComponent";
-import React from "react";
-import { afterEach, beforeEach, describe, expect, MockedFunction, test } from "vitest";
+  TestComponentProps,
+} from './TestComponent';
+import React from 'react';
+import { afterEach, beforeEach, describe, expect, MockedFunction, test } from 'vitest';
 import {
   emptyContext,
   expectSpecificEvent,
   expectTouchEvent,
   longPressExpectedEventMap,
   longPressMockedEventCreatorMap,
-  noop
-} from "./use-long-press.test.consts";
+  noop,
+} from './use-long-press.test.consts';
 import {
   createMockedDomEventFactory,
   createMockedMouseEvent,
@@ -39,9 +39,9 @@ import {
   createPositionedPointerEvent,
   createPositionedTouchEvent,
   getDOMTestHandlersMap,
-  getTestHandlersMap
-} from "./use-long-press.test.utils";
-import { isMouseEvent, isPointerEvent, isRecognisableEvent, isTouchEvent } from "../use-long-press.utils";
+  getTestHandlersMap,
+} from './use-long-press.test.utils';
+import { isMouseEvent, isPointerEvent, isRecognisableEvent, isTouchEvent } from '../use-long-press.utils';
 
 /*
  ⌜‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
@@ -190,7 +190,7 @@ describe('Different environments compatibility', () => {
       // Temporary delete window
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      // eslint-disable-next-line no-global-assign
+      // eslint-disable-next-line no-global-assign,no-native-reassign
       window = undefined;
 
       const callback = vi.fn();
@@ -214,7 +214,7 @@ describe('Different environments compatibility', () => {
       expect(callback).toHaveBeenCalledTimes(1);
 
       // Restore window
-      // eslint-disable-next-line no-global-assign
+      // eslint-disable-next-line no-global-assign,no-native-reassign
       window = originalWindow;
     }
   );
