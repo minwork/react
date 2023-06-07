@@ -1,3 +1,11 @@
+## [3.1.4-rc.1](https://github.com/minwork/react/compare/use-long-press-v3.1.3...use-long-press-v3.1.4-rc.1) (2023-06-07)
+
+
+### Bug Fixes
+
+* **use-long-press:** Make safer check for "window" presence ([9e0e9ac](https://github.com/minwork/react/commit/9e0e9acf8517e845c02e166eb1ee9ff2ca765b3b))
+* **use-long-press:** Properly handle multiple bind calls with different contexts ([84bd6e0](https://github.com/minwork/react/commit/84bd6e0464ebeb0c698709fa3d50c9aaddec5ad7))
+
 ## [3.1.4-alpha.1](https://github.com/minwork/react/compare/use-long-press-v3.1.3...use-long-press-v3.1.4-alpha.1) (2023-05-29)
 
 
