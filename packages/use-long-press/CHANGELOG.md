@@ -1,3 +1,10 @@
+## [3.1.5](https://github.com/minwork/react/compare/use-long-press-v3.1.4...use-long-press-v3.1.5) (2023-06-07)
+
+
+### Build config
+
+* **deps-dev:** bump vite from 4.1.4 to 4.1.5 ([bd9f206](https://github.com/minwork/react/commit/bd9f2065ffb2a039a572c5c69799fb6e3f3dbbb6))
+
 ## [3.1.4](https://github.com/minwork/react/compare/use-long-press-v3.1.3...use-long-press-v3.1.4) (2023-06-07)
 
 
