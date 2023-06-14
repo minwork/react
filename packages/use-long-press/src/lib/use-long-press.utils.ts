@@ -11,12 +11,9 @@ const getTouchEvent = () => (typeof window === 'object' ? window?.TouchEvent ?? 
 
 export function isTouchEvent<Target extends Element>(event: SyntheticEvent<Target>): event is ReactTouchEvent<Target> {
   const { nativeEvent } = event;
-  if (!nativeEvent) {
-    return false;
-  }
   const TouchEvent = getTouchEvent();
 
-  return (TouchEvent && nativeEvent instanceof TouchEvent) || 'touches' in nativeEvent;
+  return (TouchEvent && nativeEvent instanceof TouchEvent) || 'touches' in event;
 }
 
 export function isMouseEvent<Target extends Element>(event: SyntheticEvent<Target>): event is ReactMouseEvent<Target> {

@@ -16,6 +16,9 @@
     "baseUrl": ".",
     "paths": {
       "@react/shared/npm-publish": ["packages/shared/npm-publish/src/index.ts"],
+      "@react/shared/util-polyfills": ["packages/shared/util-polyfills/src/index.ts"],
+      "@react/shared/util-tests": ["packages/shared/util-tests/src/index.ts"],
+      "use-double-tap": ["packages/use-double-tap/src/index.ts"],
       "use-long-press": ["packages/use-long-press/src/index.ts"]
     }
   },

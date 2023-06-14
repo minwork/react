@@ -1,20 +1,14 @@
 {
-  "name": "use-long-press",
-  "version": "3.1.5",
-  "description": "React hook for detecting click, tap or point and hold event. Easy to use, highly customizable options, thoroughly tested.",
+  "name": "use-double-tap",
+  "version": "2.0.0",
+  "description": "React hook for handling double tap on mobile devices",
   "author": "minwork",
   "license": "MIT",
   "keywords": [
-    "long press",
-    "hook",
+    "double tap",
     "react",
-    "click and hold",
-    "tap and hold",
-    "point and hold"
+    "hook"
   ],
-  "scripts": {
-    "postversion": "cp package.json ../../../packages/use-long-press"
-  },
   "repository": "https://github.com/minwork/react",
   "readme": "https://github.com/minwork/react/blob/main/packages/use-long-press/README.md",
   "homepage": "https://github.com/minwork/react/blob/main/packages/use-long-press/README.md",

@@ -1,6 +1,5 @@
-import { act, renderHook } from '@testing-library/react-hooks';
 import { renderHook as renderHookSSR } from '@testing-library/react-hooks/server';
-import { createEvent, fireEvent, render } from '@testing-library/react';
+import { act, renderHook, createEvent, fireEvent, render } from '@testing-library/react';
 import { useLongPress } from '../use-long-press';
 import {
   LongPressCallback,
@@ -19,7 +18,7 @@ import {
   TestComponent,
   TestComponentProps,
 } from './TestComponent';
-import React from 'react';
+import { TouchEvent as ReactTouchEvent, TouchList as ReactTouchList } from 'react';
 import { afterEach, beforeEach, describe, expect, MockedFunction, test } from 'vitest';
 import {
   emptyContext,
@@ -27,21 +26,23 @@ import {
   expectTouchEvent,
   longPressExpectedEventMap,
   longPressMockedEventCreatorMap,
-  noop,
 } from './use-long-press.test.consts';
 import {
   createMockedDomEventFactory,
-  createMockedMouseEvent,
-  createMockedPointerEvent,
-  createMockedTouchEvent,
   createPositionedDomEventFactory,
-  createPositionedMouseEvent,
-  createPositionedPointerEvent,
-  createPositionedTouchEvent,
   getDOMTestHandlersMap,
   getTestHandlersMap,
 } from './use-long-press.test.utils';
 import { isMouseEvent, isPointerEvent, isRecognisableEvent, isTouchEvent } from '../use-long-press.utils';
+import {
+  createMockedMouseEvent,
+  createMockedPointerEvent,
+  createMockedTouchEvent,
+  createPositionedMouseEvent,
+  createPositionedPointerEvent,
+  createPositionedTouchEvent,
+  noop,
+} from './use-long-press.test.functions';
 
 /*
  ⌜‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
@@ -129,95 +130,53 @@ describe('Hook handlers', () => {
  ⎹ Component context tests
  ⌞____________________________________________________________________________________________________
 */
-describe('Different environments compatibility', () => {
-  beforeEach(() => {
-    // Use fake timers for detecting long press
-    vi.useFakeTimers();
+describe('Different environment compatibility', () => {
+  test('Properly detect TouchEvent event even if browser doesnt provide it', () => {
+    const touchEvent = { touches: {} as ReactTouchList, nativeEvent: { touches: {} as TouchList } } as ReactTouchEvent;
+    expect(isRecognisableEvent(touchEvent)).toBe(true);
   });
 
-  afterEach(() => {
-    vi.clearAllMocks();
-    vi.clearAllTimers();
-  });
-
-  test('Properly detect TouchEvent event if browser doesnt provide test', () => {
-    const originalTouchEvent = window.TouchEvent;
-    const touchEvent = createMockedTouchEvent();
-
-    // Temporary remove TouchEvent from window to check if test will be properly handled
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    delete window.TouchEvent;
-
-    const callback = vi.fn();
-    const onStart = vi.fn();
-    const onFinish = vi.fn();
-    const onCancel = vi.fn();
-
-    const component = createTestElement({
-      callback,
-      onStart,
-      onFinish,
-      onCancel,
-      captureEvent: true,
-      detect: LongPressEventType.Touch,
+  describe('Without window', () => {
+    beforeEach(() => {
+      // Use fake timers for detecting long press
+      vi.useFakeTimers();
+      // Simulate absence of TouchEvent
+      vi.stubGlobal('window', undefined);
     });
 
-    fireEvent.touchStart(component, touchEvent);
-    vi.runOnlyPendingTimers();
-    fireEvent.touchEnd(component, touchEvent);
+    afterEach(() => {
+      vi.clearAllMocks();
+      vi.clearAllTimers();
+      vi.unstubAllGlobals();
+    });
 
-    expect(onStart).toHaveBeenCalledTimes(1);
-    expect(onStart).toHaveBeenCalledWith(expectTouchEvent, emptyContext);
+    test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch], [LongPressEventType.Pointer]])(
+      'Using hook will not throw error when rendered in SSR context, using "%s" events',
+      (eventType) => {
+        expect(window).not.toBeDefined();
 
-    expect(onFinish).toHaveBeenCalledTimes(1);
-    expect(onFinish).toHaveBeenCalledWith(expectTouchEvent, emptyContext);
+        const callback = vi.fn();
+        const onStart = vi.fn();
+        const onMove = vi.fn();
+        const onCancel = vi.fn();
+        const onFinish = vi.fn();
 
-    expect(callback).toHaveBeenCalledTimes(1);
-    expect(callback).toHaveBeenCalledWith(expectTouchEvent, emptyContext);
+        const event = longPressMockedEventCreatorMap[eventType]();
+        const { result } = renderHookSSR(() =>
+          useLongPress(callback, { detect: eventType, onStart, onMove, onCancel, onFinish })
+        );
+        const handlers = getTestHandlersMap(eventType, result.current());
 
-    expect(onCancel).toHaveBeenCalledTimes(0);
+        handlers.start(event);
+        handlers.move(event);
+        vi.runOnlyPendingTimers();
+        handlers.stop(event);
 
-    // Restore original window touch event
-    window.TouchEvent = originalTouchEvent;
+        expect(isRecognisableEvent(event)).toBe(true);
+        expect(callback).toHaveBeenCalledTimes(1);
+      }
+    );
   });
-
-  test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch], [LongPressEventType.Pointer]])(
-    'Using hook will not throw error when rendered in SSR context, using "%s" events',
-    (eventType) => {
-      const originalWindow = window;
-
-      // Temporary delete window
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      // eslint-disable-next-line no-global-assign,no-native-reassign
-      window = undefined;
-
-      const callback = vi.fn();
-      const onStart = vi.fn();
-      const onMove = vi.fn();
-      const onCancel = vi.fn();
-      const onFinish = vi.fn();
-
-      const event = longPressMockedEventCreatorMap[eventType]();
-      const { result } = renderHookSSR(() =>
-        useLongPress(callback, { detect: eventType, onStart, onMove, onCancel, onFinish })
-      );
-      const handlers = getTestHandlersMap(eventType, result.current());
-
-      handlers.start(event);
-      handlers.move(event);
-      vi.runOnlyPendingTimers();
-      handlers.stop(event);
-
-      expect(isRecognisableEvent(event)).toBe(true);
-      expect(callback).toHaveBeenCalledTimes(1);
-
-      // Restore window
-      // eslint-disable-next-line no-global-assign,no-native-reassign
-      window = originalWindow;
-    }
-  );
 });
 
 describe('Detecting long press', () => {

@@ -1,14 +1,7 @@
+import '@react/shared/util-polyfills';
 import { createEvent } from '@testing-library/react';
 import { EventType } from '@testing-library/dom/types/events';
 import { MouseEvent as ReactMouseEvent, PointerEvent as ReactPointerEvent, TouchEvent as ReactTouchEvent } from 'react';
-
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-export const noop = () => {};
-
-export function convertHandlerNameToEventName(handlerName: string): string {
-  const str = handlerName.substring(2);
-  return str.charAt(0).toLowerCase() + str.substring(1);
-}
 /*
  ⌜‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
  ⎹ Mocked events

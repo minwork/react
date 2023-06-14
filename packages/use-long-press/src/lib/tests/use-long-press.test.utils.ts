@@ -12,39 +12,6 @@ import {
 import { convertHandlerNameToEventName } from './use-long-press.test.functions';
 import { longPressPositionedEventCreatorMap, longPressTestHandlerNamesMap, noop } from './use-long-press.test.consts';
 
-/*
- ⌜‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
- ⎹ Mocked events
- ⌞____________________________________________________________________________________________________
-*/
-export function createMockedTouchEvent(
-  options?: Partial<ReactTouchEvent> & { nativeEvent?: TouchEvent }
-): ReactTouchEvent {
-  return {
-    nativeEvent: new TouchEvent('touch'),
-    touches: [{ pageX: 0, pageY: 0 }],
-    ...options,
-  } as ReactTouchEvent;
-}
-
-export function createMockedMouseEvent(
-  options?: Partial<ReactMouseEvent> & { nativeEvent?: MouseEvent }
-): ReactMouseEvent {
-  return {
-    nativeEvent: new MouseEvent('mouse'),
-    ...options,
-  } as ReactMouseEvent;
-}
-
-export function createMockedPointerEvent(
-  options?: Partial<ReactPointerEvent> & { nativeEvent?: PointerEvent }
-): ReactPointerEvent {
-  return {
-    nativeEvent: new PointerEvent('pointer'),
-    ...options,
-  } as ReactPointerEvent;
-}
-
 export function createMockedDomEventFactory(
   eventType: LongPressEventType
 ): Record<LongPressTestHandlerType, (options?: EventInit) => LongPressDomEvents> {
@@ -53,55 +20,6 @@ export function createMockedDomEventFactory(
     result[handlerName] = (options?: EventInit) => createEvent[eventName](window, options) as LongPressDomEvents;
     return result;
   }, {} as Record<LongPressTestHandlerType, (options?: EventInit) => LongPressDomEvents>);
-}
-/*
- ⌜‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
- ⎹ Mocked positioned events (with 'x' and 'y' coordinates)
- ⌞____________________________________________________________________________________________________
-*/
-export function createPositionedMouseEvent(
-  element: Document | Element | Window | Node,
-  eventType: EventType,
-  x: number,
-  y: number
-): MouseEvent {
-  const event = createEvent[eventType](element) as unknown as MouseEvent;
-  Object.assign(event, {
-    pageX: x,
-    pageY: y,
-  });
-
-  return event;
-}
-
-export function createPositionedPointerEvent(
-  element: Document | Element | Window | Node,
-  eventType: EventType,
-  x: number,
-  y: number
-): PointerEvent {
-  const event = createEvent[eventType]({
-    ...element,
-    // Remove this after jsdom add support for pointer events
-    ownerDocument: { ...document, defaultView: window },
-  }) as PointerEvent;
-  Object.assign(event, {
-    pageX: x,
-    pageY: y,
-  });
-
-  return event;
-}
-
-export function createPositionedTouchEvent(
-  element: Document | Element | Window | Node,
-  eventType: EventType,
-  x: number,
-  y: number
-): TouchEvent {
-  return createEvent[eventType](element, {
-    touches: [{ pageX: x, pageY: y } as Touch],
-  }) as TouchEvent;
 }
 
 export function createPositionedDomEventFactory<E extends MouseEvent | TouchEvent | PointerEvent>(
