@@ -1,21 +1,21 @@
-import { expect } from "vitest";
 import {
   LongPressCallbackMeta,
   LongPressEventType,
   LongPressMouseHandlers,
   LongPressPointerHandlers,
-  LongPressTouchHandlers
-} from "../use-long-press.types";
-import { EventType } from "@testing-library/dom/types/events";
-import { LongPressTestEventCreator, LongPressTestHandlerType } from "./use-long-press.test.types";
+  LongPressTouchHandlers,
+} from '../use-long-press.types';
+import { EventType } from '@testing-library/dom/types/events';
+import { LongPressTestEventCreator, LongPressTestHandlerType } from './use-long-press.test.types';
 import {
   createMockedMouseEvent,
   createMockedPointerEvent,
   createMockedTouchEvent,
   createPositionedMouseEvent,
   createPositionedPointerEvent,
-  createPositionedTouchEvent
-} from "./use-long-press.test.utils";
+  createPositionedTouchEvent,
+} from './use-long-press.test.functions';
+import { expect } from 'vitest';
 
 /*
  ⌜‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
@@ -34,7 +34,6 @@ export const noop = () => {};
 export const expectMouseEvent = expect.objectContaining({ nativeEvent: expect.any(MouseEvent) });
 export const expectTouchEvent = expect.objectContaining({ nativeEvent: expect.any(TouchEvent) });
 export const expectPointerEvent = expect.objectContaining({ nativeEvent: expect.any(PointerEvent) });
-
 export const expectSpecificEvent = (event: Event) =>
   expect.objectContaining({
     nativeEvent: event,
