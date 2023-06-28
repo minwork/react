@@ -1,4 +1,5 @@
 module.exports = {
+  extends: 'semantic-release-monorepo',
   repositoryUrl: 'git@github.com:minwork/react.git',
   branches: [
     {
