@@ -1,0 +1,24 @@
+name: Manual Deploy
+on:
+  workflow_dispatch:
+    inputs:
+      app:
+        description: "Application name (as in NX)"
+        required: true
+        default: 'your-app-name'
+jobs:
+  main:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Release ${{ github.event.inputs.app }}
+        run: nx run ${{ github.event.inputs.app }}:release
