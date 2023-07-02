@@ -4,7 +4,7 @@ module.exports = {
   npm: true,
   github: true,
   repositoryUrl: 'https://github.com/minwork/react',
-  buildTarget: 'build',
+  //buildTarget: 'build',
   outputPath: 'dist/packages/${PROJECT_NAME}',
   tagFormat: '${PROJECT_NAME}-v${VERSION}',
   branches: [
