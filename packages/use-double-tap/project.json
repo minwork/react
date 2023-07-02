@@ -7,14 +7,20 @@
   "targets": {
     "lint": {
       "executor": "@nx/linter:eslint",
-      "outputs": ["{options.outputFile}"],
+      "outputs": [
+        "{options.outputFile}"
+      ],
       "options": {
-        "lintFilePatterns": ["packages/use-double-tap/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": [
+          "packages/use-double-tap/**/*.{ts,tsx,js,jsx}"
+        ]
       }
     },
     "build": {
       "executor": "@nx/vite:build",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "defaultConfiguration": "production",
       "options": {
         "outputPath": "dist/packages/use-double-tap"
@@ -30,10 +36,38 @@
     },
     "test": {
       "executor": "@nx/vite:test",
-      "outputs": ["coverage/packages/use-double-tap"],
+      "outputs": [
+        "coverage/packages/use-double-tap"
+      ],
       "options": {
         "passWithNoTests": true,
         "reportsDirectory": "../../coverage/packages/use-double-tap"
+      }
+    },
+    "release": {
+      "executor": "nx:run-commands",
+      "options": {
+        "parallel": false,
+        "commands": [
+          {
+            "command": "nx run use-double-tap:test",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "nx run use-double-tap:build",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "nx run use-double-tap:semantic-release",
+            "forwardAllArgs": true
+          }
+        ]
+      }
+    },
+    "semantic-release": {
+      "executor": "@theunderscorer/nx-semantic-release:semantic-release",
+      "options": {
+
       }
     }
   }
