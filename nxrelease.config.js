@@ -7,6 +7,7 @@ module.exports = {
   //buildTarget: 'build',
   outputPath: 'dist/packages/${PROJECT_NAME}',
   tagFormat: '${PROJECT_NAME}-v${VERSION}',
+  commitMessage: 'chore(release): Release ${PROJECT_NAME} v${nextRelease.version} [skip ci]',
   branches: [
     {
       name: 'main',
