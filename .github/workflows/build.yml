@@ -40,5 +40,5 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           directory: ./coverage/packages/
-          files: "!./shared"
+          files: "[!shared]*/*.xml"
 
