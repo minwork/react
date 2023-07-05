@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       app:
-        description: "Application name (as in NX)"
+        description: 'Application name (as in NX)'
         type: choice
         required: true
         options:
@@ -12,6 +12,11 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # to be able to publish a GitHub release
+      issues: write # to be able to comment on released issues
+      pull-requests: write # to be able to comment on released pull requests
+      id-token: write # to enable use of OIDC for npm provenance
 
     steps:
       - name: Checkout
@@ -23,8 +28,11 @@ jobs:
           cache: 'yarn'
       - name: Install dependencies
         run: yarn install --frozen-lockfile
+      - name: Verify the integrity of provenance attestations and registry signatures for installed dependencies
+        run: npm audit signatures
       - name: Release ${{ github.event.inputs.app }}
         run: yarn nx run ${{ github.event.inputs.app }}:release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
