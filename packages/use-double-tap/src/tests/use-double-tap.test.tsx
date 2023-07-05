@@ -1,6 +1,6 @@
 import React from 'react';
 import { expectMouseEvent, renderUseDoubleTap } from './use-double-tap.test.utils';
-import { DoubleTapCallback } from '../';
+import { DoubleTapCallback } from '../lib';
 import { createTestComponent, createTestElement } from './TestComponent';
 import { fireEvent } from '@testing-library/react';
 import { createMockedMouseEvent, noop } from '@react/shared/util-tests';

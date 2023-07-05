@@ -1,5 +1,5 @@
 import React from 'react';
-import { DoubleTapCallback, DoubleTapOptions, useDoubleTap } from '../';
+import { DoubleTapCallback, DoubleTapOptions, useDoubleTap } from '../lib';
 import { render, RenderResult } from '@testing-library/react';
 
 import { noop } from '@react/shared/util-tests';

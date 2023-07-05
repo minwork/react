@@ -1,4 +1,4 @@
-import { CallbackFunction, DoubleTapOptions, useDoubleTap } from '../';
+import { CallbackFunction, DoubleTapOptions, useDoubleTap } from '../lib';
 import { renderHook } from '@testing-library/react';
 import { expect } from 'vitest';
 
