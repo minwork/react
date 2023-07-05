@@ -6,16 +6,6 @@ on:
         description: "Application name (as in NX)"
         required: true
         default: 'app-name'
-      branch:
-        description: "Branch on which the release will be made"
-        type: choice
-        default: 'develop'
-        required: true
-        options:
-          - develop
-          - next
-          - main
-
 jobs:
   main:
     runs-on: ubuntu-latest
@@ -23,7 +13,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        ref: ${{ github.event.inputs.branch }}
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
