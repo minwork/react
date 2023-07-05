@@ -1,6 +1,5 @@
 import { renderHook as renderHookSSR } from '@testing-library/react-hooks/server';
-import { act, renderHook, createEvent, fireEvent, render } from '@testing-library/react';
-import { useLongPress } from '../use-long-press';
+import { act, createEvent, fireEvent, render, renderHook } from '@testing-library/react';
 import {
   LongPressCallback,
   LongPressCallbackReason,
@@ -10,7 +9,9 @@ import {
   LongPressPointerHandlers,
   LongPressReactEvents,
   LongPressTouchHandlers,
-} from '../use-long-press.types';
+  useLongPress,
+} from '../lib';
+import { isMouseEvent, isPointerEvent, isRecognisableEvent, isTouchEvent } from '../lib/use-long-press.utils';
 import {
   createTestComponent,
   createTestElement,
@@ -23,7 +24,6 @@ import { afterEach, beforeEach, describe, expect, MockedFunction, test } from 'v
 import {
   emptyContext,
   expectSpecificEvent,
-  expectTouchEvent,
   longPressExpectedEventMap,
   longPressMockedEventCreatorMap,
 } from './use-long-press.test.consts';
@@ -33,7 +33,6 @@ import {
   getDOMTestHandlersMap,
   getTestHandlersMap,
 } from './use-long-press.test.utils';
-import { isMouseEvent, isPointerEvent, isRecognisableEvent, isTouchEvent } from '../use-long-press.utils';
 import {
   createMockedMouseEvent,
   createMockedPointerEvent,

@@ -6,6 +6,9 @@ import dts from 'vite-plugin-dts';
 import { joinPathFragments } from '@nx/devkit';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 
+// Get current project relative path and strip initial slash / backslash
+const projectPath = __dirname.replace(process.cwd(), '').substring(1);
+
 export default defineConfig({
   cacheDir: '../../node_modules/.vite/use-double-tap',
 
@@ -64,5 +67,9 @@ export default defineConfig({
     },
     environment: 'jsdom',
     include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+    coverage: {
+      // Cover only lib files
+      include: [joinPathFragments(projectPath, 'src/lib/**/*')],
+    },
   },
 });

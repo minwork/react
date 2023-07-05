@@ -10,8 +10,8 @@ import {
   LongPressPointerHandlers,
   LongPressResult,
   LongPressTouchHandlers,
-} from '../use-long-press.types';
-import { useLongPress } from '../use-long-press';
+  useLongPress,
+} from '../lib';
 import { noop } from './use-long-press.test.consts';
 
 describe('useLongPress typings', () => {

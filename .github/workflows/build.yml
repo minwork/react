@@ -32,11 +32,12 @@ jobs:
       - name: Lint packages
         run: yarn lint
       - name: Test packages with coverage
-        run: "yarn test --coverage"
+        run: yarn test:coverage
       - name: Build packages
         run: yarn build
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          directory: ./coverage/packages/use-long-press/
+          directory: ./coverage/packages/
+

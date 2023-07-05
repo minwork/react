@@ -1,5 +1,5 @@
 import { UIEvent } from 'react';
-import { LongPressDomEvents, LongPressReactEvents } from '../use-long-press.types';
+import { LongPressDomEvents, LongPressReactEvents } from '../lib';
 
 export type LongPressTestHandlerType = 'start' | 'move' | 'stop';
 export type LongPressTestHandler = (event: LongPressReactEvents | LongPressDomEvents) => void;
