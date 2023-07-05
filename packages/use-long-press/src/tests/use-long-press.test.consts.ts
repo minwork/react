@@ -4,7 +4,7 @@ import {
   LongPressMouseHandlers,
   LongPressPointerHandlers,
   LongPressTouchHandlers,
-} from '../use-long-press.types';
+} from '../lib';
 import { EventType } from '@testing-library/dom/types/events';
 import { LongPressTestEventCreator, LongPressTestHandlerType } from './use-long-press.test.types';
 import {

@@ -1,7 +1,7 @@
 import { MouseEvent as ReactMouseEvent, PointerEvent as ReactPointerEvent, TouchEvent as ReactTouchEvent } from 'react';
 import { createEvent, fireEvent } from '@testing-library/react';
 import { EventType } from '@testing-library/dom/types/events';
-import { LongPressDomEvents, LongPressEventType, LongPressHandlers } from '../use-long-press.types';
+import { LongPressDomEvents, LongPressEventType, LongPressHandlers } from '../lib';
 import {
   LongPressTestHandler,
   LongPressTestHandlersMap,

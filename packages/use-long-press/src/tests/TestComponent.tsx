@@ -1,7 +1,6 @@
 import React, { useRef } from 'react';
-import { useLongPress } from '../use-long-press';
+import { LongPressCallback, LongPressOptions, useLongPress } from '../lib';
 import { render, RenderResult } from '@testing-library/react';
-import { LongPressCallback, LongPressOptions } from '../use-long-press.types';
 
 export interface TestComponentProps extends LongPressOptions {
   callback: LongPressCallback | null;
