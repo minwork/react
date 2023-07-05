@@ -10,8 +10,8 @@
     "hook"
   ],
   "repository": "https://github.com/minwork/react",
-  "readme": "https://github.com/minwork/react/blob/main/packages/use-long-press/README.md",
-  "homepage": "https://github.com/minwork/react/blob/main/packages/use-long-press/README.md",
+  "readme": "https://github.com/minwork/react/blob/main/packages/use-double-tap/README.md",
+  "homepage": "https://github.com/minwork/react/blob/main/packages/use-double-tap/README.md",
   "main": "./index.js",
   "types": "./index.d.ts",
   "exports": {
