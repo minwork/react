@@ -24,4 +24,4 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
       - name: Release ${{ github.event.inputs.app }}
-        run: nx run ${{ github.event.inputs.app }}:release
+        run: yarn nx run ${{ github.event.inputs.app }}:release
