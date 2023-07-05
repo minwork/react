@@ -32,7 +32,7 @@ jobs:
       - name: Lint packages
         run: yarn lint
       - name: Test packages with coverage
-        run: "yarn test --coverage"
+        run: yarn test:coverage
       - name: Build packages
         run: yarn build
       - name: Upload coverage reports to Codecov
@@ -40,5 +40,4 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           directory: ./coverage/packages/
-          files: "[!shared]*/*.xml"
 
