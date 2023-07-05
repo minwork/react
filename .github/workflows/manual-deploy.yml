@@ -4,8 +4,11 @@ on:
     inputs:
       app:
         description: "Application name (as in NX)"
+        type: choice
         required: true
-        default: 'app-name'
+        options:
+          - use-long-press
+          - use-double-tap
 jobs:
   main:
     runs-on: ubuntu-latest
