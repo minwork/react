@@ -1,3 +1,5 @@
+## [1.3.5-rc.2](https://github.com/minwork/react/compare/use-double-tap-v1.3.5-rc.1...use-double-tap-v1.3.5-rc.2) (2023-07-12)
+
 ## [1.3.5-alpha.2](https://github.com/minwork/react/compare/use-double-tap-v1.3.5-alpha.1...use-double-tap-v1.3.5-alpha.2) (2023-07-05)
 
 ## [1.3.5-rc.1](https://github.com/minwork/react/compare/use-double-tap-v1.3.4...use-double-tap-v1.3.5-rc.1) (2023-07-05)
