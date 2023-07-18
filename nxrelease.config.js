@@ -37,6 +37,7 @@ module.exports = {
     { type: 'build', release: 'patch' },
   ],
   presetConfig: {
+    preset: 'conventionalcommits',
     types: [
       { type: 'feat', section: 'Features' },
       { type: 'fix', section: 'Bug Fixes' },
