@@ -12,9 +12,6 @@
     "tap and hold",
     "point and hold"
   ],
-  "scripts": {
-    "postversion": "cp package.json ../../../packages/use-long-press"
-  },
   "repository": "https://github.com/minwork/react",
   "readme": "https://github.com/minwork/react/blob/main/packages/use-long-press/README.md",
   "homepage": "https://github.com/minwork/react/blob/main/packages/use-long-press/README.md",
