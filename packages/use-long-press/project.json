@@ -50,22 +50,16 @@
             "forwardAllArgs": false
           },
           {
-            "command": "yarn run semantic-release --extends=./packages/use-long-press/release.config.js --no-ci",
+            "command": "nx run use-long-press:semantic-release",
             "forwardAllArgs": true
           }
         ]
       }
     },
-    "publish": {
-      "executor": "nx:run-commands",
+    "semantic-release": {
+      "executor": "@theunderscorer/nx-semantic-release:semantic-release",
       "options": {
-        "parallel": false,
-        "commands": [
-          {
-            "command": "nx run shared-npm-publish:exec --path=dist/packages/use-long-press/",
-            "forwardAllArgs": true
-          }
-        ]
+
       }
     }
   }
