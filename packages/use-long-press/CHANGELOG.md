@@ -1,3 +1,15 @@
+# [3.2.0-rc.1](https://github.com/minwork/react/compare/use-long-press-v3.1.5...use-long-press-v3.2.0-rc.1) (2023-08-09)
+
+
+### Bug Fixes
+
+* **use-long-press:** Add proper path to TS typings for ESM ([253c1dd](https://github.com/minwork/react/commit/253c1dde219a8dd3081ced5b20e72eab88824d15))
+
+
+### Features
+
+* **use-double-tap:** Add and migrate use-double-tap library ([9c8ea05](https://github.com/minwork/react/commit/9c8ea05d12298efcdbe0dce3405db43f941bf673))
+
 # [3.2.0-alpha.1](https://github.com/minwork/react/compare/use-long-press-v3.1.5...use-long-press-v3.2.0-alpha.1) (2023-08-04)
 
 
