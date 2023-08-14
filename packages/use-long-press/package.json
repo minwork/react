@@ -14,7 +14,7 @@
   ],
   "repository": "https://github.com/minwork/react",
   "readme": "https://github.com/minwork/react/blob/main/packages/use-long-press/README.md",
-  "homepage": "https://github.com/minwork/react/blob/main/packages/use-long-press/README.md",
+  "homepage": "https://minwork.gitbook.io/long-press-hook/",
   "main": "./index.js",
   "types": "./index.d.ts",
   "exports": {
