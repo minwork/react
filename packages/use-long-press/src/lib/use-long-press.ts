@@ -209,7 +209,7 @@ export function useLongPress<
       // First call callback to allow modifying event position
       onMove?.(event, { context });
 
-      if (cancelOnMovement && startPosition.current) {
+      if (cancelOnMovement !== false && startPosition.current) {
         const currentPosition = getCurrentPosition(event);
 
         if (currentPosition) {
