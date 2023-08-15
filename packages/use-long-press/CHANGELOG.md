@@ -1,3 +1,5 @@
+# [3.2.0-rc.3](https://github.com/minwork/react/compare/use-long-press-v3.2.0-rc.2...use-long-press-v3.2.0-rc.3) (2023-08-15)
+
 # [3.2.0-rc.2](https://github.com/minwork/react/compare/use-long-press-v3.2.0-rc.1...use-long-press-v3.2.0-rc.2) (2023-08-15)
 
 
