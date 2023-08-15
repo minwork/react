@@ -1,3 +1,16 @@
+## [3.2.0-alpha.3](https://github.com/minwork/react/compare/use-long-press-v3.2.0-alpha.2...use-long-press-v3.2.0-alpha.3) (2023-08-15)
+
+
+### Bug Fixes
+
+* **use-long-press:** Prevent casting falsy cancelOnMovement values to false ([8ff90a1](https://github.com/minwork/react/commit/8ff90a1419f594db27dd5f0a3f8a8c33e5739f05))
+
+
+### Build config
+
+* **project:** Fix creating CHANGELOG sections on release ([6729a36](https://github.com/minwork/react/commit/6729a36661c2c8c1830e1788104b5223ce8d2442))
+* **use-long-press:** Move semantic release config to project.json ([67c23b2](https://github.com/minwork/react/commit/67c23b291b0450bf166efcec5ccfc0c575184fb2))
+
 # [3.2.0-rc.3](https://github.com/minwork/react/compare/use-long-press-v3.2.0-rc.2...use-long-press-v3.2.0-rc.3) (2023-08-15)
 
 # [3.2.0-rc.2](https://github.com/minwork/react/compare/use-long-press-v3.2.0-rc.1...use-long-press-v3.2.0-rc.2) (2023-08-15)
