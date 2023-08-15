@@ -1,3 +1,10 @@
+## [1.3.6-alpha.2](https://github.com/minwork/react/compare/use-double-tap-v1.3.6-alpha.1...use-double-tap-v1.3.6-alpha.2) (2023-08-15)
+
+
+### Build config
+
+* **use-double-tap:** Move semantic-release config to project.json ([738531e](https://github.com/minwork/react/commit/738531e18041d464be6f666af4832e08f536350d))
+
 ## [1.3.6-alpha.1](https://github.com/minwork/react/compare/use-double-tap-v1.3.5...use-double-tap-v1.3.6-alpha.1) (2023-08-15)
 
 
