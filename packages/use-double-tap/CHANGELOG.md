@@ -1,3 +1,10 @@
+## [1.3.6-alpha.1](https://github.com/minwork/react/compare/use-double-tap-v1.3.5...use-double-tap-v1.3.6-alpha.1) (2023-08-15)
+
+
+### Bug Fixes
+
+* **use-double-tap:** Add proper path to TS typings for ESM ([dbfbb03](https://github.com/minwork/react/commit/dbfbb03ea3214dc51950f818acd9fee421c8a4ea))
+
 ## [1.3.5](https://github.com/minwork/react/compare/use-double-tap-v1.3.4...use-double-tap-v1.3.5) (2023-08-01)
 
 
