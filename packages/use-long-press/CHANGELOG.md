@@ -1,3 +1,35 @@
+## [3.2.0](https://github.com/minwork/react/compare/use-long-press-v3.1.5...use-long-press-v3.2.0) (2023-08-15)
+
+
+### Features
+
+* **use-double-tap:** Add and migrate use-double-tap library ([9c8ea05](https://github.com/minwork/react/commit/9c8ea05d12298efcdbe0dce3405db43f941bf673))
+
+
+### Bug Fixes
+
+* **use-long-press:** Add proper path to TS typings for ESM ([253c1dd](https://github.com/minwork/react/commit/253c1dde219a8dd3081ced5b20e72eab88824d15))
+* **use-long-press:** Prevent casting falsy cancelOnMovement values to false ([8ff90a1](https://github.com/minwork/react/commit/8ff90a1419f594db27dd5f0a3f8a8c33e5739f05))
+
+
+### Documentation
+
+* **use-long-press:** Migrate all documentation to GitBook ([9af2820](https://github.com/minwork/react/commit/9af282087d76fae6cc53d1516a988afcf111f659))
+
+
+### Build config
+
+* **deps:** bump semver from 5.7.1 to 5.7.2 ([842c47f](https://github.com/minwork/react/commit/842c47f1173449971b0add9b4908ff87893fb0ec))
+* **deps:** bump tough-cookie from 4.1.2 to 4.1.3 ([da85f24](https://github.com/minwork/react/commit/da85f24ecc0d4012f18b88af30977c839d1be4f3))
+* **deps:** bump word-wrap from 1.2.3 to 1.2.5 ([232430b](https://github.com/minwork/react/commit/232430b3adc80e024128b6f49f1d5f5537323bed))
+* **project:** [react-14] Setup coverage for all packages ([#15](https://github.com/minwork/react/issues/15)) ([40c5a37](https://github.com/minwork/react/commit/40c5a3739462ccff50f68880d64165f711d94abc))
+* **project:** Add support for monorepo release ([bf5fba3](https://github.com/minwork/react/commit/bf5fba395cfab6d5cbed19c73628728a740df87e))
+* **project:** Fix creating CHANGELOG sections on release ([6729a36](https://github.com/minwork/react/commit/6729a36661c2c8c1830e1788104b5223ce8d2442))
+* **use-double-tap:** Reorganize release process using nx-semantic-release ([c23950c](https://github.com/minwork/react/commit/c23950cf5b79bbebacfcd569515185af2349d1ed))
+* **use-long-press:** Migrate semantic release pipeline to nx-semantic-release ([1f8f239](https://github.com/minwork/react/commit/1f8f239b60d22fe3301e50b21306486302fca4f7))
+* **use-long-press:** Move semantic release config to project.json ([67c23b2](https://github.com/minwork/react/commit/67c23b291b0450bf166efcec5ccfc0c575184fb2))
+* **use-long-press:** Remove unnecessary sync of package version in output files ([85320f7](https://github.com/minwork/react/commit/85320f7c7e8e6aff946da12abd06df72d21d5067))
+
 ## [3.2.0-alpha.3](https://github.com/minwork/react/compare/use-long-press-v3.2.0-alpha.2...use-long-press-v3.2.0-alpha.3) (2023-08-15)
 
 
