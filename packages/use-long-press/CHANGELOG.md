@@ -1,3 +1,10 @@
+# [3.2.0-rc.2](https://github.com/minwork/react/compare/use-long-press-v3.2.0-rc.1...use-long-press-v3.2.0-rc.2) (2023-08-15)
+
+
+### Bug Fixes
+
+* **use-long-press:** Prevent casting falsy cancelOnMovement values to false ([8ff90a1](https://github.com/minwork/react/commit/8ff90a1419f594db27dd5f0a3f8a8c33e5739f05))
+
 # [3.2.0-alpha.2](https://github.com/minwork/react/compare/use-long-press-v3.2.0-alpha.1...use-long-press-v3.2.0-alpha.2) (2023-08-14)
 
 # [3.2.0-rc.1](https://github.com/minwork/react/compare/use-long-press-v3.1.5...use-long-press-v3.2.0-rc.1) (2023-08-09)
