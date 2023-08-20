@@ -1,0 +1,111 @@
+{
+  "name": "react-interval-hook",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/react-interval-hook/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/react-interval-hook/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/packages/react-interval-hook"
+      },
+      "configurations": {
+        "development": {
+          "mode": "development"
+        },
+        "production": {
+          "mode": "production"
+        }
+      }
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["coverage/packages/react-interval-hook"],
+      "options": {
+        "passWithNoTests": true,
+        "reportsDirectory": "../../coverage/packages/react-interval-hook"
+      }
+    },
+    "release": {
+      "executor": "nx:run-commands",
+      "options": {
+        "parallel": false,
+        "commands": [
+          {
+            "command": "nx run react-interval-hook:test",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "nx run react-interval-hook:build",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "nx run react-interval-hook:semantic-release",
+            "forwardAllArgs": true
+          }
+        ]
+      }
+    },
+    "semantic-release": {
+      "executor": "@theunderscorer/nx-semantic-release:semantic-release",
+      "options": {
+        "changelog": true,
+        "git": true,
+        "npm": true,
+        "github": true,
+        "repositoryUrl": "https://github.com/minwork/react",
+        "outputPath": "dist/packages/${PROJECT_NAME}",
+        "tagFormat": "${PROJECT_NAME}-v${VERSION}",
+        "commitMessage": "chore(release): Release ${PROJECT_NAME} v${nextRelease.version} [skip ci]",
+        "branches": [
+          {
+            "name": "main",
+            "channel": "latest"
+          },
+          {
+            "name": "next",
+            "channel": "next",
+            "prerelease": "rc"
+          },
+          {
+            "name": "develop",
+            "channel": "alpha",
+            "prerelease": "alpha"
+          }
+        ],
+        "releaseRules": [
+          { "breaking": true, "release": "major" },
+          { "type": "docs", "release": "patch" },
+          { "type": "refactor", "release": "patch" },
+          { "type": "style", "release": "patch" },
+          { "type": "perf", "release": "patch" },
+          { "type": "build", "release": "patch" }
+        ],
+        "preset": "conventionalcommits",
+        "presetConfig": {
+          "types": [
+            { "type": "feat", "section": "Features" },
+            { "type": "fix", "section": "Bug Fixes" },
+            { "type": "chore", "hidden": true },
+            { "type": "docs", "section": "Documentation" },
+            { "type": "style", "hidden": true },
+            { "type": "refactor", "section": "Refactors" },
+            { "type": "build", "section": "Build config" },
+            { "type": "perf", "hidden": true },
+            { "type": "test", "hidden": true }
+          ]
+        }
+      }
+    }
+  }
+}
