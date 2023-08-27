@@ -24,7 +24,7 @@ yarn add use-double-tap
 ```
 # Documentation
 
-Full documentation can be found [here](https://minwork.gitbook.io/long-press-hook/)
+Full documentation can be found [here](https://minwork.gitbook.io/double-tap-hook/)
 
 # Support
 
