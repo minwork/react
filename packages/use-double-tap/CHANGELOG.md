@@ -1,3 +1,10 @@
+## [1.3.6-alpha.3](https://github.com/minwork/react/compare/use-double-tap-v1.3.6-alpha.2...use-double-tap-v1.3.6-alpha.3) (2023-08-27)
+
+
+### Documentation
+
+* **use-double-tap:** Move documentation to gitbook ([b67574e](https://github.com/minwork/react/commit/b67574e12a943dc3ac2c596435dba6f0e368fb2f))
+
 ## [1.3.6-alpha.2](https://github.com/minwork/react/compare/use-double-tap-v1.3.6-alpha.1...use-double-tap-v1.3.6-alpha.2) (2023-08-15)
 
 
