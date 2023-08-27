@@ -11,7 +11,7 @@
   ],
   "repository": "https://github.com/minwork/react",
   "readme": "https://github.com/minwork/react/blob/main/packages/use-double-tap/README.md",
-  "homepage": "https://github.com/minwork/react/blob/main/packages/use-double-tap/README.md",
+  "homepage": "https://minwork.gitbook.io/double-tap-hook/",
   "main": "./index.js",
   "types": "./index.d.ts",
   "exports": {
