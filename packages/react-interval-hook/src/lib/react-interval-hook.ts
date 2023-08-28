@@ -49,15 +49,17 @@ export function useInterval(
         clearTimeout(timer.current);
       }
       // Failsafe: Set new timeout only if timer is active
-      /* istanbul ignore else */
+
       if (active.current) {
         timer.current = setTimeout(tick, ms);
+        /* c8 ignore start */
       } else {
         // eslint-disable-next-line no-console
         console.debug(
           'Trying to set interval timeout on inactive timer, this is no-op and probably indicates bug in your code.'
         );
       }
+      /* c8 ignore stop */
     },
     [tick, active]
   );
