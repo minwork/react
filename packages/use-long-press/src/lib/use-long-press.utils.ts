@@ -73,7 +73,3 @@ export function createArtificialReactEvent<Target extends Element = Element>(
     persist: () => {},
   } as LongPressReactEvents<Target>;
 }
-
-export function hashContext(context: unknown): string {
-  return JSON.stringify(context);
-}
