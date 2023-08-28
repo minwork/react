@@ -48,3 +48,9 @@ jobs:
           directory: ./coverage/packages/use-double-tap
           flags: hooks,use-double-tap
 
+      - name: Upload react-interval-hook coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./coverage/packages/react-interval-hook
+          flags: hooks,react-interval-hook
