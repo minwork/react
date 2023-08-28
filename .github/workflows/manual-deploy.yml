@@ -3,12 +3,13 @@ on:
   workflow_dispatch:
     inputs:
       app:
-        description: 'Application name (as in NX)'
+        description: 'Package name (as in NX)'
         type: choice
         required: true
         options:
           - use-long-press
           - use-double-tap
+          - react-interval-hook
 jobs:
   release:
     runs-on: ubuntu-latest
