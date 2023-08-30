@@ -1,6 +1,6 @@
 {
   "name": "react-interval-hook",
-  "version": "1.1.4-alpha.1",
+  "version": "1.1.4-alpha.2",
   "description": "React hook for using self-correcting setInterval, augmented by management methods (start, stop, isActive)",
   "author": "minwork",
   "license": "MIT",

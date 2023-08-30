@@ -1,3 +1,10 @@
+## [1.1.4-alpha.2](https://github.com/minwork/react/compare/react-interval-hook-v1.1.4-alpha.1...react-interval-hook-v1.1.4-alpha.2) (2023-08-30)
+
+
+### Build config
+
+* **react-interval-hook:** Copy *.md files to build output ([30a6a77](https://github.com/minwork/react/commit/30a6a77698b972ef84bbace87c6d223e62f2b759))
+
 ## [1.1.4-alpha.1](https://github.com/minwork/react/compare/react-interval-hook-v1.1.3...react-interval-hook-v1.1.4-alpha.1) (2023-08-29)
 
 
