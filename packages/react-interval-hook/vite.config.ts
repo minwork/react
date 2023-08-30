@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react';
 import viteTsConfigPaths from 'vite-tsconfig-paths';
 import dts from 'vite-plugin-dts';
 import { joinPathFragments } from '@nx/devkit';
+import { viteStaticCopy } from "vite-plugin-static-copy";
 
 // Get current project relative path and strip initial slash / backslash
 const projectPath = __dirname.replace(process.cwd(), '').substring(1);
@@ -20,6 +21,14 @@ export default defineConfig({
     react(),
     viteTsConfigPaths({
       root: '../../',
+    }),
+    viteStaticCopy({
+      targets: [
+        {
+          src: '*.md',
+          dest: '.',
+        },
+      ],
     }),
   ],
 
