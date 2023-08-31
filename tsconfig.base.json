@@ -15,7 +15,6 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@react/shared/npm-publish": ["packages/shared/npm-publish/src/index.ts"],
       "@react/shared/util-polyfills": ["packages/shared/util-polyfills/src/index.ts"],
       "@react/shared/util-tests": ["packages/shared/util-tests/src/index.ts"],
       "react-interval-hook": ["packages/react-interval-hook/src/index.ts"],
