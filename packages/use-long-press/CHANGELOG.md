@@ -1,3 +1,10 @@
+## [3.2.1-alpha.1](https://github.com/minwork/react/compare/use-long-press-v3.2.0...use-long-press-v3.2.1-alpha.1) (2023-12-08)
+
+
+### Refactors
+
+* **use-long-press:** Recognise events by their type instead of class ([4e65b2a](https://github.com/minwork/react/commit/4e65b2aba13fe7e6eca18da3cff4dfc308696688))
+
 ## [3.2.0](https://github.com/minwork/react/compare/use-long-press-v3.1.5...use-long-press-v3.2.0) (2023-08-15)
 
 
