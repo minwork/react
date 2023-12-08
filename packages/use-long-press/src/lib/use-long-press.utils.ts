@@ -6,31 +6,44 @@ import {
   TouchEvent as ReactTouchEvent,
 } from 'react';
 
-const getPointerEvent = () => (typeof window === 'object' ? window?.PointerEvent ?? null : null);
-const getTouchEvent = () => (typeof window === 'object' ? window?.TouchEvent ?? null : null);
+const recognisedMouseEvents: string[] = [
+  'mousedown',
+  'mousemove',
+  'mouseup',
+  'mouseleave',
+  'mouseout',
+] satisfies (keyof WindowEventMap)[];
 
-export function isTouchEvent<Target extends Element>(event: SyntheticEvent<Target>): event is ReactTouchEvent<Target> {
-  const { nativeEvent } = event;
-  const TouchEvent = getTouchEvent();
+const recognisedTouchEvents: string[] = [
+  'touchstart',
+  'touchmove',
+  'touchend',
+  'touchcancel',
+] satisfies (keyof WindowEventMap)[];
 
-  return (TouchEvent && nativeEvent instanceof TouchEvent) || 'touches' in event;
-}
+const recognisedPointerEvents: string[] = [
+  'pointerdown',
+  'pointermove',
+  'pointerup',
+  'pointerleave',
+  'pointerout',
+] satisfies (keyof WindowEventMap)[];
 
 export function isMouseEvent<Target extends Element>(event: SyntheticEvent<Target>): event is ReactMouseEvent<Target> {
-  const PointerEvent = getPointerEvent();
-  return event.nativeEvent instanceof MouseEvent && !(PointerEvent && event.nativeEvent instanceof PointerEvent);
+  return recognisedMouseEvents.includes(event?.nativeEvent?.type);
+}
+
+export function isTouchEvent<Target extends Element>(event: SyntheticEvent<Target>): event is ReactTouchEvent<Target> {
+  return recognisedTouchEvents.includes(event?.nativeEvent?.type) || 'touches' in event;
 }
 
 export function isPointerEvent<Target extends Element>(
   event: SyntheticEvent<Target>
 ): event is ReactPointerEvent<Target> {
   const { nativeEvent } = event;
-  if (!nativeEvent) {
-    return false;
-  }
+  if (!nativeEvent) return false;
 
-  const PointerEvent = getPointerEvent();
-  return (PointerEvent && nativeEvent instanceof PointerEvent) || 'pointerId' in nativeEvent;
+  return recognisedPointerEvents.includes(nativeEvent?.type) || 'pointerId' in nativeEvent;
 }
 
 export function isRecognisableEvent<Target extends Element>(

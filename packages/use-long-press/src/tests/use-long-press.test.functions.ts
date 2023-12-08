@@ -19,7 +19,7 @@ export function createMockedTouchEvent<T extends HTMLElement = HTMLElement>(
   options?: Partial<ReactTouchEvent<T>> & { nativeEvent?: TouchEvent }
 ): ReactTouchEvent<T> {
   return {
-    nativeEvent: new TouchEvent('touch'),
+    nativeEvent: new TouchEvent('touchstart'),
     touches: [{ pageX: 0, pageY: 0 }],
     ...options,
   } as ReactTouchEvent<T>;
@@ -29,7 +29,7 @@ export function createMockedMouseEvent<T extends HTMLElement = HTMLElement>(
   options?: Partial<ReactMouseEvent<T>> & { nativeEvent?: MouseEvent }
 ): ReactMouseEvent<T> {
   return {
-    nativeEvent: new MouseEvent('mouse'),
+    nativeEvent: new MouseEvent('mousedown'),
     ...options,
   } as ReactMouseEvent<T>;
 }
@@ -38,7 +38,7 @@ export function createMockedPointerEvent<T extends HTMLElement = HTMLElement>(
   options?: Partial<ReactPointerEvent<T>> & { nativeEvent?: PointerEvent }
 ): ReactPointerEvent<T> {
   return {
-    nativeEvent: new PointerEvent('pointer'),
+    nativeEvent: new PointerEvent('pointerdown'),
     ...options,
   } as ReactPointerEvent<T>;
 }

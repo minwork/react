@@ -3,6 +3,7 @@ import { act, createEvent, fireEvent, render, renderHook } from '@testing-librar
 import {
   LongPressCallback,
   LongPressCallbackReason,
+  LongPressDomEvents,
   LongPressEventType,
   LongPressMouseHandlers,
   LongPressOptions,
@@ -11,7 +12,13 @@ import {
   LongPressTouchHandlers,
   useLongPress,
 } from '../lib';
-import { isMouseEvent, isPointerEvent, isRecognisableEvent, isTouchEvent } from '../lib/use-long-press.utils';
+import {
+  createArtificialReactEvent,
+  isMouseEvent,
+  isPointerEvent,
+  isRecognisableEvent,
+  isTouchEvent,
+} from '../lib/use-long-press.utils';
 import {
   createTestComponent,
   createTestElement,
@@ -648,6 +655,57 @@ describe('Hook options', () => {
         expect(callback).toHaveBeenCalledTimes(1);
         expect(onCancel).toHaveBeenCalledTimes(0);
         expect(onFinish).toHaveBeenCalledTimes(1);
+      }
+    );
+
+    test.each([[LongPressEventType.Mouse], [LongPressEventType.Touch], [LongPressEventType.Pointer]])(
+      'Trigger cancel on window when moved "%s" outside element if option is set to false',
+      (eventType) => {
+        const callback = vi.fn();
+        const onCancel = vi.fn();
+        const onFinish = vi.fn();
+        const windowOnCancel = vi.fn();
+        const windowEventName = {
+          [LongPressEventType.Mouse]: 'mouseup',
+          [LongPressEventType.Touch]: 'touchend',
+          [LongPressEventType.Pointer]: 'pointerup',
+        }[eventType];
+        const threshold = 1000;
+
+        const element = createTestElement({
+          callback,
+          onCancel,
+          onFinish,
+          detect: eventType,
+          cancelOutsideElement: false,
+          threshold,
+        });
+        const longPressEvent = getDOMTestHandlersMap(eventType, element);
+        const event = longPressMockedEventCreatorMap[eventType]();
+
+        window.addEventListener(windowEventName, windowOnCancel);
+
+        longPressEvent.start(event);
+        longPressEvent.leave?.(event);
+        expect(callback).toHaveBeenCalledTimes(0);
+        expect(onFinish).toHaveBeenCalledTimes(0);
+        expect(onCancel).toHaveBeenCalledTimes(0);
+
+        vi.advanceTimersByTime(threshold + 1);
+
+        expect(callback).toHaveBeenCalledTimes(1);
+        expect(onFinish).toHaveBeenCalledTimes(0);
+        expect(onCancel).toHaveBeenCalledTimes(0);
+        expect(windowOnCancel).toHaveBeenCalledTimes(0);
+
+        fireEvent(window, createEvent(windowEventName, window));
+
+        expect(windowOnCancel).toHaveBeenCalledTimes(1);
+        expect(callback).toHaveBeenCalledTimes(1);
+        expect(onFinish).toHaveBeenCalledTimes(1);
+        expect(onCancel).toHaveBeenCalledTimes(0);
+
+        window.removeEventListener(windowEventName, windowOnCancel);
       }
     );
   });
@@ -1360,5 +1418,18 @@ describe('Utils', () => {
     [{ nativeEvent: createEvent.pointerUp(window) }, true],
   ])('isPointerEvent treat %s as pointer event: %s', (event, isProperEvent) => {
     expect(isPointerEvent(event as LongPressReactEvents)).toBe(isProperEvent);
+  });
+
+  test.each([
+    ['mouseDown' as const],
+    ['mouseUp' as const],
+    ['touchStart' as const],
+    ['touchEnd' as const],
+    ['pointerDown' as const],
+    ['pointerUp' as const],
+  ])('Create recognisable artificial %s react event', (eventName) => {
+    const event = createEvent[eventName](window);
+    const reactEvent = createArtificialReactEvent(event as LongPressDomEvents);
+    expect(isRecognisableEvent(reactEvent)).toBe(true);
   });
 });

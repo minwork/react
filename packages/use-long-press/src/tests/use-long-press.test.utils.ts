@@ -1,5 +1,5 @@
 import { MouseEvent as ReactMouseEvent, PointerEvent as ReactPointerEvent, TouchEvent as ReactTouchEvent } from 'react';
-import { createEvent, fireEvent } from '@testing-library/react';
+import { createEvent, fireEvent, FireObject } from '@testing-library/react';
 import { EventType } from '@testing-library/dom/types/events';
 import { LongPressDomEvents, LongPressEventType, LongPressHandlers } from '../lib';
 import {
@@ -64,26 +64,30 @@ export function getDOMTestHandlersMap(
   eventType: LongPressEventType,
   element: Window | Element | Node | Document
 ): LongPressTestHandlersMap {
+  function eventHandler(eventName: keyof FireObject) {
+    return (options?: object) => fireEvent[eventName](element, options);
+  }
+
   switch (eventType) {
     case LongPressEventType.Mouse:
       return {
-        start: fireEvent.mouseDown.bind(null, element),
-        move: fireEvent.mouseMove.bind(null, element),
-        stop: fireEvent.mouseUp.bind(null, element),
-        leave: fireEvent.mouseLeave.bind(null, element),
+        start: eventHandler('mouseDown'),
+        move: eventHandler('mouseMove'),
+        stop: eventHandler('mouseUp'),
+        leave: eventHandler('mouseLeave'),
       };
     case LongPressEventType.Touch:
       return {
-        start: fireEvent.touchStart.bind(null, element),
-        move: fireEvent.touchMove.bind(null, element),
-        stop: fireEvent.touchEnd.bind(null, element),
+        start: eventHandler('touchStart'),
+        move: eventHandler('touchMove'),
+        stop: eventHandler('touchEnd'),
       };
     case LongPressEventType.Pointer: {
       return {
-        start: fireEvent.pointerDown.bind(null, element),
-        move: fireEvent.pointerMove.bind(null, element),
-        stop: fireEvent.pointerUp.bind(null, element),
-        leave: fireEvent.pointerLeave.bind(null, element),
+        start: eventHandler('pointerDown'),
+        move: eventHandler('pointerMove'),
+        stop: eventHandler('pointerUp'),
+        leave: eventHandler('pointerLeave'),
       };
     }
   }
