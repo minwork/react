@@ -14,6 +14,7 @@ import {
 } from '../lib';
 import {
   createArtificialReactEvent,
+  getCurrentPosition,
   isMouseEvent,
   isPointerEvent,
   isRecognisableEvent,
@@ -26,7 +27,13 @@ import {
   TestComponent,
   TestComponentProps,
 } from './TestComponent';
-import { TouchEvent as ReactTouchEvent, TouchList as ReactTouchList } from 'react';
+import {
+  TouchEvent as ReactTouchEvent,
+  PointerEvent as ReactPointerEvent,
+  MouseEvent as ReactMouseEvent,
+  TouchList as ReactTouchList,
+  Touch as ReactTouch,
+} from 'react';
 import { afterEach, beforeEach, describe, expect, MockedFunction, test } from 'vitest';
 import {
   emptyContext,
@@ -137,9 +144,63 @@ describe('Hook handlers', () => {
  ⌞____________________________________________________________________________________________________
 */
 describe('Different environment compatibility', () => {
-  test('Properly detect TouchEvent event even if browser doesnt provide it', () => {
-    const touchEvent = { touches: {} as ReactTouchList, nativeEvent: { touches: {} as TouchList } } as ReactTouchEvent;
-    expect(isRecognisableEvent(touchEvent)).toBe(true);
+  describe('Event absence', () => {
+    test('Properly detect MouseEvent event even if browser doesnt provide it', () => {
+      const mouseEvent = {
+        nativeEvent: {
+          type: 'mouseup',
+        },
+      } as ReactMouseEvent;
+      expect(isRecognisableEvent(mouseEvent)).toBe(true);
+    });
+    test('Properly detect TouchEvent event even if browser doesnt provide it', () => {
+      const touchEvent = {
+        nativeEvent: {
+          type: 'touchstart',
+        },
+      } as ReactTouchEvent;
+      expect(isRecognisableEvent(touchEvent)).toBe(true);
+    });
+    test('Properly detect PointerEvent event even if browser doesnt provide it', () => {
+      const pointerEvent = {
+        nativeEvent: {
+          type: 'pointerup',
+          pointerId: 0,
+        },
+      } as ReactPointerEvent;
+      expect(isRecognisableEvent(pointerEvent)).toBe(true);
+    });
+  });
+
+  describe('Reading position from event without it', () => {
+    test('Return null for mouse-like event', () => {
+      const mouseEvent = {
+        nativeEvent: {
+          type: 'mouseup',
+        },
+      } as ReactMouseEvent;
+      expect(isRecognisableEvent(mouseEvent)).toBe(true);
+      expect(getCurrentPosition(mouseEvent)).toBe(null);
+    });
+    test('Return null for touch-like event', () => {
+      const touchEvent = {
+        nativeEvent: {
+          type: 'touchstart',
+        },
+      } as ReactTouchEvent;
+      expect(isRecognisableEvent(touchEvent)).toBe(true);
+      expect(getCurrentPosition(touchEvent)).toBe(null);
+    });
+    test('Return null for pointer-like event', () => {
+      const pointerEvent = {
+        nativeEvent: {
+          type: 'pointerup',
+          pointerId: 0,
+        },
+      } as ReactPointerEvent;
+      expect(isRecognisableEvent(pointerEvent)).toBe(true);
+      expect(getCurrentPosition(pointerEvent)).toBe(null);
+    });
   });
 
   describe('Without window', () => {
@@ -1422,11 +1483,19 @@ describe('Utils', () => {
 
   test.each([
     ['mouseDown' as const],
+    ['mouseMove' as const],
     ['mouseUp' as const],
+    ['mouseLeave' as const],
+    ['mouseOut' as const],
     ['touchStart' as const],
+    ['touchMove' as const],
     ['touchEnd' as const],
+    ['touchCancel' as const],
     ['pointerDown' as const],
+    ['pointerMove' as const],
     ['pointerUp' as const],
+    ['pointerLeave' as const],
+    ['pointerOut' as const],
   ])('Create recognisable artificial %s react event', (eventName) => {
     const event = createEvent[eventName](window);
     const reactEvent = createArtificialReactEvent(event as LongPressDomEvents);

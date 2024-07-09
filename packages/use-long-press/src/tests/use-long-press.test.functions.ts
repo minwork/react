@@ -39,6 +39,7 @@ export function createMockedPointerEvent<T extends HTMLElement = HTMLElement>(
 ): ReactPointerEvent<T> {
   return {
     nativeEvent: new PointerEvent('pointerdown'),
+    pointerId: 1,
     ...options,
   } as ReactPointerEvent<T>;
 }

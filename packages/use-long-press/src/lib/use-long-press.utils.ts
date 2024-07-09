@@ -29,6 +29,17 @@ const recognisedPointerEvents: string[] = [
   'pointerout',
 ] satisfies (keyof WindowEventMap)[];
 
+function hasPageCoordinates(obj: unknown): boolean {
+  return (
+    typeof obj === 'object' &&
+    obj !== null &&
+    'pageX' in obj &&
+    typeof obj.pageX === 'number' &&
+    'pageY' in obj &&
+    typeof obj.pageY === 'number'
+  );
+}
+
 export function isMouseEvent<Target extends Element>(event: SyntheticEvent<Target>): event is ReactMouseEvent<Target> {
   return recognisedMouseEvents.includes(event?.nativeEvent?.type);
 }
@@ -58,20 +69,14 @@ export function getCurrentPosition<Target extends Element>(
   x: number;
   y: number;
 } | null {
-  if (isTouchEvent(event)) {
+  const positionHolder = isTouchEvent(event) ? event?.touches?.[0] : event;
+
+  if (hasPageCoordinates(positionHolder)) {
     return {
-      x: event.touches[0].pageX,
-      y: event.touches[0].pageY,
+      x: positionHolder.pageX,
+      y: positionHolder.pageY,
     };
   }
-
-  if (isMouseEvent(event) || isPointerEvent(event)) {
-    return {
-      x: event.pageX,
-      y: event.pageY,
-    };
-  }
-
   return null;
 }
 

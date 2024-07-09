@@ -6,8 +6,8 @@ import {
   TouchEventHandler,
   useCallback,
   useEffect,
-  useRef
-} from "react";
+  useRef,
+} from 'react';
 import {
   LongPressCallback,
   LongPressCallbackReason,
@@ -20,9 +20,9 @@ import {
   LongPressPointerHandlers,
   LongPressReactEvents,
   LongPressResult,
-  LongPressTouchHandlers
-} from "./use-long-press.types";
-import { createArtificialReactEvent, getCurrentPosition, isRecognisableEvent } from "./use-long-press.utils";
+  LongPressTouchHandlers,
+} from './use-long-press.types';
+import { createArtificialReactEvent, getCurrentPosition, isRecognisableEvent } from './use-long-press.utils';
 
 // Disabled callback
 export function useLongPress<Target extends Element = Element, Context = unknown>(
@@ -206,6 +206,11 @@ export function useLongPress<
 
   const move = useCallback(
     (context?: Context) => (event: LongPressReactEvents<Target>) => {
+      // Ignore unrecognised events
+      if (!isRecognisableEvent(event)) {
+        return;
+      }
+
       // First call callback to allow modifying event position
       onMove?.(event, { context });
 
