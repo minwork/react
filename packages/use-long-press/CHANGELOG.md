@@ -1,3 +1,10 @@
+## [3.2.1-alpha.2](https://github.com/minwork/react/compare/use-long-press-v3.2.1-alpha.1...use-long-press-v3.2.1-alpha.2) (2024-07-09)
+
+
+### Bug Fixes
+
+* **use-long-press:** [react-34] Handle reading position from unrecognised event ([03ebb32](https://github.com/minwork/react/commit/03ebb324b426429929043f380565ffdabd10f161))
+
 ## [3.2.1-alpha.1](https://github.com/minwork/react/compare/use-long-press-v3.2.0...use-long-press-v3.2.1-alpha.1) (2023-12-08)
 
 
