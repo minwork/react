@@ -30,7 +30,7 @@
     },
     "test": {
       "executor": "@nx/vite:test",
-      "outputs": ["coverage/packages/shared/util-polyfills"],
+      "outputs": ["{workspaceRoot}/coverage/packages/shared/util-polyfills"],
       "options": {
         "passWithNoTests": true,
         "reportsDirectory": "../../../coverage/packages/shared/util-polyfills"

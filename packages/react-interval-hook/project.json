@@ -30,7 +30,7 @@
     },
     "test": {
       "executor": "@nx/vite:test",
-      "outputs": ["coverage/packages/react-interval-hook"],
+      "outputs": ["{workspaceRoot}/coverage/packages/react-interval-hook"],
       "options": {
         "passWithNoTests": true,
         "reportsDirectory": "../../coverage/packages/react-interval-hook"
@@ -84,25 +84,70 @@
           }
         ],
         "releaseRules": [
-          { "breaking": true, "release": "major" },
-          { "type": "docs", "release": "patch" },
-          { "type": "refactor", "release": "patch" },
-          { "type": "style", "release": "patch" },
-          { "type": "perf", "release": "patch" },
-          { "type": "build", "release": "patch" }
+          {
+            "breaking": true,
+            "release": "major"
+          },
+          {
+            "type": "docs",
+            "release": "patch"
+          },
+          {
+            "type": "refactor",
+            "release": "patch"
+          },
+          {
+            "type": "style",
+            "release": "patch"
+          },
+          {
+            "type": "perf",
+            "release": "patch"
+          },
+          {
+            "type": "build",
+            "release": "patch"
+          }
         ],
         "preset": "conventionalcommits",
         "presetConfig": {
           "types": [
-            { "type": "feat", "section": "Features" },
-            { "type": "fix", "section": "Bug Fixes" },
-            { "type": "chore", "hidden": true },
-            { "type": "docs", "section": "Documentation" },
-            { "type": "style", "hidden": true },
-            { "type": "refactor", "section": "Refactors" },
-            { "type": "build", "section": "Build config" },
-            { "type": "perf", "hidden": true },
-            { "type": "test", "hidden": true }
+            {
+              "type": "feat",
+              "section": "Features"
+            },
+            {
+              "type": "fix",
+              "section": "Bug Fixes"
+            },
+            {
+              "type": "chore",
+              "hidden": true
+            },
+            {
+              "type": "docs",
+              "section": "Documentation"
+            },
+            {
+              "type": "style",
+              "hidden": true
+            },
+            {
+              "type": "refactor",
+              "section": "Refactors"
+            },
+            {
+              "type": "build",
+              "section": "Build config"
+            },
+            {
+              "type": "perf",
+              "hidden": true
+            },
+            {
+              "type": "test",
+              "hidden": true
+            }
           ]
         }
       }

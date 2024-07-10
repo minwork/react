@@ -7,20 +7,14 @@
   "targets": {
     "lint": {
       "executor": "@nx/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
+      "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": [
-          "packages/use-double-tap/**/*.{ts,tsx,js,jsx}"
-        ]
+        "lintFilePatterns": ["packages/use-double-tap/**/*.{ts,tsx,js,jsx}"]
       }
     },
     "build": {
       "executor": "@nx/vite:build",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
         "outputPath": "dist/packages/use-double-tap"
@@ -36,9 +30,7 @@
     },
     "test": {
       "executor": "@nx/vite:test",
-      "outputs": [
-        "coverage/packages/use-double-tap"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/packages/use-double-tap"],
       "options": {
         "passWithNoTests": true,
         "reportsDirectory": "../../coverage/packages/use-double-tap"
@@ -92,25 +84,70 @@
           }
         ],
         "releaseRules": [
-          { "breaking": true, "release": "major" },
-          { "type": "docs", "release": "patch" },
-          { "type": "refactor", "release": "patch" },
-          { "type": "style", "release": "patch" },
-          { "type": "perf", "release": "patch" },
-          { "type": "build", "release": "patch" }
+          {
+            "breaking": true,
+            "release": "major"
+          },
+          {
+            "type": "docs",
+            "release": "patch"
+          },
+          {
+            "type": "refactor",
+            "release": "patch"
+          },
+          {
+            "type": "style",
+            "release": "patch"
+          },
+          {
+            "type": "perf",
+            "release": "patch"
+          },
+          {
+            "type": "build",
+            "release": "patch"
+          }
         ],
         "preset": "conventionalcommits",
         "presetConfig": {
           "types": [
-            { "type": "feat", "section": "Features" },
-            { "type": "fix", "section": "Bug Fixes" },
-            { "type": "chore", "hidden": true },
-            { "type": "docs", "section": "Documentation" },
-            { "type": "style", "hidden": true },
-            { "type": "refactor", "section": "Refactors" },
-            { "type": "build", "section": "Build config" },
-            { "type": "perf", "hidden": true },
-            { "type": "test", "hidden": true }
+            {
+              "type": "feat",
+              "section": "Features"
+            },
+            {
+              "type": "fix",
+              "section": "Bug Fixes"
+            },
+            {
+              "type": "chore",
+              "hidden": true
+            },
+            {
+              "type": "docs",
+              "section": "Documentation"
+            },
+            {
+              "type": "style",
+              "hidden": true
+            },
+            {
+              "type": "refactor",
+              "section": "Refactors"
+            },
+            {
+              "type": "build",
+              "section": "Build config"
+            },
+            {
+              "type": "perf",
+              "hidden": true
+            },
+            {
+              "type": "test",
+              "hidden": true
+            }
           ]
         }
       }
