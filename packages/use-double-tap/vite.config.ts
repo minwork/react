@@ -10,6 +10,7 @@ import { viteStaticCopy } from 'vite-plugin-static-copy';
 const projectPath = __dirname.replace(process.cwd(), '').substring(1);
 
 export default defineConfig({
+  root: __dirname,
   cacheDir: '../../node_modules/.vite/use-double-tap',
 
   plugins: [
@@ -42,6 +43,9 @@ export default defineConfig({
   // Configuration for building your library.
   // See: https://vitejs.dev/guide/build.html#library-mode
   build: {
+    outDir: '../../dist/packages/use-double-tap',
+    reportCompressedSize: true,
+    commonjsOptions: { transformMixedEsModules: true },
     lib: {
       // Could also be a dictionary or array of multiple entry points.
       entry: 'src/index.ts',
@@ -58,6 +62,9 @@ export default defineConfig({
   },
 
   test: {
+    reporters: ['default'],
+    reportsDirectory: '../../coverage/packages/use-double-tap',
+    provider: 'v8',
     globals: true,
     setupFiles: 'src/tests/setup-tests.ts',
     cache: {

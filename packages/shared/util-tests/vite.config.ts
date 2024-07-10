@@ -5,9 +5,13 @@ import react from '@vitejs/plugin-react';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 
 export default defineConfig({
+  root: __dirname,
   // Configuration for building your library.
   // See: https://vitejs.dev/guide/build.html#library-mode
   build: {
+    outDir: '../../../dist/packages/shared/util-tests',
+    reportCompressedSize: true,
+    commonjsOptions: { transformMixedEsModules: true },
     lib: {
       // Could also be a dictionary or array of multiple entry points.
       entry: 'src/index.ts',
@@ -25,10 +29,7 @@ export default defineConfig({
   cacheDir: '../../../node_modules/.vite/shared-util-tests',
 
   plugins: [
-    ...[
-      react(),
-      nxViteTsPaths(),
-    ],
+    ...[react(), nxViteTsPaths()],
     dts({
       entryRoot: 'src',
       tsConfigFilePath: joinPathFragments(__dirname, 'tsconfig.lib.json'),
@@ -46,6 +47,9 @@ export default defineConfig({
   // },
 
   test: {
+    reporters: ['default'],
+    reportsDirectory: '../../../coverage/packages/shared/util-tests',
+    provider: 'v8',
     globals: true,
     cache: {
       dir: '../../../node_modules/.vitest',
