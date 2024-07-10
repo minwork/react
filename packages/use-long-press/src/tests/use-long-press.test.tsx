@@ -1,39 +1,13 @@
 import { renderHook as renderHookSSR } from '@testing-library/react-hooks/server';
 import { act, createEvent, fireEvent, render, renderHook } from '@testing-library/react';
 import {
-  LongPressCallback,
-  LongPressCallbackReason,
-  LongPressDomEvents,
-  LongPressEventType,
-  LongPressMouseHandlers,
-  LongPressOptions,
-  LongPressPointerHandlers,
-  LongPressReactEvents,
-  LongPressTouchHandlers,
-  useLongPress,
-} from '../lib';
-import {
-  createArtificialReactEvent,
-  getCurrentPosition,
-  isMouseEvent,
-  isPointerEvent,
-  isRecognisableEvent,
-  isTouchEvent,
-} from '../lib/use-long-press.utils';
-import {
   createTestComponent,
   createTestElement,
   getComponentElement,
   TestComponent,
   TestComponentProps,
 } from './TestComponent';
-import {
-  TouchEvent as ReactTouchEvent,
-  PointerEvent as ReactPointerEvent,
-  MouseEvent as ReactMouseEvent,
-  TouchList as ReactTouchList,
-  Touch as ReactTouch,
-} from 'react';
+import { MouseEvent as ReactMouseEvent, PointerEvent as ReactPointerEvent, TouchEvent as ReactTouchEvent } from 'react';
 import { afterEach, beforeEach, describe, expect, MockedFunction, test } from 'vitest';
 import {
   emptyContext,
@@ -56,6 +30,26 @@ import {
   createPositionedTouchEvent,
   noop,
 } from './use-long-press.test.functions';
+import {
+  LongPressCallback,
+  LongPressCallbackReason,
+  LongPressDomEvents,
+  LongPressEventType,
+  LongPressMouseHandlers,
+  LongPressOptions,
+  LongPressPointerHandlers,
+  LongPressReactEvents,
+  LongPressTouchHandlers,
+  useLongPress,
+} from '../lib';
+import {
+  createArtificialReactEvent,
+  getCurrentPosition,
+  isMouseEvent,
+  isPointerEvent,
+  isRecognisableEvent,
+  isTouchEvent,
+} from '../lib/use-long-press.utils';
 
 /*
  ⌜‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
@@ -1410,24 +1404,20 @@ describe('Utils', () => {
     [{ nativeEvent: new MouseEvent('mousedown') }, true],
     [{ nativeEvent: new MouseEvent('mousemove') }, true],
     [{ nativeEvent: new MouseEvent('mouseup') }, true],
-
     [createMockedMouseEvent(), true],
     [createMockedTouchEvent(), false],
     [createMockedPointerEvent(), false],
-
     [{ nativeEvent: createPositionedMouseEvent(window, 'mouseMove', 1, 2) }, true],
     [{ nativeEvent: createPositionedTouchEvent(window, 'touchMove', 1, 2) }, false],
     [{ nativeEvent: createPositionedPointerEvent(window, 'pointerMove', 1, 2) }, false],
-
     [{ nativeEvent: new MouseEvent('mousedown') }, true],
     [{ nativeEvent: new TouchEvent('touchstart') }, false],
     [{ nativeEvent: new PointerEvent('pointerdown') }, false],
     [{ nativeEvent: new Event('blur') }, false],
-
     [{ nativeEvent: createEvent.mouseUp(window) }, true],
     [{ nativeEvent: createEvent.touchEnd(window) }, false],
     [{ nativeEvent: createEvent.pointerUp(window) }, false],
-  ])('isMouseEvent treat %s as mouse event: %s', (event, isProperEvent) => {
+  ])('%#. isMouseEvent treat %j as mouse event: %s', (event, isProperEvent) => {
     expect(isMouseEvent(event as LongPressReactEvents)).toBe(isProperEvent);
   });
 
@@ -1452,7 +1442,7 @@ describe('Utils', () => {
     [{ nativeEvent: createEvent.mouseUp(window) }, false],
     [{ nativeEvent: createEvent.touchEnd(window) }, true],
     [{ nativeEvent: createEvent.pointerUp(window) }, false],
-  ])('isTouchEvent treat %s as touch event: %s', (event, isProperEvent) => {
+  ])('%#. isTouchEvent treat %j as touch event: %s', (event, isProperEvent) => {
     expect(isTouchEvent(event as LongPressReactEvents)).toBe(isProperEvent);
   });
 
@@ -1477,7 +1467,7 @@ describe('Utils', () => {
     [{ nativeEvent: createEvent.mouseUp(window) }, false],
     [{ nativeEvent: createEvent.touchEnd(window) }, false],
     [{ nativeEvent: createEvent.pointerUp(window) }, true],
-  ])('isPointerEvent treat %s as pointer event: %s', (event, isProperEvent) => {
+  ])('%#. isPointerEvent treat %j as pointer event: %s', (event, isProperEvent) => {
     expect(isPointerEvent(event as LongPressReactEvents)).toBe(isProperEvent);
   });
 

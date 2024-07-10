@@ -21,29 +21,27 @@ export const TestComponent: React.FC<TestComponentProps> = ({ callback, context,
       {...handlers}
       onPointerDown={(event) => {
         if ('onPointerDown' in handlers) {
-          event.nativeEvent = new PointerEvent('pointerdown');
+          // event.nativeEvent = new PointerEvent('pointerdown');
           handlers.onPointerDown(event);
         }
       }}
       onPointerMove={(event) => {
         if ('onPointerMove' in handlers) {
-          event.nativeEvent = new PointerEvent('pointermove');
-          Object.assign(event.nativeEvent, {
-            pageX: event.pageX,
-            pageY: event.pageY,
-          });
+          // event.nativeEvent = new PointerEvent('pointermove');
+          // appendPositionToEvent(event.nativeEvent, event.pageX, event.pageY);
+
           handlers.onPointerMove(event);
         }
       }}
       onPointerUp={(event) => {
         if ('onPointerUp' in handlers) {
-          event.nativeEvent = new PointerEvent('pointerup');
+          // event.nativeEvent = new PointerEvent('pointerup');
           handlers.onPointerUp(event);
         }
       }}
       onPointerLeave={(event) => {
         if ('onPointerLeave' in handlers && handlers.onPointerLeave) {
-          event.nativeEvent = new PointerEvent('pointerleave');
+          // event.nativeEvent = new PointerEvent('pointerleave');
           handlers.onPointerLeave(event);
         }
       }}

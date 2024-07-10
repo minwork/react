@@ -9,6 +9,21 @@ export function convertHandlerNameToEventName(handlerName: string): string {
   const str = handlerName.substring(2);
   return str.charAt(0).toLowerCase() + str.substring(1);
 }
+
+export function appendPositionToEvent(event: object, x: number, y: number): void {
+  Object.defineProperties(event, {
+    pageX: {
+      value: x,
+      writable: false,
+      enumerable: true,
+    },
+    pageY: {
+      value: y,
+      writable: false,
+      enumerable: true,
+    },
+  });
+}
 /*
  ⌜‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
  ⎹ Mocked events
@@ -39,7 +54,7 @@ export function createMockedPointerEvent<T extends HTMLElement = HTMLElement>(
 ): ReactPointerEvent<T> {
   return {
     nativeEvent: new PointerEvent('pointerdown'),
-    pointerId: 1,
+    // pointerId: 1,
     ...options,
   } as ReactPointerEvent<T>;
 }
@@ -56,19 +71,7 @@ export function createPositionedMouseEvent(
   y: number
 ): MouseEvent {
   const event = createEvent[eventType](element) as unknown as MouseEvent;
-
-  Object.defineProperties(event, {
-    pageX: {
-      value: x,
-      writable: false,
-      enumerable: true,
-    },
-    pageY: {
-      value: y,
-      writable: false,
-      enumerable: true,
-    },
-  });
+  appendPositionToEvent(event, x, y);
 
   return event;
 }
@@ -84,19 +87,7 @@ export function createPositionedPointerEvent(
     // Remove this after jsdom add support for pointer events
     ownerDocument: { ...document, defaultView: window },
   }) as PointerEvent;
-
-  Object.defineProperties(event, {
-    pageX: {
-      value: x,
-      writable: false,
-      enumerable: true,
-    },
-    pageY: {
-      value: y,
-      writable: false,
-      enumerable: true,
-    },
-  });
+  appendPositionToEvent(event, x, y);
 
   return event;
 }
