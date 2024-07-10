@@ -201,7 +201,7 @@ describe('Different environment compatibility', () => {
     beforeEach(() => {
       // Use fake timers for detecting long press
       vi.useFakeTimers();
-      // Simulate absence of TouchEvent
+      // Simulate absence of window
       vi.stubGlobal('window', undefined);
     });
 

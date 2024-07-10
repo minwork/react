@@ -301,9 +301,6 @@ export function useLongPress<
 
   // Listen to long press stop events on window
   useEffect(() => {
-    // Do nothing if SSR
-    if (!window) return;
-
     function listener(event: LongPressDomEvents) {
       const reactEvent = createArtificialReactEvent<Target>(event);
       cancel()(reactEvent);
