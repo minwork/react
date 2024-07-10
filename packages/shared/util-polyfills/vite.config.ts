@@ -51,15 +51,13 @@ export default defineConfig({
 
   test: {
     reporters: ['default'],
-    reportsDirectory: '../../../coverage/packages/shared/util-polyfills',
-    provider: 'v8',
     globals: true,
-    cache: {
-      dir: '../../../node_modules/.vitest',
-    },
     environment: 'jsdom',
     include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     coverage: {
+      enabled: false,
+      provider: 'v8',
+      reportsDirectory: '../../../coverage/packages/shared/util-polyfills',
       // Disable coverage for this library
       include: [],
     },

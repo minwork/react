@@ -5,10 +5,6 @@ import viteTsConfigPaths from 'vite-tsconfig-paths';
 import dts from 'vite-plugin-dts';
 import { join } from 'path';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
-import { joinPathFragments } from 'nx/src/utils/path';
-
-// Get current project relative path and strip initial slash / backslash
-const projectPath = __dirname.replace(process.cwd(), '').substring(1);
 
 export default defineConfig({
   cacheDir: '../../node_modules/.vite/use-long-press',
@@ -63,14 +59,12 @@ export default defineConfig({
   test: {
     globals: true,
     setupFiles: 'src/tests/setup-tests.ts',
-    cache: {
-      dir: '../../node_modules/.vitest',
-    },
     environment: 'jsdom',
     include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     coverage: {
+      reportsDirectory: '../../coverage/packages/use-long-press',
       // Cover only lib files
-      include: [joinPathFragments(projectPath, 'src/lib/**/*')],
+      include: ['src/lib/**/*'],
     },
   },
 });

@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import dts from 'vite-plugin-dts';
 import { joinPathFragments } from '@nx/devkit';
 import { defineConfig } from 'vite';
@@ -48,15 +49,13 @@ export default defineConfig({
 
   test: {
     reporters: ['default'],
-    reportsDirectory: '../../../coverage/packages/shared/util-tests',
-    provider: 'v8',
     globals: true,
-    cache: {
-      dir: '../../../node_modules/.vitest',
-    },
     environment: 'jsdom',
     include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     coverage: {
+      enabled: false,
+      reportsDirectory: '../../../coverage/packages/shared/util-tests',
+      provider: 'v8',
       // Disable coverage for this library
       include: [],
     },
