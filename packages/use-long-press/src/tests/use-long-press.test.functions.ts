@@ -56,9 +56,18 @@ export function createPositionedMouseEvent(
   y: number
 ): MouseEvent {
   const event = createEvent[eventType](element) as unknown as MouseEvent;
-  Object.assign(event, {
-    pageX: x,
-    pageY: y,
+
+  Object.defineProperties(event, {
+    pageX: {
+      value: x,
+      writable: false,
+      enumerable: true,
+    },
+    pageY: {
+      value: y,
+      writable: false,
+      enumerable: true,
+    },
   });
 
   return event;
@@ -75,9 +84,18 @@ export function createPositionedPointerEvent(
     // Remove this after jsdom add support for pointer events
     ownerDocument: { ...document, defaultView: window },
   }) as PointerEvent;
-  Object.assign(event, {
-    pageX: x,
-    pageY: y,
+
+  Object.defineProperties(event, {
+    pageX: {
+      value: x,
+      writable: false,
+      enumerable: true,
+    },
+    pageY: {
+      value: y,
+      writable: false,
+      enumerable: true,
+    },
   });
 
   return event;
