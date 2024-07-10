@@ -1,3 +1,15 @@
+## [3.2.1-alpha.3](https://github.com/minwork/react/compare/use-long-press-v3.2.1-alpha.2...use-long-press-v3.2.1-alpha.3) (2024-07-10)
+
+
+### Bug Fixes
+
+* **project:** Fix running test coverage tasks ([394fdde](https://github.com/minwork/react/commit/394fdde6e1c8dc90dd30928dd91a423199bbadf7))
+
+
+### Refactors
+
+* **use-long-press:** Remove unnecessary window check in useEffect ([25780ea](https://github.com/minwork/react/commit/25780eac0a963bcb4f9524bab533a3813de1b591))
+
 ## [3.2.1-alpha.2](https://github.com/minwork/react/compare/use-long-press-v3.2.1-alpha.1...use-long-press-v3.2.1-alpha.2) (2024-07-09)
 
 
