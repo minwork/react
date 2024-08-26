@@ -68,5 +68,10 @@
     }
   },
   "useInferencePlugins": false,
-  "defaultBase": "master"
+  "defaultBase": "master",
+  "release": {
+    "version": {
+      "conventionalCommits": true
+    }
+  }
 }
