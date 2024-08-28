@@ -4,8 +4,8 @@ import {
   PointerEvent as ReactPointerEvent,
   PointerEventHandler,
   TouchEvent as ReactTouchEvent,
-  TouchEventHandler
-} from "react";
+  TouchEventHandler,
+} from 'react';
 
 /*
  ⌜‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
@@ -81,15 +81,18 @@ export interface LongPressOptions<
 > {
   /**
    * Period of time that must elapse after detecting click or tap in order to trigger _callback_
+   * @default 400
    */
   threshold?: number;
   /**
    * If `event.persist()` should be called on react event
+   * @default false
    */
   captureEvent?: boolean;
   /**
    * Which type of events should be detected ('mouse' | 'touch' | 'pointer'). For TS use *LongPressEventType* enum.
    * @see LongPressEventType
+   * @default LongPressEventType.Pointer
    */
   detect?: EventType;
   /**
@@ -103,12 +106,14 @@ export interface LongPressOptions<
    * - `false`: [default] Disable cancelling on movement
    * - `true`: Enable cancelling on movement and use default 25px threshold
    * - `number`: Set a specific tolerance value in pixels (square side size inside which movement won't cancel long press)
+   * @default false
    */
   cancelOnMovement?: boolean | number;
   /**
    * If long press should be canceled when moving mouse / touch / pointer outside the element to which it was bound.
    *
    * Works for mouse and pointer events, touch events will be supported in the future.
+   * @default true
    */
   cancelOutsideElement?: boolean;
   /**
