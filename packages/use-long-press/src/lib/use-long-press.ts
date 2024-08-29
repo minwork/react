@@ -234,22 +234,6 @@ export function useLongPress<
     [cancel, cancelOnMovement, onMove]
   );
 
-  /*const unregisterWindowListeners = useCallback((context: Context | undefined) => {
-    // Skip if SSR
-    if (!window) return;
-
-    const contextHash = hashContext(context);
-    const listener = windowListeners.current.get(contextHash);
-
-    if (listener) {
-      window.removeEventListener('mouseup', listener);
-      window.removeEventListener('touchend', listener);
-      window.removeEventListener('pointerup', listener);
-
-      windowListeners.current.delete(contextHash);
-    }
-  }, []);*/
-
   const binder = useCallback<LongPressResult<LongPressHandlers<Target>, Context>>(
     (ctx?: Context) => {
       if (callback === null) {
