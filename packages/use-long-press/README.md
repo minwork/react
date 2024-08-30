@@ -18,9 +18,33 @@
 - Disable hook when necessary
 - Filter undesired events (like mouse right clicks)
 
+# Installation
+```shell
+yarn add use-long-press
+```
+or
+```shell
+npm install --save use-long-press
+```
+
+# Basic usage
+Basic hook usage example to get started immediately
+```tsx
+import React from 'react'; // No longer necessary in newer React versions
+import { useLongPress } from 'use-long-press';
+
+const Example = () => {
+  const handlers = useLongPress(() => {
+    // Your long press handler
+    alert('Long pressed!');
+  });
+  return <button {...handlers()}>Press me</button>;
+};
+```
+
 # Documentation
 
-Full documentation can be found [here](https://minwork.gitbook.io/long-press-hook/)
+Full documentation can be found [here](https://minwork.gitbook.io/long-press-hook/).
 
 # Support
 
