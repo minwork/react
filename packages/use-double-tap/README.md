@@ -1,12 +1,15 @@
-# :point_up_2: React Double Tap Hook :point_up_2:
+# React Double Tap Hook
 
-> React hook for handling double tap on mobile devices
 
 [![codecov](https://codecov.io/gh/minwork/react/branch/main/graph/badge.svg?token=2KPMMSLDOM)](https://codecov.io/gh/minwork/react)
 ![npm type definitions](https://img.shields.io/npm/types/use-double-tap)
 ![npm bundle size](https://img.shields.io/bundlephobia/min/use-double-tap)
+![NPM Downloads](https://img.shields.io/npm/dm/use-double-tap)
 ![npm](https://img.shields.io/npm/v/use-double-tap)
-![GitHub](https://img.shields.io/github/license/minwork/react)
+
+![React Double Tap Hook](https://raw.githubusercontent.com/minwork/react/main/packages/use-double-tap/images/react-double-tap-hook.webp)
+
+> React hook for handling double tap on mobile devices
 
 # Main features
 - Detect double tap on mobile devices
