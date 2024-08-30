@@ -6,7 +6,7 @@
 ![NPM Downloads](https://img.shields.io/npm/dm/use-long-press)
 [![npm](https://img.shields.io/npm/v/use-long-press)](https://www.npmjs.com/package/use-long-press)
 
-![Logo horizontal](https://raw.githubusercontent.com/minwork/react/main/packages/use-long-press/images/logo-horizontal.png)
+![React Long Press Hook](https://raw.githubusercontent.com/minwork/react/main/packages/use-long-press/images/react-long-press-hook.webp)
 
 > React hook for detecting _click_ / _tap_ / _point_ and _hold_ event
 
