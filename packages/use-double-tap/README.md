@@ -3,7 +3,6 @@
 
 [![codecov](https://codecov.io/gh/minwork/react/branch/main/graph/badge.svg?token=2KPMMSLDOM)](https://codecov.io/gh/minwork/react)
 ![npm type definitions](https://img.shields.io/npm/types/use-double-tap)
-![npm bundle size](https://img.shields.io/bundlephobia/min/use-double-tap)
 ![NPM Downloads](https://img.shields.io/npm/dm/use-double-tap)
 ![npm](https://img.shields.io/npm/v/use-double-tap)
 
