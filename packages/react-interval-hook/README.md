@@ -4,6 +4,7 @@
 ![npm type definitions](https://img.shields.io/npm/types/react-interval-hook)
 ![NPM Downloads](https://img.shields.io/npm/dm/react-interval-hook)
 [![npm](https://img.shields.io/npm/v/react-interval-hook)](https://www.npmjs.com/package/react-interval-hook)
+![npm bundle size](https://img.shields.io/bundlephobia/minzip/react-interval-hook)
 
 ![React Interval Hook](https://raw.githubusercontent.com/minwork/react/main/packages/react-interval-hook/images/react-interval-hook.webp)
 

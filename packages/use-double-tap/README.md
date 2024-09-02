@@ -5,6 +5,7 @@
 ![npm type definitions](https://img.shields.io/npm/types/use-double-tap)
 ![NPM Downloads](https://img.shields.io/npm/dm/use-double-tap)
 ![npm](https://img.shields.io/npm/v/use-double-tap)
+![npm bundle size](https://img.shields.io/bundlephobia/minzip/use-double-tap)
 
 ![React Double Tap Hook](https://raw.githubusercontent.com/minwork/react/main/packages/use-double-tap/images/react-double-tap-hook.webp)
 
