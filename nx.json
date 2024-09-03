@@ -58,6 +58,42 @@
   "useInferencePlugins": false,
   "defaultBase": "master",
   "release": {
+    "projectsRelationship": "independent",
+    "git": {
+      "commitMessage": "chore(release): Release {projectName} {version} [skip ci]"
+    },
+    "conventionalCommits": {
+      "types": {
+        "chore": {
+          "changelog": false
+        },
+        "docs": {
+          "semverBump": "patch"
+        },
+        "refactor": {
+          "semverBump": "patch"
+        },
+        "style": {
+          "semverBump": "patch",
+          "changelog": false
+        },
+        "perf": {
+          "semverBump": "patch",
+          "changelog": false
+        },
+        "build": {
+          "semverBump": "patch"
+        },
+        "test": {
+          "changelog": false
+        }
+      }
+    },
+    "changelog": {
+      "projectChangelogs": true,
+      "workspaceChangelog": false
+    },
+    "projects": ["packages/*"],
     "version": {
       "conventionalCommits": true
     }
