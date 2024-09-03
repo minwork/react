@@ -15,8 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@react/shared/util-polyfills": ["packages/shared/util-polyfills/src/index.ts"],
-      "@react/shared/util-tests": ["packages/shared/util-tests/src/index.ts"],
+      "@react/shared/util-polyfills": ["libs/shared/util-polyfills/src/index.ts"],
+      "@react/shared/util-tests": ["libs/shared/util-tests/src/index.ts"],
       "react-interval-hook": ["packages/react-interval-hook/src/index.ts"],
       "storybook-host": ["libs/storybook-host/src/index.ts"],
       "use-double-tap": ["packages/use-double-tap/src/index.ts"],

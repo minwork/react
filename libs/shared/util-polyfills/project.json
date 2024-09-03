@@ -1,7 +1,7 @@
 {
-  "name": "shared-util-tests",
+  "name": "shared-util-polyfills",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/shared/util-tests/src",
+  "sourceRoot": "libs/shared/util-polyfills/src",
   "projectType": "library",
   "tags": [],
   "targets": {
@@ -9,20 +9,12 @@
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
     },
-    "test": {
-      "executor": "@nx/vite:test",
-      "outputs": ["{workspaceRoot}/coverage/packages/shared/util-tests"],
-      "options": {
-        "passWithNoTests": true,
-        "reportsDirectory": "../../../coverage/packages/shared/util-tests"
-      }
-    },
     "build": {
       "executor": "@nx/vite:build",
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "outputPath": "dist/packages/shared/util-tests"
+        "outputPath": "dist/libs/shared/util-polyfills"
       },
       "configurations": {
         "development": {
@@ -31,6 +23,14 @@
         "production": {
           "mode": "production"
         }
+      }
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{workspaceRoot}/coverage/libs/shared/util-polyfills"],
+      "options": {
+        "passWithNoTests": true,
+        "reportsDirectory": "../../../coverage/libs/shared/util-polyfills"
       }
     }
   }
