@@ -54,7 +54,7 @@ import { execCommand } from 'nx/src/command-line/release/utils/exec-command';
   console.log(`${chalk.blueBright(branch)} 🔀 Using ${chalk.yellow(specifier ?? 'default')} specifier\n`);
 
   console.log('Tags list exec command', await execCommand('git', ['tag', '--sort', '-v:refname']));
-  console.log('Tags list execa', $`git tag --sort -v:refname`.stdout);
+  console.log('Tags list execa', execaSync('git', ['tag', '--sort', '-v:refname']).stdout);
 
   // Create new version and update changelog if not only publishing
   if (options.publishOnly) {
