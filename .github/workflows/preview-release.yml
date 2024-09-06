@@ -27,13 +27,13 @@ jobs:
       - name: Verify the integrity of provenance attestations and registry signatures for installed dependencies
         run: npm audit signatures
       - name: Test all packages
-        run: yarn lint
+        run: yarn nx run-many -t lint
       - name: Test all packages
-        run: yarn test
+        run: yarn nx run-many -t test
       - name: Build all packages
-        run: yarn build
+        run: yarn nx run-many -t build
       - name: Release packages
-        run: yarn release --verbose
+        run: yarn tsx tools/scripts/release.ts --verbose
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
