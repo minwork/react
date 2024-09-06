@@ -21,6 +21,11 @@
     "build-storybook": {
       "cache": true,
       "inputs": ["default", "^production", "{projectRoot}/.storybook/**/*", "{projectRoot}/tsconfig.storybook.json"]
+    },
+    "nx-release-publish": {
+      "options": {
+        "packageRoot": "dist/packages/{projectName}"
+      }
     }
   },
   "namedInputs": {
@@ -59,9 +64,7 @@
   "defaultBase": "master",
   "release": {
     "projectsRelationship": "independent",
-    "git": {
-      "commitMessage": "chore(release): Release {projectName} {version} [skip ci]"
-    },
+    "projects": ["packages/*", "!libs/*"],
     "conventionalCommits": {
       "types": {
         "chore": {
@@ -89,13 +92,15 @@
         }
       }
     },
-    "changelog": {
-      "projectChangelogs": true,
-      "workspaceChangelog": false
-    },
-    "projects": ["packages/*"],
     "version": {
       "conventionalCommits": true
+    },
+    "changelog": {
+      "projectChangelogs": true,
+      "workspaceChangelog": false,
+      "git": {
+        "commitMessage": "chore(release): Release {projectName} {version} [skip ci]"
+      }
     }
   }
 }
