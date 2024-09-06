@@ -4,42 +4,9 @@ import * as process from 'node:process';
 import { $, execaSync } from 'execa';
 import chalk from 'chalk';
 import { parseCSV } from 'nx/src/command-line/yargs-utils/shared-options';
-import { execCommand } from 'nx/src/command-line/release/utils/exec-command';
 
 (async () => {
-  const options = await yargs
-    .version(false) // don't use the default meaning of version in yargs
-    .option('version', {
-      description: 'Explicit version specifier to use, if overriding conventional commits',
-      type: 'string',
-    })
-    .option('dryRun', {
-      alias: 'd',
-      description: 'Whether or not to perform a dry-run of the release process, defaults to true',
-      type: 'boolean',
-      default: true,
-    })
-    .option('verbose', {
-      description: 'Whether or not to enable verbose logging, defaults to false',
-      type: 'boolean',
-      default: false,
-    })
-    .options('publishOnly', {
-      description: 'Whether or not to only execute publishing step',
-      type: 'boolean',
-      default: false,
-    })
-    .option('otp', {
-      description: 'One time password for publishing',
-      type: 'number',
-    })
-    .option('projects', {
-      type: 'string',
-      alias: 'p',
-      coerce: parseCSV,
-      describe: 'Projects to run. (comma/space delimited project names and/or patterns)',
-    })
-    .parseAsync();
+  const options = await parseOptions();
 
   // Get current branch
   const { stdout: branch } = execaSync('git', ['branch', '--show-current']);
@@ -50,8 +17,11 @@ import { execCommand } from 'nx/src/command-line/release/utils/exec-command';
   const preid: string | undefined = isPrerelease ? 'preview' : undefined;
   const tag: string = isPrerelease ? 'preview' : 'latest';
 
+  // Output which branch is used
   console.log(`${chalk.bgBlueBright(chalk.black(' BRANCH '))}  Detecting current git branch\n`);
-  console.log(`${chalk.blueBright(branch)} 🔀 Using ${chalk.yellow(specifier ?? 'default')} specifier\n`);
+  console.log(`${chalk.blueBright(branch)} 🔀 Using ${chalk.yellow(preid ?? '[empty]')} preid\n`);
+
+  let projectsList: string[] = options.projects ?? [];
 
   // Create new version and update changelog if not only publishing
   if (options.publishOnly) {
@@ -65,12 +35,17 @@ import { execCommand } from 'nx/src/command-line/release/utils/exec-command';
       projects: options.projects,
     });
 
+    // Filter projects that have new version
+    projectsList = Object.entries(projectsVersionData)
+      .filter(([project, entry]) => entry.newVersion !== null)
+      .map(([project]) => project);
+
     // If there is no package with new version
-    if (Object.values(projectsVersionData).every((entry) => entry.newVersion === null)) {
+    if (projectsList.length === 0) {
       console.log(
         `${chalk.bgYellowBright(
           chalk.black(' VERSION ')
-        )}  No changes detected across any package, skipping publish step altogether\n`
+        )}  No changes detected across any package, skipping changelog and publish step altogether\n`
       );
       process.exit(0);
     }
@@ -106,7 +81,7 @@ import { execCommand } from 'nx/src/command-line/release/utils/exec-command';
   const publishStatus = await releasePublish({
     dryRun: options.dryRun,
     verbose: options.verbose,
-    projects: options.projects,
+    projects: projectsList,
     tag,
     registry: 'https://registry.npmjs.org/',
     otp: options.otp,
@@ -114,3 +89,39 @@ import { execCommand } from 'nx/src/command-line/release/utils/exec-command';
 
   process.exit(publishStatus);
 })();
+
+function parseOptions() {
+  return yargs
+    .version(false) // don't use the default meaning of version in yargs
+    .option('version', {
+      description: 'Explicit version specifier to use, if overriding conventional commits',
+      type: 'string',
+    })
+    .option('dryRun', {
+      alias: 'd',
+      description: 'Whether or not to perform a dry-run of the release process, defaults to true',
+      type: 'boolean',
+      default: true,
+    })
+    .option('verbose', {
+      description: 'Whether or not to enable verbose logging, defaults to false',
+      type: 'boolean',
+      default: false,
+    })
+    .options('publishOnly', {
+      description: 'Whether or not to only execute publishing step',
+      type: 'boolean',
+      default: false,
+    })
+    .option('otp', {
+      description: 'One time password for publishing',
+      type: 'number',
+    })
+    .option('projects', {
+      type: 'string',
+      alias: 'p',
+      coerce: parseCSV,
+      describe: 'Projects to run. (comma/space delimited project names and/or patterns)',
+    })
+    .parseAsync();
+}
