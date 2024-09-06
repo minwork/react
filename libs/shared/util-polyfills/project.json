@@ -9,6 +9,14 @@
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
     },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{workspaceRoot}/coverage/libs/shared/util-polyfills"],
+      "options": {
+        "passWithNoTests": true,
+        "reportsDirectory": "../../../coverage/libs/shared/util-polyfills"
+      }
+    },
     "build": {
       "executor": "@nx/vite:build",
       "outputs": ["{options.outputPath}"],
@@ -23,14 +31,6 @@
         "production": {
           "mode": "production"
         }
-      }
-    },
-    "test": {
-      "executor": "@nx/vite:test",
-      "outputs": ["{workspaceRoot}/coverage/libs/shared/util-polyfills"],
-      "options": {
-        "passWithNoTests": true,
-        "reportsDirectory": "../../../coverage/libs/shared/util-polyfills"
       }
     }
   }
