@@ -57,12 +57,22 @@ import { parseCSV } from 'nx/src/command-line/yargs-utils/shared-options';
     console.log(`${chalk.bgCyanBright(chalk.black(' MODE '))}  Publish only, skipping version and changelog\n`);
   } else {
     const { workspaceVersion, projectsVersionData } = await releaseVersion({
-      specifier,
+      // specifier,
       preid,
       dryRun: options.dryRun,
       verbose: options.verbose,
       projects: options.projects,
     });
+
+    // If there is no package with new version
+    if (Object.values(projectsVersionData).every((entry) => entry.newVersion === null)) {
+      console.log(
+        `${chalk.bgYellowBright(
+          chalk.black(' VERSION ')
+        )}  No changes detected across any package, skipping publish step altogether\n`
+      );
+      process.exit(0);
+    }
 
     await releaseChangelog({
       versionData: projectsVersionData,
@@ -71,12 +81,6 @@ import { parseCSV } from 'nx/src/command-line/yargs-utils/shared-options';
       verbose: options.verbose,
       projects: options.projects,
     });
-
-    // An explicit null value here means that no changes were detected across any package
-    if (workspaceVersion === null) {
-      console.log('⏭️ No changes detected across any package, skipping publish step altogether');
-      process.exit(0);
-    }
   }
 
   // Build selected projects to ensure bumped version of package.json in output
