@@ -4,9 +4,16 @@ import * as process from 'node:process';
 import { $, execaSync } from 'execa';
 import chalk from 'chalk';
 import { parseCSV } from 'nx/src/command-line/yargs-utils/shared-options';
+import { getProjectRoots } from 'nx/src/utils/command-line-utils';
+import { createProjectGraphAsync } from 'nx/src/project-graph/project-graph';
+import { getProjects } from 'nx/src/generators/utils/project-configuration';
+import { createTree } from 'nx/src/generators/testing-utils/create-tree';
+import * as path from 'node:path';
+import { ProjectGraph } from 'nx/src/config/project-graph';
 
 (async () => {
   const options = await parseOptions();
+  const graph = await createProjectGraphAsync({ exitOnError: true });
 
   // Get current branch
   const { stdout: branch } = execaSync('git', ['branch', '--show-current']);
@@ -59,23 +66,8 @@ import { parseCSV } from 'nx/src/command-line/yargs-utils/shared-options';
     });
   }
 
-  // Build selected projects to ensure bumped version of package.json in output
-  try {
-    console.log(
-      chalk.bgBlueBright(chalk.black(' BUILD ')),
-      `Running command "nx run-many -t build --projects=${options.projects ?? ''} --verbose=${
-        options.verbose ? 'true' : 'false'
-      }"\n`
-    );
-
-    await $({
-      stdout: 'inherit',
-      stderr: 'inherit',
-      verbose: options.verbose,
-    })`nx run-many -t build --projects=${options.projects ?? ''} --verbose=${options.verbose ? 'true' : 'false'}`;
-  } catch (error) {
-    process.exit(1);
-  }
+  // Sync package.json files before release
+  syncPackageJson(projectsList, graph);
 
   // The returned number value from releasePublish will be zero if all projects are published successfully, non-zero if not
   const publishStatus = await releasePublish({
@@ -124,4 +116,48 @@ function parseOptions() {
       describe: 'Projects to run. (comma/space delimited project names and/or patterns)',
     })
     .parseAsync();
+}
+
+const colors = [
+  { instance: chalk.green, spinnerColor: 'green' },
+  { instance: chalk.greenBright, spinnerColor: 'green' },
+  { instance: chalk.red, spinnerColor: 'red' },
+  { instance: chalk.redBright, spinnerColor: 'red' },
+  { instance: chalk.cyan, spinnerColor: 'cyan' },
+  { instance: chalk.cyanBright, spinnerColor: 'cyan' },
+  { instance: chalk.yellow, spinnerColor: 'yellow' },
+  { instance: chalk.yellowBright, spinnerColor: 'yellow' },
+  { instance: chalk.magenta, spinnerColor: 'magenta' },
+  { instance: chalk.magentaBright, spinnerColor: 'magenta' },
+] as const;
+
+function getColor(projectName: string) {
+  let code = 0;
+  for (let i = 0; i < projectName.length; ++i) {
+    code += projectName.charCodeAt(i);
+  }
+  const colorIndex = code % colors.length;
+
+  return colors[colorIndex];
+}
+
+function syncPackageJson(projectsList: string[], graph: ProjectGraph) {
+  console.log(
+    chalk.bgCyan(chalk.black(' SYNC ')),
+    `Copy "package.json" files to projects output to sync package version\n`
+  );
+  const projects = projectsList.map((projectName) => graph.nodes[projectName]);
+
+  const file = 'package.json';
+  projects.forEach((project) => {
+    const projectRoot = `${project.data.root}`;
+    const outputRoot = project.data.targets['build']?.options?.outputPath ?? `dist/${project.data.root}`;
+    const color = getColor(project.name);
+    console.log(
+      color.instance.bold(project.name),
+      '📄',
+      `Copy ${chalk.yellow('package.json')} from ${chalk.grey(projectRoot)} to ${chalk.green(outputRoot)}`
+    );
+    $`cp ${path.join(projectRoot, file)} ${path.join(outputRoot, file)}`;
+  });
 }
