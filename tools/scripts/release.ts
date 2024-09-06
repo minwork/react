@@ -4,10 +4,7 @@ import * as process from 'node:process';
 import { $, execaSync } from 'execa';
 import chalk from 'chalk';
 import { parseCSV } from 'nx/src/command-line/yargs-utils/shared-options';
-import { getProjectRoots } from 'nx/src/utils/command-line-utils';
 import { createProjectGraphAsync } from 'nx/src/project-graph/project-graph';
-import { getProjects } from 'nx/src/generators/utils/project-configuration';
-import { createTree } from 'nx/src/generators/testing-utils/create-tree';
 import * as path from 'node:path';
 import { ProjectGraph } from 'nx/src/config/project-graph';
 

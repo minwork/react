@@ -1,8 +1,9 @@
-name: Preview release (from develop)
+name: Release
 on:
   push:
     branches:
       - develop
+      - main
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -36,7 +37,7 @@ jobs:
       - name: Build all packages
         run: yarn build
       - name: Release packages
-        run: yarn release --verbose
+        run: yarn release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
