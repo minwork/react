@@ -4,6 +4,7 @@ import * as process from 'node:process';
 import { $, execaSync } from 'execa';
 import chalk from 'chalk';
 import { parseCSV } from 'nx/src/command-line/yargs-utils/shared-options';
+import { execCommand } from 'nx/src/command-line/release/utils/exec-command';
 
 (async () => {
   const options = await yargs
@@ -51,6 +52,8 @@ import { parseCSV } from 'nx/src/command-line/yargs-utils/shared-options';
 
   console.log(`${chalk.bgBlueBright(chalk.black(' BRANCH '))}  Detecting current git branch\n`);
   console.log(`${chalk.blueBright(branch)} 🔀 Using ${chalk.yellow(specifier ?? 'default')} specifier\n`);
+
+  console.log('Tags list', await execCommand('git', ['tag', '--sort', '-v:refname']));
 
   // Create new version and update changelog if not only publishing
   if (options.publishOnly) {
