@@ -23,6 +23,15 @@ import { parseCSV } from 'nx/src/command-line/yargs-utils/shared-options';
       type: 'boolean',
       default: false,
     })
+    .options('publishOnly', {
+      description: 'Whether or not to only execute publishing step',
+      type: 'boolean',
+      default: false,
+    })
+    .option('otp', {
+      description: 'One time password for publishing',
+      type: 'number',
+    })
     .option('projects', {
       type: 'string',
       alias: 'p',
@@ -41,28 +50,33 @@ import { parseCSV } from 'nx/src/command-line/yargs-utils/shared-options';
   const tag: string = isPrerelease ? 'preview' : 'latest';
 
   console.log(`${chalk.bgBlueBright(chalk.black(' BRANCH '))}  Detecting current git branch\n`);
-  console.log(`${chalk.blueBright(branch)} 🔀 Using ${chalk.yellow(specifier ?? 'default')} specifier`);
+  console.log(`${chalk.blueBright(branch)} 🔀 Using ${chalk.yellow(specifier ?? 'default')} specifier\n`);
 
-  const { workspaceVersion, projectsVersionData } = await releaseVersion({
-    specifier,
-    preid,
-    dryRun: options.dryRun,
-    verbose: options.verbose,
-    projects: options.projects,
-  });
+  // Create new version and update changelog if not only publishing
+  if (options.publishOnly) {
+    console.log(`${chalk.bgCyanBright(chalk.black(' MODE '))}  Publish only, skipping version and changelog\n`);
+  } else {
+    const { workspaceVersion, projectsVersionData } = await releaseVersion({
+      specifier,
+      preid,
+      dryRun: options.dryRun,
+      verbose: options.verbose,
+      projects: options.projects,
+    });
 
-  await releaseChangelog({
-    versionData: projectsVersionData,
-    version: workspaceVersion,
-    dryRun: options.dryRun,
-    verbose: options.verbose,
-    projects: options.projects,
-  });
+    await releaseChangelog({
+      versionData: projectsVersionData,
+      version: workspaceVersion,
+      dryRun: options.dryRun,
+      verbose: options.verbose,
+      projects: options.projects,
+    });
 
-  // An explicit null value here means that no changes were detected across any package
-  if (workspaceVersion === null) {
-    console.log('⏭️ No changes detected across any package, skipping publish step altogether');
-    process.exit(0);
+    // An explicit null value here means that no changes were detected across any package
+    if (workspaceVersion === null) {
+      console.log('⏭️ No changes detected across any package, skipping publish step altogether');
+      process.exit(0);
+    }
   }
 
   // Build selected projects to ensure bumped version of package.json in output
@@ -89,6 +103,8 @@ import { parseCSV } from 'nx/src/command-line/yargs-utils/shared-options';
     projects: options.projects,
     tag,
     registry: 'https://registry.npmjs.org/',
+    otp: options.otp,
   });
+
   process.exit(publishStatus);
 })();
