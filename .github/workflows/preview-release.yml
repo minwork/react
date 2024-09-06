@@ -32,7 +32,7 @@ jobs:
       - name: Build all packages
         run: yarn build
       - name: Release packages
-        run: yarn release
+        run: yarn release --verbose
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
