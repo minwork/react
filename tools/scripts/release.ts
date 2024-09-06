@@ -53,9 +53,6 @@ import { execCommand } from 'nx/src/command-line/release/utils/exec-command';
   console.log(`${chalk.bgBlueBright(chalk.black(' BRANCH '))}  Detecting current git branch\n`);
   console.log(`${chalk.blueBright(branch)} 🔀 Using ${chalk.yellow(specifier ?? 'default')} specifier\n`);
 
-  console.log('Tags list exec command', await execCommand('git', ['tag', '--sort', '-v:refname']));
-  console.log('Tags list execa', execaSync('git', ['tag', '--sort', '-v:refname']).stdout);
-
   // Create new version and update changelog if not only publishing
   if (options.publishOnly) {
     console.log(`${chalk.bgCyanBright(chalk.black(' MODE '))}  Publish only, skipping version and changelog\n`);
@@ -91,16 +88,17 @@ import { execCommand } from 'nx/src/command-line/release/utils/exec-command';
   try {
     console.log(
       chalk.bgBlueBright(chalk.black(' BUILD ')),
-      `Running command "nx run-many -t build ${options.projects && `--projects=${options.projects}`} --verbose=${
+      `Running command "nx run-many -t build --projects=${options.projects ?? ''} --verbose=${
         options.verbose ? 'true' : 'false'
       }"\n`
     );
 
-    await $({ stdout: process.stdout, stderr: process.stderr, verbose: options.verbose })`nx run-many -t build ${
-      options.projects && `--projects=${options.projects}`
-    } --verbose=${options.verbose ? 'true' : 'false'}`;
+    await $({
+      stdout: 'inherit',
+      stderr: 'inherit',
+      verbose: options.verbose,
+    })`nx run-many -t build --projects=${options.projects ?? ''} --verbose=${options.verbose ? 'true' : 'false'}`;
   } catch (error) {
-    console.error(error);
     process.exit(1);
   }
 
