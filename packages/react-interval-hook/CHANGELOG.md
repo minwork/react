@@ -1,3 +1,35 @@
+## 1.1.5-preview.0 (2024-09-06)
+
+
+### 🚀 Features
+
+- **storybook-host:** Create storybook lib and add stories for Long Press Hook
+
+
+### 🩹 Fixes
+
+- **project:** Fix running test coverage tasks
+
+
+### 📖 Documentation
+
+- **README:** Update react-interval-hook description
+
+- **README:** Add what's new section
+
+- **react-interval-hook:** Replace package README image and unify badges
+
+- **README:** Refactor main README file
+
+- **README:** Refactor the README for clearer formatting
+
+- **README:** Restore bundle size badge for all libraries
+
+
+### ❤️  Thank You
+
+- minwork
+
 ## [1.1.4](https://github.com/minwork/react/compare/react-interval-hook-v1.1.3...react-interval-hook-v1.1.4) (2023-08-30)
 
 
