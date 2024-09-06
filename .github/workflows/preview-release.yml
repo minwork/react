@@ -6,12 +6,17 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
-    permissions: write-all
+    permissions:
+      contents: write # to be able to publish a GitHub release
+      issues: write # to be able to comment on released issues
+      pull-requests: write # to be able to comment on released pull requests
+      id-token: write # to enable use of OIDC for npm provenance
+
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
       - name: Install Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v3
         with:
           node-version: 20
           registry-url: 'https://registry.npmjs.org/'
@@ -22,13 +27,13 @@ jobs:
       - name: Verify the integrity of provenance attestations and registry signatures for installed dependencies
         run: npm audit signatures
       - name: Test all packages
-        run: yarn nx run-many -t lint
+        run: yarn lint
       - name: Test all packages
-        run: yarn nx run-many -t test
+        run: yarn test
       - name: Build all packages
-        run: yarn nx run-many -t build
+        run: yarn build
       - name: Release packages
-        run: npx tsx tools/scripts/release.ts --verbose
+        run: yarn release --verbose
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
