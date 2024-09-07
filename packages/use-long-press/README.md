@@ -35,8 +35,8 @@ import { useLongPress } from 'use-long-press';
 
 const Example = () => {
   const handlers = useLongPress(() => {
-    // Your long press handler
-    alert('Long pressed!');
+    // Your action here
+    console.log('Long pressed!');
   });
   return <button {...handlers()}>Press me</button>;
 };
