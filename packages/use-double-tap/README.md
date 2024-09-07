@@ -16,15 +16,32 @@
 - Adjustable detection threshold
 - Callback for single tap
 
-# Install
+# Installation
 
-```bash
-npm install --save use-double-tap
-```
-or
 ```bash
 yarn add use-double-tap
 ```
+or
+```bash
+npm install --save use-double-tap
+```
+
+# Basic usage
+
+```tsx
+import React from 'react'; // No longer necessary in newer React versions
+import { useDoubleTap } from 'use-double-tap';
+
+export const Example = () => {
+    const bind = useDoubleTap((event) => {
+      // Your action here
+      console.log('Double tapped');
+    });
+
+    return <button {...bind}>Tap me</button>;
+}
+```
+
 # Documentation
 
 Full documentation can be found [here](https://minwork.gitbook.io/double-tap-hook/)
