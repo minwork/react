@@ -16,7 +16,7 @@
 -   Manageable (start, stop, isActive)
 -   Thoroughly tested
 
-## Install
+## Installation
 
 ```bash
 yarn add react-interval-hook
@@ -26,6 +26,21 @@ or
 
 ```bash
 npm install --save react-interval-hook
+```
+
+# Basic usage
+
+```tsx
+import React from 'react'; // No longer necessary in newer React versions
+import { useInterval } from 'react-interval-hook';
+
+export const Example = () => {
+    useInterval(() => {
+        console.log('I am called every second');
+    });
+    
+    return null;
+};
 ```
 
 # Documentation
