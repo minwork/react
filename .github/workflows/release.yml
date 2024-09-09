@@ -13,6 +13,9 @@ jobs:
       pull-requests: write # to be able to comment on released pull requests
       id-token: write # to enable use of OIDC for npm provenance
 
+    environment: # Set deployment environment according to branch to properly use env specific variables
+      name: "${{ github.ref == 'refs/heads/main' && 'Production' || 'Preview' }}"
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
