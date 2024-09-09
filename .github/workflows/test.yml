@@ -4,8 +4,6 @@
 name: Lint and test with coverage all packages
 
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
     branches: [ "main", "next", "develop" ]
 
