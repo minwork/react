@@ -14,9 +14,17 @@ jobs:
       id-token: write # to enable use of OIDC for npm provenance
 
     environment: # Set deployment environment according to branch to properly use env specific variables
-      name: "${{ github.ref == 'refs/heads/main' && 'Production' || 'Preview' }}"
+      name: "${{ (github.ref == 'refs/heads/main' && 'Production') || (github.ref == 'refs/heads/develop' && 'Preview') || '' }}"
 
     steps:
+      - name: Github Debug
+        run: |
+          echo "GH_REF: $GH_REF"
+          echo "GH_REF_NAME: $GH_REF_NAME"
+          echo "Environment ${{ (github.ref == 'refs/heads/main' && 'Production') || (github.ref == 'refs/heads/develop' && 'Preview') || '' }}"
+        env:
+          GH_REF: ${{ github.ref }}
+          GH_REF_NAME: ${{ github.ref_name }}
       - name: Checkout
         uses: actions/checkout@v4
         with:
