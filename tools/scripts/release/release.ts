@@ -1,6 +1,5 @@
-import { releaseChangelog, releasePublish } from 'nx/release';
+import { releasePublish } from 'nx/release';
 import * as process from 'node:process';
-import { execaSync } from 'execa';
 import chalk from 'chalk';
 import { createProjectGraphAsync } from 'nx/src/project-graph/project-graph';
 import { printHeader } from '../utils/output';
@@ -13,6 +12,13 @@ import { handlePrereleaseChangelog, handleRegularReleaseChangelog } from './chan
   const options = await parseReleaseCliOptions();
   const graph = await createProjectGraphAsync({ exitOnError: true });
   const { tag, preid, isPrerelease } = getOptionsBasedOnBranch();
+
+  const releaseEnabled = Boolean(process.env.RELEASE_ENABLED ?? false);
+
+  console.info(
+    printHeader('release', 'yellow'),
+    `Live release enabled? ${releaseEnabled ? chalk.green('Yes') : chalk.red('No')}\n`
+  );
 
   let projectsList: string[] = options.projects ?? [];
 

@@ -39,6 +39,7 @@ jobs:
       - name: Release packages
         run: yarn release
         env:
+          RELEASE_ENABLED: ${{ vars.RELEASE_ENABLED }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
