@@ -13,11 +13,13 @@ import { handlePrereleaseChangelog, handleRegularReleaseChangelog } from './chan
   const graph = await createProjectGraphAsync({ exitOnError: true });
   const { tag, preid, isPrerelease } = getOptionsBasedOnBranch();
 
-  const releaseEnabled = Boolean(process.env.RELEASE_ENABLED ?? false);
+  const releaseEnabled = process.env.RELEASE_ENABLED === '1' || process.env.RELEASE_ENABLED === 'true';
 
   console.info(
     printHeader('release', 'yellow'),
-    `Live release enabled? ${releaseEnabled ? chalk.green('Yes') : chalk.red('No')}\n`
+    `Live release enabled? ${releaseEnabled ? chalk.green('Yes') : chalk.red('No')} (RELEASE_ENABLED=${
+      process.env.RELEASE_ENABLED
+    })\n`
   );
 
   let projectsList: string[] = options.projects ?? [];
