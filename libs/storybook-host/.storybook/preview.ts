@@ -16,9 +16,17 @@ const preview: Preview = {
         date: /Date$/,
       },
     },
+    docs: {
+      toc: true,
+      subtitle: 'Example usage of useLongPress hook',
+      description: {
+        component:
+          'All `LongPressButton` props are just the **useLongPress** hook options that are forwarded in order to configure its behavior.',
+      },
+    },
   },
 
-  // tags: ['autodocs'],
+  tags: ['autodocs'],
 
   initialGlobals: {
     backgrounds: '#333',

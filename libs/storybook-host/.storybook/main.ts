@@ -21,7 +21,9 @@ const config: StorybookConfig = {
       plugins: [nxViteTsPaths()],
     }),
 
-  docs: {},
+  docs: {
+    defaultName: 'Simplified Documentation',
+  },
 
   typescript: {
     reactDocgen: 'react-docgen-typescript',

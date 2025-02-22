@@ -1,11 +1,13 @@
+import type { Decorator } from '@storybook/react';
 import { Stack } from '@mui/material';
-import type { ComponentType } from 'react';
 
-export const ContentDecorator = (Story: ComponentType, context: object) => {
+export const ContentDecorator: Decorator = (Story, context) => {
   return (
     <Stack
       width="100vw"
-      height="100vh"
+      height={context.viewMode === 'docs' ? 500 : '100vh'}
+      maxWidth={1}
+      maxHeight={1}
       alignItems="center"
       justifyContent="center"
       sx={{
