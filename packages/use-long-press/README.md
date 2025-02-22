@@ -44,7 +44,8 @@ const Example = () => {
 
 # Documentation
 
-Full documentation can be found [here](https://minwork.gitbook.io/long-press-hook/).
+- [Interactive documentation](https://react-libraries-storybook.vercel.app/) (Storybook)
+- [Static documentation](https://minwork.gitbook.io/long-press-hook/) (Gitbook)
 
 # Support
 
