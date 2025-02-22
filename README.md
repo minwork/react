@@ -18,8 +18,8 @@ Minwork is the personal brand of Krzysztof Kalkhoff. You can find more informati
 > React hook for detecting _click_, _tap_ or _point_ and _hold_ event.
 
 - [Readme](./packages/use-long-press/README.md)
-- [Demo (Storybook)](https://react-libraries-storybook.vercel.app/)
-- [Documentation](https://minwork.gitbook.io/long-press-hook)
+- [Interactive documentation](https://react-libraries-storybook.vercel.app/) (Storybook)
+- [Static documentation](https://minwork.gitbook.io/long-press-hook/) (Gitbook)
 
 ## Use Double Tap
 
