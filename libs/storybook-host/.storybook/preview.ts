@@ -5,9 +5,7 @@ import { SnackbarDecorator } from './decorators/SnackbarDecorator';
 
 const preview: Preview = {
   decorators: [ThemeDecorator, ContentDecorator, SnackbarDecorator],
-  globals: {
-    backgrounds: '#333',
-  },
+
   parameters: {
     layout: 'fullscreen',
     controls: {
@@ -18,6 +16,12 @@ const preview: Preview = {
         date: /Date$/,
       },
     },
+  },
+
+  // tags: ['autodocs'],
+
+  initialGlobals: {
+    backgrounds: '#333',
   },
 };
 
