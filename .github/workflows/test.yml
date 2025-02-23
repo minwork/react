@@ -3,6 +3,10 @@
 
 name: Lint and test with coverage all packages
 
+permissions:
+  contents: read
+  pull-requests: write
+
 on:
   pull_request:
     branches: [ "main", "next", "develop" ]
