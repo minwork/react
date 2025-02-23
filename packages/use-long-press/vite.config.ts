@@ -12,7 +12,8 @@ export default defineConfig({
   plugins: [
     dts({
       entryRoot: 'src',
-      tsconfigPath: join(__dirname, 'tsconfig.lib.json'),
+      tsConfigFilePath: join(__dirname, 'tsconfig.lib.json'),
+      skipDiagnostics: true,
     }),
     react(),
     viteTsConfigPaths({
