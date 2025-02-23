@@ -93,6 +93,7 @@
       }
     },
     "version": {
+      "preVersionCommand": "yarn nx run-many -t build",
       "conventionalCommits": true,
       "generatorOptions": {
         "fallbackCurrentVersionResolver": "disk"

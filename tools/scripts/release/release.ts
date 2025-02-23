@@ -60,7 +60,7 @@ import { handlePrereleaseChangelog, handleRegularReleaseChangelog } from './chan
   syncPackageJson(projectsList, graph);
 
   // The returned number value from releasePublish will be zero if all projects are published successfully, non-zero if not
-  const publishStatus = await releasePublish({
+  const publishProjectsResult = await releasePublish({
     dryRun: options.dryRun,
     verbose: options.verbose,
     projects: projectsList,
@@ -68,6 +68,8 @@ import { handlePrereleaseChangelog, handleRegularReleaseChangelog } from './chan
     registry: 'https://registry.npmjs.org/',
     otp: options.otp,
   });
+
+  const publishStatus = Object.values(publishProjectsResult).reduce((sum, { code }) => sum + code, 0);
 
   process.exit(publishStatus);
 })();
