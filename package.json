@@ -54,7 +54,6 @@
     "@swc/helpers": "~0.5.11",
     "@testing-library/react": "15.0.6",
     "@testing-library/react-hooks": "^8.0.1",
-    "@theunderscorer/nx-semantic-release": "^2.4.0",
     "@types/jest": "29.5.14",
     "@types/node": "18.16.9",
     "@types/react": "18.3.1",
