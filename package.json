@@ -88,7 +88,8 @@
     "yargs": "^17.7.1"
   },
   "resolutions": {
-    "esbuild": "~0.25.0"
+    "esbuild": "~0.25.0",
+    "koa": "~2.15.4"
   },
   "packageManager": "yarn@4.6.0"
 }
