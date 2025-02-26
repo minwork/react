@@ -4,14 +4,14 @@ import chalk from 'chalk';
 import { createProjectGraphAsync } from 'nx/src/project-graph/project-graph';
 import { printHeader } from '../utils/output';
 import { syncPackageJson } from './publish';
-import { getOptionsBasedOnBranch, parseReleaseCliOptions } from './cli';
+import { parseReleaseOptions, parseReleaseCliOptions } from './cli';
 import { handlePrereleaseVersioning, handleRegularReleaseVersioning } from './version';
 import { handlePrereleaseChangelog, handleRegularReleaseChangelog } from './changelog';
 
 (async () => {
   const options = await parseReleaseCliOptions();
   const graph = await createProjectGraphAsync({ exitOnError: true });
-  const { tag, preid, isPrerelease } = getOptionsBasedOnBranch();
+  const { tag, preid, isPrerelease } = parseReleaseOptions(options);
 
   const releaseEnabled = process.env.RELEASE_ENABLED === '1' || process.env.RELEASE_ENABLED === 'true';
 
