@@ -1,8 +1,14 @@
 name: Release
 on:
-  push:
-    branches:
-      - develop
+  workflow_dispatch:
+    inputs:
+      channel:
+        description: 'NPM Release channel'
+        type: choice
+        required: false
+        options:
+          - preview
+          - latest
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -35,8 +41,8 @@ jobs:
         run: yarn test
       - name: Build all packages
         run: yarn build
-      - name: Release packages
-        run: yarn release
+      - name: Release packages on '${{ inputs.channel }}' channel
+        run: yarn release -c ${{ inputs.channel }}
         env:
           RELEASE_ENABLED: ${{ vars.RELEASE_ENABLED }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
