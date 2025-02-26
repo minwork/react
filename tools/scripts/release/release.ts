@@ -11,47 +11,39 @@ import { handlePrereleaseChangelog, handleRegularReleaseChangelog } from './chan
 (async () => {
   const options = await parseReleaseCliOptions();
   const graph = await createProjectGraphAsync({ exitOnError: true });
-  const { tag, preid, isPrerelease } = parseReleaseOptions(options);
+  const { publishOnly, projects, verbose, otp } = options;
+  const { tag, preid, isPrerelease, dryRun } = parseReleaseOptions(options);
 
-  const releaseEnabled = process.env.RELEASE_ENABLED === '1' || process.env.RELEASE_ENABLED === 'true';
-
-  console.info(
-    printHeader('release', 'yellow'),
-    `Live release enabled? ${releaseEnabled ? chalk.green('Yes') : chalk.red('No')} (RELEASE_ENABLED=${
-      process.env.RELEASE_ENABLED
-    })\n`
-  );
-
-  let projectsList: string[] = options.projects ?? [];
+  let projectsList: string[] = projects ?? [];
 
   // Create new version and update changelog if not only publishing
-  if (options.publishOnly) {
+  if (publishOnly) {
     console.log(printHeader('mode', 'cyanBright'), `Publish only, skipping version and changelog\n`);
   } else {
     if (isPrerelease) {
       const versionData = await handlePrereleaseVersioning({
         preid,
-        projects: options.projects,
-        dryRun: options.dryRun,
-        verbose: options.verbose,
+        projects,
+        dryRun,
+        verbose,
       });
       await handlePrereleaseChangelog({
         versionData,
-        dryRun: options.dryRun,
-        verbose: options.verbose,
+        dryRun,
+        verbose,
       });
     } else {
       const versionData = await handleRegularReleaseVersioning({
         preid,
-        projects: options.projects,
-        dryRun: options.dryRun,
-        verbose: options.verbose,
+        projects: projects,
+        dryRun,
+        verbose,
       });
 
       await handleRegularReleaseChangelog({
         versionData,
-        dryRun: options.dryRun,
-        verbose: options.verbose,
+        dryRun,
+        verbose,
       });
     }
   }
@@ -61,12 +53,12 @@ import { handlePrereleaseChangelog, handleRegularReleaseChangelog } from './chan
 
   // The returned number value from releasePublish will be zero if all projects are published successfully, non-zero if not
   const publishProjectsResult = await releasePublish({
-    dryRun: options.dryRun,
-    verbose: options.verbose,
+    dryRun,
+    verbose,
     projects: projectsList,
     tag,
     registry: 'https://registry.npmjs.org/',
-    otp: options.otp,
+    otp,
   });
 
   const publishStatus = Object.values(publishProjectsResult).reduce((sum, { code }) => sum + code, 0);

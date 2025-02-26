@@ -19,7 +19,7 @@ export function parseReleaseCliOptions() {
       alias: 'd',
       description: 'Whether or not to perform a dry-run of the release process, defaults to true',
       type: 'boolean',
-      default: true,
+      default: false,
     })
     .option('verbose', {
       description: 'Whether or not to enable verbose logging, defaults to false',
@@ -44,10 +44,11 @@ export function parseReleaseCliOptions() {
     .parseAsync();
 }
 
-export function parseReleaseOptions({ channel }: { channel?: ReleaseChannel }): {
+export function parseReleaseOptions({ channel, dryRun }: Awaited<ReturnType<typeof parseReleaseCliOptions>>): {
   isPrerelease: boolean;
   preid?: string;
   tag: ReleaseChannel;
+  dryRun?: boolean;
 } {
   let isPrerelease: boolean;
   let preid: ReleasePreidValue;
@@ -81,9 +82,19 @@ export function parseReleaseOptions({ channel }: { channel?: ReleaseChannel }): 
   preid = releaseChannelPreid[selectedChannel];
   tag = selectedChannel;
 
+  const releaseEnabled = process.env.RELEASE_ENABLED === '1' || process.env.RELEASE_ENABLED === 'true';
+
+  console.info(
+    printHeader('release', 'yellow'),
+    `Live release enabled? ${releaseEnabled ? chalk.green('Yes') : chalk.red('No')} (RELEASE_ENABLED=${
+      process.env.RELEASE_ENABLED
+    })\n`
+  );
+
   return {
     isPrerelease,
     preid,
     tag,
+    dryRun: dryRun || !releaseEnabled,
   };
 }
