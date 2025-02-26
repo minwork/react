@@ -34,7 +34,7 @@ jobs:
           cache: 'yarn'
           cache-dependency-path: 'yarn.lock'
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
       - name: Verify the integrity of provenance attestations and registry signatures for installed dependencies
         run: npm audit signatures
       - name: Lint all packages
