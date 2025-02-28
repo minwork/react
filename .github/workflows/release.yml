@@ -28,8 +28,10 @@ jobs:
         with:
           fetch-tags: 'true'
           fetch-depth: '0'
+
       - name: Enable Corepack
         run: corepack enable
+
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
@@ -37,16 +39,27 @@ jobs:
           registry-url: 'https://registry.npmjs.org/'
           cache: 'yarn'
           cache-dependency-path: 'yarn.lock'
+
       - name: Install dependencies
         run: yarn install --immutable
+
       - name: Verify the integrity of provenance attestations and registry signatures for installed dependencies
         run: npm audit signatures
+
       - name: Lint all packages
         run: yarn lint
+
       - name: Test all packages
         run: yarn test
+
       - name: Build all packages
         run: yarn build
+
+      - name: Setup Git user
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
+
       - name: Release packages on '${{ inputs.channel }}' channel
         run: yarn release -c ${{ inputs.channel }}
         env:
