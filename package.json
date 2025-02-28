@@ -28,7 +28,6 @@
     "@chromatic-com/storybook": "^3",
     "@commitlint/cli": "^17.4.4",
     "@commitlint/config-conventional": "^17.4.4",
-    "@nrwl/vite": "19.8.14",
     "@nx/eslint": "20.5.0-beta.4",
     "@nx/eslint-plugin": "20.5.0-beta.4",
     "@nx/jest": "20.5.0-beta.4",
