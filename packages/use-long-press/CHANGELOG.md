@@ -1,3 +1,51 @@
+## 3.3.0-preview.0 (2025-03-01)
+
+### 🚀 Features
+
+- **storybook-host:** Add Vercel Analytics in form of Storybook addon
+- **storybook-host:** Create storybook lib and add stories for Long Press Hook
+
+### 🩹 Fixes
+
+- **project:** Fix running test coverage tasks
+- **use-long-press:** [react-34] Handle reading position from unrecognised event
+
+### 💅 Refactors
+
+- **use-long-press:** Remove unnecessary window check in useEffect
+- **use-long-press:** Recognise events by their type instead of class
+- **react-interval-hook:** Move hook code to react monorepo
+
+### 📖 Documentation
+
+- **project:** Update links for Long press hook section
+- **use-long-press:** Add link to Storybook documentation
+- **use-long-press:** Unify basic example in README with other libraries
+- **README:** Restore bundle size badge for all libraries
+- **README:** Refactor the README for clearer formatting
+- **README:** Refactor main README file
+- **use-long-press:** Replace package README image
+- **use-long-press:** Add installation and basic usage example to README
+- **use-long-press:** Add downloads badge
+- **README:** Add what's new section
+- **README:** Update react-interval-hook description
+- **README:** Stylistic changes to main README
+
+### 📦 Build
+
+- **project:** Resolve packages resolutions validation errors
+- **deps:** bump rollup from 2.79.1 to 2.79.2
+- **pr:** Update node versions matrix
+- **pr:** Enable Corepack to use the newest Yarn version
+- **pr:** Update PR check node and action versions
+- **deps:** bump cross-spawn from 7.0.3 to 7.0.6
+- **workflows:** Add react-interval-hook to test workflow
+- **workflows:** Separate build and test workflow
+
+### ❤️ Thank You
+
+- minwork
+
 ## [3.2.1-alpha.3](https://github.com/minwork/react/compare/use-long-press-v3.2.1-alpha.2...use-long-press-v3.2.1-alpha.3) (2024-07-10)
 
 

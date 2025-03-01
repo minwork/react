@@ -1,6 +1,6 @@
 {
   "name": "use-long-press",
-  "version": "3.2.1-alpha.3",
+  "version": "3.3.0-preview.0",
   "description": "React hook for detecting click, tap or point and hold event. Easy to use, highly customizable options, thoroughly tested.",
   "author": "minwork",
   "license": "MIT",

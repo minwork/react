@@ -1,3 +1,45 @@
+## 1.3.7-preview.0 (2025-03-01)
+
+### 🚀 Features
+
+- **storybook-host:** Add Vercel Analytics in form of Storybook addon
+- **storybook-host:** Create storybook lib and add stories for Long Press Hook
+
+### 🩹 Fixes
+
+- **project:** Fix running test coverage tasks
+
+### 💅 Refactors
+
+- **react-interval-hook:** Move hook code to react monorepo
+
+### 📖 Documentation
+
+- **project:** Update links for Long press hook section
+- **use-double-tap:** Add basic usage example to README
+- **README:** Restore bundle size badge for all libraries
+- **README:** Refactor the README for clearer formatting
+- **README:** Refactor main README file
+- **use-double-tap:** Replace package README image and unify badges
+- **README:** Add what's new section
+- **README:** Update react-interval-hook description
+- **README:** Stylistic changes to main README
+
+### 📦 Build
+
+- **project:** Resolve packages resolutions validation errors
+- **deps:** bump rollup from 2.79.1 to 2.79.2
+- **pr:** Update node versions matrix
+- **pr:** Enable Corepack to use the newest Yarn version
+- **pr:** Update PR check node and action versions
+- **deps:** bump cross-spawn from 7.0.3 to 7.0.6
+- **workflows:** Add react-interval-hook to test workflow
+- **workflows:** Separate build and test workflow
+
+### ❤️ Thank You
+
+- minwork
+
 ## [1.3.6](https://github.com/minwork/react/compare/use-double-tap-v1.3.5...use-double-tap-v1.3.6) (2023-08-27)
 
 

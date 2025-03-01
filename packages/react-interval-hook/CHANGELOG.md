@@ -1,3 +1,27 @@
+## 1.1.5-preview.1 (2025-03-01)
+
+### 🚀 Features
+
+- **storybook-host:** Add Vercel Analytics in form of Storybook addon
+
+### 📖 Documentation
+
+- **project:** Update links for Long press hook section
+- **react-interval-hook:** Add basic usage example to README
+
+### 📦 Build
+
+- **project:** Resolve packages resolutions validation errors
+- **deps:** bump rollup from 2.79.1 to 2.79.2
+- **pr:** Update node versions matrix
+- **pr:** Enable Corepack to use the newest Yarn version
+- **pr:** Update PR check node and action versions
+- **deps:** bump cross-spawn from 7.0.3 to 7.0.6
+
+### ❤️ Thank You
+
+- minwork
+
 ## 1.1.5-preview.0 (2024-09-06)
 
 
