@@ -30,7 +30,7 @@ import { hasGitChanges } from './git';
     console.log('\n');
   }
 
-  if (await hasGitChanges()) {
+  if (!dryRun && (await hasGitChanges())) {
     console.warn(printHeader('git', 'redBright'), '🚨 Detected uncommitted git changes, aborting! 🚨');
     console.log(chalk.grey('Commit your changes first, then run release as it will create new commits'));
     process.exit(1);

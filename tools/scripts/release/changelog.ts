@@ -47,6 +47,7 @@ export async function handleRegularReleaseChangelog({ versionData, dryRun, verbo
         'to',
         chalk.green(versionData[projectName].newVersion)
       );
+
       await releaseChangelog({
         versionData,
         dryRun,
