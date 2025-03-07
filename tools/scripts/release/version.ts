@@ -4,8 +4,6 @@ import { diff, parse, prerelease, ReleaseType } from 'semver';
 import chalk from 'chalk';
 import { releaseVersion } from 'nx/release';
 import { VersionOptions } from 'nx/src/command-line/release/command-object';
-import { getLatestGitTagVersionsForProject } from './git';
-import * as process from 'node:process';
 
 export async function handleRegularReleaseVersioning({
   preid,
@@ -18,20 +16,19 @@ export async function handleRegularReleaseVersioning({
   const specifiers: Partial<Record<ReleaseType, string[]>> = {};
   console.log(printHeader('version', 'cyan'), 'Detecting version changes\n');
 
-  // Graduate all prerelease versions to regular release
+  // Promote all prerelease versions to regular release
   for (const projectName in suggestedProjectsVersionData) {
     let { newVersion, currentVersion } = suggestedProjectsVersionData[projectName];
 
     // If no change, skip
-    if (newVersion === currentVersion || newVersion === null) {
-      console.log(colorProjectName(projectName), 'No changes detected, skipping');
-      break;
+    if (newVersion === currentVersion) {
+      console.log(colorProjectName(projectName), 'Current version same as the new version, skipping');
+      continue;
     }
 
     // If is prerelease and should be regular
     if (isPrereleaseVersion(newVersion)) {
-      const data = parse(newVersion);
-      const regularVersion = `${data.major}.${data.minor}.${data.patch}`;
+      const regularVersion = getRegularVersionFromPrerelease(newVersion);
       // Promote prerelease version to proper release version
       console.log(
         colorProjectName(projectName),
@@ -43,6 +40,16 @@ export async function handleRegularReleaseVersioning({
         chalk.green(regularVersion)
       );
       newVersion = regularVersion;
+    } else if (newVersion === null && isPrereleaseVersion(currentVersion)) {
+      // If no new version but just promoting prerelease to regular release
+      newVersion = getRegularVersionFromPrerelease(currentVersion);
+      console.log(
+        colorProjectName(projectName),
+        'Promoting prerelease version',
+        chalk.yellow(currentVersion),
+        'to',
+        chalk.green(newVersion)
+      );
     } else {
       console.log(
         colorProjectName(projectName),
@@ -129,6 +136,20 @@ async function getSuggestedProjectsVersionData(options: VersionOptions): Promise
 export function isPrereleaseVersion(version: string): boolean {
   const prereleaseComponents = prerelease(version);
   return prereleaseComponents?.length > 0;
+}
+
+export function getRegularVersionFromPrerelease(prereleaseVersion: string): string {
+  if (!isPrereleaseVersion(prereleaseVersion)) {
+    throw new Error(
+      `Trying to get regular version from prerelease version, but provided version is not prerelease: ${chalk.red(
+        prereleaseVersion
+      )}`
+    );
+  }
+
+  const data = parse(prereleaseVersion);
+
+  return `${data.major}.${data.minor}.${data.patch}`;
 }
 
 export interface VersioningOptions {

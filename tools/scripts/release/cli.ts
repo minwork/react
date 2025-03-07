@@ -31,6 +31,11 @@ export function parseReleaseCliOptions() {
       type: 'boolean',
       default: false,
     })
+    .options('skipPublish', {
+      description: 'Whether or not to skip publishing step',
+      type: 'boolean',
+      default: false,
+    })
     .option('otp', {
       description: 'One time password for publishing',
       type: 'number',

@@ -1,9 +1,6 @@
 import { execCommand } from 'nx/src/command-line/release/utils/exec-command';
 import { interpolate } from 'nx/src/tasks-runner/utils';
 import { readNxJson } from 'nx/src/config/nx-json';
-import { parse, prerelease } from 'semver';
-import { release } from 'nx/release';
-import * as process from 'node:process';
 import { isPrereleaseVersion } from './version';
 
 function escapeRegExp(string) {
@@ -102,4 +99,12 @@ export async function getLatestGitTagVersionsForProject(projectName: string): Pr
   } catch {
     return null;
   }
+}
+
+export async function hasGitChanges() {
+  const changesAmount = await execCommand('git', ['status', '--porcelain']).then((result) => {
+    return result.split('\n').filter((line) => line.trim().length > 0).length;
+  });
+
+  return changesAmount > 0;
 }

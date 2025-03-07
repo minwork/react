@@ -58,12 +58,14 @@ export async function handleRegularReleaseChangelog({ versionData, dryRun, verbo
   }
 
   // Now release rest of the projects using regular flow
-  await releaseChangelog({
-    versionData,
-    dryRun,
-    verbose,
-    projects: implicitProjects,
-  });
+  if (implicitProjects.length > 0) {
+    await releaseChangelog({
+      versionData,
+      dryRun,
+      verbose,
+      projects: implicitProjects,
+    });
+  }
 }
 
 function getChangedProjectsList(versionData: VersionData): string[] {
