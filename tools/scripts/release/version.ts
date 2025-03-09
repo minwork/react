@@ -3,14 +3,91 @@ import { colorProjectName, printHeader, suppressOutput } from '../utils/output';
 import { diff, parse, prerelease, ReleaseType } from 'semver';
 import chalk from 'chalk';
 import { releaseVersion } from 'nx/release';
-import { VersionOptions } from 'nx/src/command-line/release/command-object';
+import { VersionOptions as NxVersionOptions } from 'nx/src/command-line/release/command-object';
+import { HandleVersionOptions } from './version.types';
+
+export async function handleVersion({
+  options,
+  projectName,
+  suggestedVersionData,
+  isPrerelease,
+}: HandleVersionOptions): Promise<VersionData | null> {
+  // If suggested version was modified
+  let modified = false;
+  let { newVersion, currentVersion } = suggestedVersionData;
+
+  console.log(printHeader('version', 'cyan'), 'Detecting version changes\n');
+
+  // If no change, skip
+  if (newVersion === currentVersion) {
+    console.log(colorProjectName(projectName), 'Current version same as the new version, skipping');
+    return null;
+  }
+
+  // If new version was detected as prerelease, but it shouldn't correct it to proper regular version
+  if (isPrereleaseVersion(newVersion) && !isPrerelease) {
+    const regularVersion = getRegularVersionFromPrerelease(newVersion);
+
+    console.log(
+      colorProjectName(projectName),
+      'Detected version change from',
+      chalk.red(currentVersion),
+      'to',
+      chalk.yellow(newVersion),
+      'but instead correcting to',
+      chalk.green(regularVersion)
+    );
+
+    newVersion = regularVersion;
+    modified = true;
+  }
+
+  // If no new version was detected but current is prerelease and want to release regular then promote it
+  if (newVersion === null && !isPrerelease && isPrereleaseVersion(currentVersion)) {
+    const regularVersion = getRegularVersionFromPrerelease(currentVersion);
+
+    console.log(
+      colorProjectName(projectName),
+      'Promoting prerelease version',
+      chalk.yellow(currentVersion),
+      'to',
+      chalk.green(regularVersion)
+    );
+
+    newVersion = regularVersion;
+    modified = true;
+  }
+
+  // If no modifications were made just log what will be released
+  if (!modified) {
+    console.log(
+      colorProjectName(projectName),
+      'Detected version change from',
+      chalk.red(currentVersion),
+      'to',
+      chalk.green(newVersion)
+    );
+  }
+
+  // Calculate precise specifier if modified
+  const specifier: ReleaseType | undefined = modified ? diff(newVersion, currentVersion) : undefined;
+
+  // Version using NX version script
+  const { projectsVersionData } = await releaseVersion({
+    ...options,
+    specifier,
+    projects: [projectName],
+  });
+
+  return projectsVersionData;
+}
 
 export async function handleRegularReleaseVersioning({
   preid,
   dryRun,
   verbose,
   projects,
-}: VersioningOptions): Promise<VersionData> {
+}: NxVersionOptions): Promise<VersionData> {
   const suggestedProjectsVersionData = await suppressOutput(() => getSuggestedProjectsVersionData({ preid, projects }));
 
   const specifiers: Partial<Record<ReleaseType, string[]>> = {};
@@ -104,12 +181,12 @@ export async function handleRegularReleaseVersioning({
  * @param verbose
  * @param projects
  */
-export async function handlePrereleaseVersioning({
+export async function handlePrereleaseVersion({
   preid,
   dryRun,
   verbose,
   projects,
-}: VersioningOptions): Promise<VersionData> {
+}: NxVersionOptions): Promise<VersionData> {
   const { projectsVersionData } = await releaseVersion({
     preid,
     dryRun,
@@ -120,7 +197,7 @@ export async function handlePrereleaseVersioning({
   return projectsVersionData;
 }
 
-async function getSuggestedProjectsVersionData(options: VersionOptions): Promise<VersionData> {
+export async function getSuggestedProjectsVersionData(options: NxVersionOptions): Promise<VersionData> {
   const { projectsVersionData } = await releaseVersion({
     ...options,
     gitCommit: false,
@@ -150,12 +227,4 @@ export function getRegularVersionFromPrerelease(prereleaseVersion: string): stri
   const data = parse(prereleaseVersion);
 
   return `${data.major}.${data.minor}.${data.patch}`;
-}
-
-export interface VersioningOptions {
-  // specifier?: ReleaseType | string;
-  preid?: string;
-  dryRun?: boolean;
-  verbose?: boolean;
-  projects: string[];
 }

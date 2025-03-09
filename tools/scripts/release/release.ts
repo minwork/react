@@ -2,12 +2,13 @@ import { releasePublish } from 'nx/release';
 import * as process from 'node:process';
 import chalk from 'chalk';
 import { createProjectGraphAsync } from 'nx/src/project-graph/project-graph';
-import { printHeader } from '../utils/output';
+import { colorProjectName, printHeader, suppressOutput } from '../utils/output';
 import { syncPackageJson } from './publish';
-import { parseReleaseOptions, parseReleaseCliOptions } from './cli';
-import { handlePrereleaseVersioning, handleRegularReleaseVersioning } from './version';
-import { handlePrereleaseChangelog, handleRegularReleaseChangelog } from './changelog';
+import { parseReleaseCliOptions, parseReleaseOptions } from './cli';
+import { getSuggestedProjectsVersionData, handleVersion } from './version';
 import { hasGitChanges } from './git';
+import { VersionOptions } from 'nx/src/command-line/release/command-object';
+import { handleChangelog } from './changelog';
 
 (async () => {
   const options = await parseReleaseCliOptions();
@@ -15,8 +16,9 @@ import { hasGitChanges } from './git';
   const { publishOnly, projects, verbose, otp, skipPublish } = options;
   const { tag, preid, isPrerelease, dryRun } = parseReleaseOptions(options);
 
-  let projectsList: string[] = projects ?? [];
+  const projectsList = new Set(projects ?? []);
 
+  // If using verbose option, dump calculated options as pseudo-JSON
   if (verbose) {
     console.group(printHeader('Options', 'gray'), 'Provided and calculated options');
     console.log('{');
@@ -40,7 +42,54 @@ import { hasGitChanges } from './git';
     // Create new version and update changelog if not only publishing
     console.log(printHeader('mode', 'cyanBright'), `Publish only, skipping version and changelog\n`);
   } else {
-    if (isPrerelease) {
+    console.log('Calculating changed projects...\n');
+    // Start by obtaining all projects and their suggested release version
+    const versionOptions: VersionOptions = {
+      preid,
+      projects,
+      dryRun,
+      verbose,
+    };
+    const suggestedProjectsVersionData = await suppressOutput(() => getSuggestedProjectsVersionData(versionOptions));
+
+    console.log(
+      `Finished calculating proposed changes for ${Object.keys(suggestedProjectsVersionData)
+        .map(colorProjectName)
+        .join(', ')}.`
+    );
+    console.log('Proceeding with release...\n');
+
+    // Iterate through changed projects and release them one by one
+    for (const projectName of Object.keys(suggestedProjectsVersionData)) {
+      const suggestedVersionData = suggestedProjectsVersionData[projectName];
+
+      const versionData = await handleVersion({
+        projectName,
+        suggestedVersionData,
+        isPrerelease,
+        options: {
+          preid,
+          dryRun,
+          verbose,
+        },
+      });
+
+      // If version changed
+      if (versionData) {
+        await handleChangelog({
+          projectName,
+          isPrerelease,
+          options: {
+            versionData,
+            dryRun,
+            verbose,
+          },
+        });
+        // Add this project to projects list that will be published
+        projectsList.add(projectName);
+      }
+    }
+    /*if (isPrerelease) {
       const versionData = await handlePrereleaseVersioning({
         preid,
         projects,
@@ -55,7 +104,7 @@ import { hasGitChanges } from './git';
     } else {
       const versionData = await handleRegularReleaseVersioning({
         preid,
-        projects: projects,
+        projects,
         dryRun,
         verbose,
       });
@@ -65,23 +114,32 @@ import { hasGitChanges } from './git';
         dryRun,
         verbose,
       });
-    }
+    }*/
   }
 
   console.log('\n');
 
   if (skipPublish) {
     console.log(printHeader('mode', 'cyanBright'), `Skip publish, version and changelog only\n`);
-    process.exit(0);
+    return process.exit(0);
   } else {
+    if (publishOnly && projects.length === 0) {
+      console.error(
+        printHeader('Projects', 'redBright'),
+        `Trying to publish only but no projects were specified. This would release ALL projects with tag '${tag}'! Exiting...`
+      );
+      return process.exit(1);
+    }
+
+    const projectsListArray = Array.from(projectsList.values());
     // Sync package.json files before release
-    syncPackageJson(projectsList, graph);
+    syncPackageJson(projectsListArray, graph);
 
     // The returned number value from releasePublish will be zero if all projects are published successfully, non-zero if not
     const publishProjectsResult = await releasePublish({
       dryRun,
       verbose,
-      projects: projectsList,
+      projects: projectsListArray,
       tag,
       registry: 'https://registry.npmjs.org/',
       otp,
@@ -89,6 +147,6 @@ import { hasGitChanges } from './git';
 
     const publishStatus = Object.values(publishProjectsResult).reduce((sum, { code }) => sum + code, 0);
 
-    process.exit(publishStatus);
+    return process.exit(publishStatus);
   }
 })();

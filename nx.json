@@ -98,19 +98,12 @@
         "fallbackCurrentVersionResolver": "disk"
       },
       "preVersionCommand": "yarn nx run-many -t build",
-      "git": {
-        "commitMessage": "chore(release): Release {projectName} {version} [skip ci]",
-        "commit": true,
-        "tag": false
-      }
     },
     "changelog": {
       "projectChangelogs": true,
       "workspaceChangelog": false,
       "git": {
-        "commit": true,
-        "tag": true,
-        "commitMessage": "chore(release): Create changelog for {projectName} {version} [skip ci]"
+        "commitMessage": "chore(release): Release {projectName} {version} [skip ci]"
       }
     }
   },

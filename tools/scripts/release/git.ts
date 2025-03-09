@@ -11,7 +11,10 @@ function escapeRegExp(string) {
 const SEMVER_REGEX =
   /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/g;
 
-export async function getLatestGitTagVersionsForProject(projectName: string): Promise<{
+export async function getLatestGitTagVersionsForProject(
+  projectName: string,
+  excludeVersion?: string | null | string[]
+): Promise<{
   releaseVersion: string | null;
   releaseVersionTag: string | null;
   prereleaseVersion: string | null;
@@ -19,6 +22,8 @@ export async function getLatestGitTagVersionsForProject(projectName: string): Pr
 }> {
   const nxJson = readNxJson();
   const releaseTagPattern = nxJson?.release?.releaseTagPattern ?? '{projectName}@{version}';
+  const excludedVersions: string[] =
+    typeof excludeVersion === 'string' ? [excludeVersion] : Array.isArray(excludeVersion) ? excludeVersion : [];
 
   try {
     let tags: string[];
@@ -74,6 +79,11 @@ export async function getLatestGitTagVersionsForProject(projectName: string): Pr
         return r.match(SEMVER_REGEX);
       })[0];
 
+      // If this version is excluded then skip to the next one
+      if (excludedVersions.includes(version)) {
+        continue;
+      }
+
       if (isPrereleaseVersion(version)) {
         if (prereleaseVersion === null) {
           prereleaseVersion = version;
@@ -97,14 +107,18 @@ export async function getLatestGitTagVersionsForProject(projectName: string): Pr
       prereleaseVersionTag: prereleaseVersionTag,
     };
   } catch {
-    return null;
+    return { releaseVersion: null, releaseVersionTag: null, prereleaseVersion: null, prereleaseVersionTag: null };
   }
 }
 
-export async function hasGitChanges() {
+export async function hasGitChanges(): Promise<boolean> {
   const changesAmount = await execCommand('git', ['status', '--porcelain']).then((result) => {
     return result.split('\n').filter((line) => line.trim().length > 0).length;
   });
 
   return changesAmount > 0;
+}
+
+export async function getGitTail(): Promise<string> {
+  return await execCommand('git', ['rev-list', '--max-parents=0', 'HEAD']);
 }
