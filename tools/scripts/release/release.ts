@@ -14,7 +14,7 @@ import { handleChangelog } from './changelog';
   const options = await parseReleaseCliOptions();
   const graph = await createProjectGraphAsync({ exitOnError: true });
   const { publishOnly, projects, verbose, otp, skipPublish } = options;
-  const { tag, preid, isPrerelease, dryRun } = parseReleaseOptions(options);
+  const { tag, preid, isPrerelease, dryRun, isCI } = parseReleaseOptions(options);
 
   const projectsList = new Set(projects ?? []);
 
@@ -79,10 +79,12 @@ import { handleChangelog } from './changelog';
         await handleChangelog({
           projectName,
           isPrerelease,
+          isCI,
           options: {
             versionData,
             dryRun,
             verbose,
+            createRelease: 'github',
           },
         });
         // Add this project to projects list that will be published

@@ -5,6 +5,8 @@ import { printHeader } from '../utils/output';
 import { execaSync } from 'execa';
 import { ReleaseChannel, releaseChannelPreid } from './release.consts';
 import { ReleasePreidValue } from './release.types';
+import { ParsedOptions } from './cli.types';
+import { isCI as isNxCI } from 'nx/src/utils/is-ci';
 
 export function parseReleaseCliOptions() {
   return yargs
@@ -46,15 +48,19 @@ export function parseReleaseCliOptions() {
       coerce: parseCSV,
       describe: 'Projects to run. (comma/space delimited project names and/or patterns)',
     })
+    .option('ci', {
+      type: 'boolean',
+      default: false,
+      describe: 'Whether or not to run in CI context.',
+    })
     .parseAsync();
 }
 
-export function parseReleaseOptions({ channel, dryRun }: Awaited<ReturnType<typeof parseReleaseCliOptions>>): {
-  isPrerelease: boolean;
-  preid?: string;
-  tag: ReleaseChannel;
-  dryRun?: boolean;
-} {
+export function parseReleaseOptions({
+  channel,
+  dryRun,
+  ci,
+}: Awaited<ReturnType<typeof parseReleaseCliOptions>>): ParsedOptions {
   let isPrerelease: boolean;
   let preid: ReleasePreidValue;
   let tag: ReleaseChannel;
@@ -96,10 +102,13 @@ export function parseReleaseOptions({ channel, dryRun }: Awaited<ReturnType<type
     })\n`
   );
 
+  const isCI = ci ?? isNxCI();
+
   return {
     isPrerelease,
     preid,
     tag,
     dryRun: dryRun || !releaseEnabled,
+    isCI,
   };
 }

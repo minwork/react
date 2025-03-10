@@ -5,7 +5,12 @@ import { isPrereleaseVersion } from './version';
 import chalk from 'chalk';
 import { HandleChangelogOptions } from './changelog.types';
 
-export async function handleChangelog({ projectName, isPrerelease, options }: HandleChangelogOptions): Promise<void> {
+export async function handleChangelog({
+  projectName,
+  isPrerelease,
+  isCI,
+  options,
+}: HandleChangelogOptions): Promise<void> {
   // Option to explicitly specify scope of the changelog
   let from: string | undefined;
   const currentVersion = options.versionData[projectName].currentVersion;
@@ -56,5 +61,7 @@ export async function handleChangelog({ projectName, isPrerelease, options }: Ha
     ...options,
     projects: [projectName],
     from,
+    // If in CI environment then commits need to be pushed
+    gitPush: isCI,
   });
 }
