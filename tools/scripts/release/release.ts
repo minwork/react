@@ -94,13 +94,13 @@ import { handleChangelog } from './changelog';
         } else {
           console.log(
             printHeader('Publish', 'cyanBright'),
-            `Skip publishing ${projectName} as newVersion is ${chalk.grey('null')}`
+            `Skipped publishing ${projectName} as ${chalk.whiteBright('newVersion')} is ${chalk.grey('null')}`
           );
         }
       } else {
         console.log(
           printHeader('Changelog', 'yellow'),
-          `Skip generating changelog as versionData is ${chalk.grey('null')}`
+          `Skipped generating changelog as ${chalk.whiteBright('versionData')} is ${chalk.grey('null')}`
         );
       }
     }
@@ -112,10 +112,10 @@ import { handleChangelog } from './changelog';
     console.log(printHeader('mode', 'cyanBright'), `Skip publish, version and changelog only\n`);
     return process.exit(0);
   } else {
-    if (publishOnly && projects?.length === 0) {
+    if (projectsList.size === 0) {
       console.error(
         printHeader('Projects', 'redBright'),
-        `Trying to publish only but no projects were specified. This would release ALL projects with tag '${tag}'! Exiting...`
+        `Trying to publish but no projects were specified. This would release ALL projects with tag '${tag}'! Exiting...`
       );
       return process.exit(1);
     }
