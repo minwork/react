@@ -87,36 +87,23 @@ import { handleChangelog } from './changelog';
             gitPush: githubRelease || isCI ? true : undefined,
           },
         });
+
         // Add this project to projects list that will be published
-        projectsList.add(projectName);
+        if (versionData[projectName].newVersion !== null) {
+          projectsList.add(projectName);
+        } else {
+          console.log(
+            printHeader('Publish', 'cyanBright'),
+            `Skip publishing ${projectName} as newVersion is ${chalk.grey('null')}`
+          );
+        }
+      } else {
+        console.log(
+          printHeader('Changelog', 'yellow'),
+          `Skip generating changelog as versionData is ${chalk.grey('null')}`
+        );
       }
     }
-    /*if (isPrerelease) {
-      const versionData = await handlePrereleaseVersioning({
-        preid,
-        projects,
-        dryRun,
-        verbose,
-      });
-      await handlePrereleaseChangelog({
-        versionData,
-        dryRun,
-        verbose,
-      });
-    } else {
-      const versionData = await handleRegularReleaseVersioning({
-        preid,
-        projects,
-        dryRun,
-        verbose,
-      });
-
-      await handleRegularReleaseChangelog({
-        versionData,
-        dryRun,
-        verbose,
-      });
-    }*/
   }
 
   console.log('\n');
