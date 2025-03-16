@@ -50,8 +50,14 @@ export function parseReleaseCliOptions() {
     })
     .option('ci', {
       type: 'boolean',
-      default: false,
       describe: 'Whether or not to run in CI context.',
+      demandOption: false,
+    })
+    .option('githubRelease', {
+      type: 'boolean',
+      alias: 'ghr',
+      default: false,
+      describe: 'Whether or not to create Github release (doing so will require pushing changes)',
     })
     .parseAsync();
 }
@@ -60,6 +66,7 @@ export function parseReleaseOptions({
   channel,
   dryRun,
   ci,
+  verbose,
 }: Awaited<ReturnType<typeof parseReleaseCliOptions>>): ParsedOptions {
   let isPrerelease: boolean;
   let preid: ReleasePreidValue;
@@ -103,12 +110,14 @@ export function parseReleaseOptions({
   );
 
   const isCI = ci ?? isNxCI();
+  console.log('CI', ci, isCI);
 
   return {
     isPrerelease,
     preid,
     tag,
     dryRun: dryRun || !releaseEnabled,
+    verbose: isCI || verbose,
     isCI,
   };
 }

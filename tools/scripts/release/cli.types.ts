@@ -3,7 +3,8 @@ import { ReleaseChannel } from './release.consts';
 export interface ParsedOptions {
   isPrerelease: boolean;
   isCI: boolean;
-  preid?: string;
+  preid: string | undefined;
   tag: ReleaseChannel;
-  dryRun?: boolean;
+  dryRun: boolean;
+  verbose: boolean;
 }
