@@ -77,7 +77,7 @@ jobs:
           git config user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
 
       - name: Release packages on '${{ inputs.channel }}' channel
-        run: yarn release -c ${{ inputs.channel }} --verbose ${{ inputs.publish-only && '--publishOnly' }} ${{ inputs.skip-publish && '--skipPublish' }} ${{ inputs.github-release && '--githubRelease'}}
+        run: yarn release -c ${{ inputs.channel }} --verbose ${{ inputs.publish-only && '--publishOnly' || '' }} ${{ inputs.skip-publish && '--skipPublish' || '' }} ${{ inputs.github-release && '--githubRelease' || '' }}
         env:
           RELEASE_ENABLED: ${{ vars.RELEASE_ENABLED }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
