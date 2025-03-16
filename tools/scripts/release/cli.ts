@@ -110,7 +110,6 @@ export function parseReleaseOptions({
   );
 
   const isCI = ci ?? isNxCI();
-  console.log('CI', ci, isCI);
 
   return {
     isPrerelease,
