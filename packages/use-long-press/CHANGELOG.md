@@ -1,3 +1,51 @@
+## 3.3.0 (2025-03-16)
+
+### 🚀 Features
+
+- **storybook-host:** Add Vercel Analytics in form of Storybook addon ([1103f48](https://github.com/minwork/react/commit/1103f48))
+- **storybook-host:** Create storybook lib and add stories for Long Press Hook ([b206ad4](https://github.com/minwork/react/commit/b206ad4))
+
+### 🩹 Fixes
+
+- **project:** Fix running test coverage tasks ([394fdde](https://github.com/minwork/react/commit/394fdde))
+- **use-long-press:** [react-34] Handle reading position from unrecognised event ([03ebb32](https://github.com/minwork/react/commit/03ebb32))
+
+### 💅 Refactors
+
+- **use-long-press:** Remove unnecessary window check in useEffect ([25780ea](https://github.com/minwork/react/commit/25780ea))
+- **use-long-press:** Recognise events by their type instead of class ([4e65b2a](https://github.com/minwork/react/commit/4e65b2a))
+- **react-interval-hook:** Move hook code to react monorepo ([1ce9766](https://github.com/minwork/react/commit/1ce9766))
+
+### 📖 Documentation
+
+- **project:** Update links for Long press hook section ([f59e8b8](https://github.com/minwork/react/commit/f59e8b8))
+- **use-long-press:** Add link to Storybook documentation ([b5b0e46](https://github.com/minwork/react/commit/b5b0e46))
+- **use-long-press:** Unify basic example in README with other libraries ([708ea12](https://github.com/minwork/react/commit/708ea12))
+- **README:** Restore bundle size badge for all libraries ([cc40996](https://github.com/minwork/react/commit/cc40996))
+- **README:** Refactor the README for clearer formatting ([59c185a](https://github.com/minwork/react/commit/59c185a))
+- **README:** Refactor main README file ([7a5e045](https://github.com/minwork/react/commit/7a5e045))
+- **use-long-press:** Replace package README image ([732dac7](https://github.com/minwork/react/commit/732dac7))
+- **use-long-press:** Add installation and basic usage example to README ([188f018](https://github.com/minwork/react/commit/188f018))
+- **use-long-press:** Add downloads badge ([c199311](https://github.com/minwork/react/commit/c199311))
+- **README:** Add what's new section ([826bd51](https://github.com/minwork/react/commit/826bd51))
+- **README:** Update react-interval-hook description ([893cd05](https://github.com/minwork/react/commit/893cd05))
+- **README:** Stylistic changes to main README ([aadaf67](https://github.com/minwork/react/commit/aadaf67))
+
+### 📦 Build
+
+- **project:** Resolve packages resolutions validation errors ([ae96d2d](https://github.com/minwork/react/commit/ae96d2d))
+- **deps:** bump rollup from 2.79.1 to 2.79.2 ([#45](https://github.com/minwork/react/pull/45))
+- **pr:** Update node versions matrix ([a3e3dc7](https://github.com/minwork/react/commit/a3e3dc7))
+- **pr:** Enable Corepack to use the newest Yarn version ([9f31d44](https://github.com/minwork/react/commit/9f31d44))
+- **pr:** Update PR check node and action versions ([233ef73](https://github.com/minwork/react/commit/233ef73))
+- **deps:** bump cross-spawn from 7.0.3 to 7.0.6 ([3b7ce9b](https://github.com/minwork/react/commit/3b7ce9b))
+- **workflows:** Add react-interval-hook to test workflow ([1983df2](https://github.com/minwork/react/commit/1983df2))
+- **workflows:** Separate build and test workflow ([14d31f8](https://github.com/minwork/react/commit/14d31f8))
+
+### ❤️ Thank You
+
+- minwork @minwork
+
 ## 3.3.0-preview.0 (2025-03-01)
 
 ### 🚀 Features
