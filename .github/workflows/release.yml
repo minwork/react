@@ -26,7 +26,8 @@ on:
         default: true
 
 env:
-  FORCE_COLOR: 2
+  TERM: xterm-256color
+  FORCE_COLOR: "true"
 
 jobs:
   release:
