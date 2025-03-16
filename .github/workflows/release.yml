@@ -20,7 +20,7 @@ on:
         required: false
         default: true
       github-release:
-        description: Whether or not to create Github release (doing so will require pushing changes)
+        description: Should create Github release (doing so will require pushing changes)
         type: boolean
         required: false
         default: true
