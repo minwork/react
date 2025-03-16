@@ -81,7 +81,7 @@ jobs:
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
 
-      - name: Release packages on '${{ inputs.channel }}' channel
+      - name: Release packages on '${{ inputs.channel }}' channel ${{ inputs.dry-run && '(dry-run)' || ''}}
         run: yarn release -c ${{ inputs.channel }} --verbose ${{ inputs.publish-only && '--publishOnly' || '' }} ${{ inputs.skip-publish && '--skipPublish' || '' }} ${{ inputs.github-release && '--githubRelease' || '' }} ${{ inputs.dry-run && '--dryRun' || '' }}
         env:
           RELEASE_ENABLED: ${{ vars.RELEASE_ENABLED }}
