@@ -125,7 +125,7 @@ import { handleChangelog } from './changelog';
     console.log(printHeader('mode', 'cyanBright'), `Skip publish, version and changelog only\n`);
     return process.exit(0);
   } else {
-    if (publishOnly && projects.length === 0) {
+    if (publishOnly && projects?.length === 0) {
       console.error(
         printHeader('Projects', 'redBright'),
         `Trying to publish only but no projects were specified. This would release ALL projects with tag '${tag}'! Exiting...`

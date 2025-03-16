@@ -14,7 +14,7 @@ export function syncPackageJson(projectsList: string[], graph: ProjectGraph) {
   const file = 'package.json';
   projects.forEach((project) => {
     const projectRoot = `${project.data.root}`;
-    const outputRoot = project.data.targets['build']?.options?.outputPath ?? `dist/${project.data.root}`;
+    const outputRoot = project.data.targets?.['build']?.options?.outputPath ?? `dist/${project.data.root}`;
     console.log(
       colorProjectName(project.name),
       '📄',

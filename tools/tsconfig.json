@@ -7,7 +7,7 @@
     "target": "es5",
     "types": ["node"],
     "importHelpers": false,
-    "strictNullChecks": true
+    "strict": true
   },
   "include": ["**/*.ts"]
 }

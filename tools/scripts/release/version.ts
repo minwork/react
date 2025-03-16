@@ -1,5 +1,5 @@
 import { VersionData } from 'nx/src/command-line/release/utils/shared';
-import { colorProjectName, printHeader, suppressOutput } from '../utils/output';
+import { colorProjectName, printHeader } from '../utils/output';
 import { diff, parse, prerelease, ReleaseType } from 'semver';
 import chalk from 'chalk';
 import { releaseVersion } from 'nx/release';
@@ -25,7 +25,7 @@ export async function handleVersion({
   }
 
   // If new version was detected as prerelease, but it shouldn't correct it to proper regular version
-  if (isPrereleaseVersion(newVersion) && !isPrerelease) {
+  if (newVersion !== null && isPrereleaseVersion(newVersion) && !isPrerelease) {
     const regularVersion = getRegularVersionFromPrerelease(newVersion);
 
     console.log(
@@ -70,7 +70,8 @@ export async function handleVersion({
   }
 
   // Calculate precise specifier if modified
-  const specifier: ReleaseType | undefined = modified ? diff(newVersion, currentVersion) : undefined;
+  const specifier: ReleaseType | undefined =
+    modified && newVersion ? diff(newVersion, currentVersion) ?? undefined : undefined;
 
   // Version using NX version script
   const { projectsVersionData } = await releaseVersion({
@@ -97,7 +98,7 @@ export async function getSuggestedProjectsVersionData(options: NxVersionOptions)
 
 export function isPrereleaseVersion(version: string): boolean {
   const prereleaseComponents = prerelease(version);
-  return prereleaseComponents?.length > 0;
+  return (prereleaseComponents?.length ?? 0) > 0;
 }
 
 export function getRegularVersionFromPrerelease(prereleaseVersion: string): string {
@@ -110,6 +111,10 @@ export function getRegularVersionFromPrerelease(prereleaseVersion: string): stri
   }
 
   const data = parse(prereleaseVersion);
+
+  if (data === null) {
+    throw new Error(`Cannot parse prerelease version ${prereleaseVersion}`);
+  }
 
   return `${data.major}.${data.minor}.${data.patch}`;
 }

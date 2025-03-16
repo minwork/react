@@ -3,5 +3,5 @@ import { ChangelogOptions as NxChangelogOptions } from 'nx/src/command-line/rele
 export interface HandleChangelogOptions {
   projectName: string;
   isPrerelease: boolean;
-  options: NxChangelogOptions;
+  options: Omit<NxChangelogOptions, 'versionData'> & Required<Pick<NxChangelogOptions, 'versionData'>>;
 }

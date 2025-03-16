@@ -3,8 +3,8 @@ import { interpolate } from 'nx/src/tasks-runner/utils';
 import { readNxJson } from 'nx/src/config/nx-json';
 import { isPrereleaseVersion } from './version';
 
-function escapeRegExp(string) {
-  return string.replace(/[/\-\\^$*+?.()|[\]{}]/g, '\\$&');
+function escapeRegExp(str: string): string {
+  return str.replace(/[/\-\\^$*+?.()|[\]{}]/g, '\\$&');
 }
 
 // https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
@@ -60,7 +60,7 @@ export async function getLatestGitTagVersionsForProject(
     const matchingSemverTags = tags.filter(
       (tag) =>
         // Do the match against SEMVER_REGEX to ensure that we skip tags that aren't valid semver versions
-        !!tag.match(tagRegexp) && tag.match(tagRegexp).some((r) => r.match(SEMVER_REGEX))
+        !!tag.match(tagRegexp) && tag.match(tagRegexp)?.some((r) => r.match(SEMVER_REGEX))
     );
 
     // If no tags matched both version will be null
@@ -74,7 +74,11 @@ export async function getLatestGitTagVersionsForProject(
     let prereleaseVersionTag: string | null = null;
 
     for (const semverTag of matchingSemverTags) {
-      const [tag, ...rest] = semverTag.match(tagRegexp);
+      const match = semverTag.match(tagRegexp);
+      if (!match) {
+        continue;
+      }
+      const [tag, ...rest] = match;
       const version = rest.filter((r) => {
         return r.match(SEMVER_REGEX);
       })[0];
