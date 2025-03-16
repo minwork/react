@@ -9,6 +9,11 @@ on:
         options:
           - preview
           - latest
+      dry-run:
+        description: Should only preview operations instead of actually executing them
+        type: boolean
+        required: false
+        default: true
       publish-only:
         description: Should run only publish command
         type: boolean
@@ -18,17 +23,12 @@ on:
         description: Should run only version and changelog and skip publishing
         type: boolean
         required: false
-        default: true
+        default: false
       github-release:
         description: Should create Github release (doing so will require pushing changes)
         type: boolean
         required: false
         default: true
-      dry-run:
-        description: Should only preview operations instead of actually executing them
-        type: boolean
-        required: false
-        default: false
 
 env:
   TERM: xterm-256color
