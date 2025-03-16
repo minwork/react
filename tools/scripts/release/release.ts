@@ -40,7 +40,7 @@ import { handleChangelog } from './changelog';
 
   if (publishOnly) {
     // Create new version and update changelog if not only publishing
-    console.log(printHeader('mode', 'cyanBright'), `Publish only, skipping version and changelog\n`);
+    console.log(printHeader('mode', 'cyan'), `Publish only, skipping version and changelog\n`);
   } else {
     console.log('Calculating changed projects...\n');
     // Start by obtaining all projects and their suggested release version
@@ -109,12 +109,12 @@ import { handleChangelog } from './changelog';
   console.log('\n');
 
   if (skipPublish) {
-    console.log(printHeader('mode', 'cyanBright'), `Skip publish, version and changelog only\n`);
+    console.log(printHeader('mode', 'cyan'), `Skip publish, version and changelog only\n`);
     return process.exit(0);
   } else {
     if (projectsList.size === 0) {
       console.log(
-        printHeader('Projects', 'yellow'),
+        printHeader('Publish', 'cyan'),
         `⏭️ Trying to publish but no projects were specified, skipping publish step altogether`
       );
       return process.exit(0);

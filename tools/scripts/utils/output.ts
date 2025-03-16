@@ -1,4 +1,4 @@
-import chalk, { ColorName, ForegroundColorName } from 'chalk';
+import chalk, { BackgroundColorName, ColorName, ForegroundColorName } from 'chalk';
 
 const colors = [
   { instance: chalk.green, spinnerColor: 'green' },
@@ -47,5 +47,6 @@ export async function suppressOutput<T>(fn: () => T): Promise<T> {
 }
 
 export function printHeader(title: string, color: ForegroundColorName): string {
-  return chalk.reset[color].inverse.bold(` ${title.toUpperCase()} `);
+  const bgColor = `bg${color.slice(0, 1).toUpperCase() + color.slice(1)}` as BackgroundColorName;
+  return chalk.reset[bgColor].black.bold(` ${title.toUpperCase()} `);
 }
