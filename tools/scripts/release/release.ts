@@ -113,11 +113,11 @@ import { handleChangelog } from './changelog';
     return process.exit(0);
   } else {
     if (projectsList.size === 0) {
-      console.error(
-        printHeader('Projects', 'redBright'),
-        `Trying to publish but no projects were specified. This would release ALL projects with tag '${tag}'! Exiting...`
+      console.log(
+        printHeader('Projects', 'yellow'),
+        `⏭️ Trying to publish but no projects were specified, skipping publish step altogether`
       );
-      return process.exit(1);
+      return process.exit(0);
     }
 
     const projectsListArray = Array.from(projectsList.values());
