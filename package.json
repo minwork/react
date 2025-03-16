@@ -7,6 +7,7 @@
     "test": "nx run-many -t test",
     "test:coverage": "nx run-many -t test --coverage",
     "build": "nx run-many -t build",
+    "typecheck": "nx run-many -t build --noEmit",
     "check": "nx run-many -t lint test build",
     "release": "tsx tools/scripts/release/release.ts"
   },
