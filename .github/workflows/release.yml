@@ -24,10 +24,15 @@ on:
         type: boolean
         required: false
         default: true
+      dry-run:
+        description: Should only preview operations instead of actually executing them
+        type: boolean
+        required: false
+        default: false
 
 env:
   TERM: xterm-256color
-  FORCE_COLOR: "true"
+  FORCE_COLOR: 'true'
 
 jobs:
   release:
@@ -77,7 +82,7 @@ jobs:
           git config user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
 
       - name: Release packages on '${{ inputs.channel }}' channel
-        run: yarn release -c ${{ inputs.channel }} --verbose ${{ inputs.publish-only && '--publishOnly' || '' }} ${{ inputs.skip-publish && '--skipPublish' || '' }} ${{ inputs.github-release && '--githubRelease' || '' }}
+        run: yarn release -c ${{ inputs.channel }} --verbose ${{ inputs.publish-only && '--publishOnly' || '' }} ${{ inputs.skip-publish && '--skipPublish' || '' }} ${{ inputs.github-release && '--githubRelease' || '' }} ${{ inputs.dry-run && '--dryRun' || '' }}
         env:
           RELEASE_ENABLED: ${{ vars.RELEASE_ENABLED }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
