@@ -1,4 +1,4 @@
-import type { ComponentType, FC } from 'react';
+import type { ComponentType } from 'react';
 import { SnackbarProvider } from 'notistack';
 
 export const SnackbarDecorator = (Story: ComponentType, context: object) => {

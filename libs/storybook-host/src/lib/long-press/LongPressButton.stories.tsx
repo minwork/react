@@ -1,4 +1,4 @@
-import type { StoryObj, StoryFn, Meta } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { LongPressButton } from './LongPressButton';
 import { LongPressEventType } from 'use-long-press';
 
@@ -6,7 +6,7 @@ const meta: Meta<typeof LongPressButton> = { component: LongPressButton };
 export default meta;
 
 type Story = StoryObj<typeof LongPressButton>;
-type StoryComponent = StoryFn<typeof LongPressButton>;
+// type StoryComponent = StoryFn<typeof LongPressButton>;
 
 export const Default: Story = {
   argTypes: {

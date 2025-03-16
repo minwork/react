@@ -1,5 +1,5 @@
-import { FC, ReactNode, useRef } from 'react';
-import { LongPressEventType, LongPressOptions, LongPressReactEvents, useLongPress } from 'use-long-press';
+import { FC, useRef } from 'react';
+import { LongPressEventType, LongPressReactEvents, useLongPress } from 'use-long-press';
 import { Button } from '@mui/material';
 import { useSnackbar } from 'notistack';
 
