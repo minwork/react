@@ -1,0 +1,85 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Verify PR changes
+
+permissions:
+  contents: read
+  pull-requests: write
+
+on:
+  pull_request:
+    branches: ['main']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        node-version: [20.x, 22.x]
+        package: [use-long-press, use-double-tap, react-interval-hook]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-tags: 'true'
+          fetch-depth: '0'
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install Node.js v${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          registry-url: 'https://registry.npmjs.org/'
+          cache: 'yarn'
+          cache-dependency-path: 'yarn.lock'
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Verify the integrity of provenance attestations and registry signatures for installed dependencies
+        run: npm audit signatures
+
+      - name: Lint all packages
+        run: yarn lint
+
+      - name: Type check all packages
+        run: yarn typecheck
+
+      - name: Test all packages with coverage
+        run: yarn test:coverage
+
+      - name: Report coverage for ${{ matrix.package }}
+        uses: davelosert/vitest-coverage-report-action@4921c44721dd660c957e91843f00e1f837ab4375
+        with:
+          name: ${{ matrix.package }} coverage report
+          working-directory: packages/${{ matrix.package }}
+          json-summary-path: ../../coverage/packages/${{ matrix.package }}/coverage-summary.json
+          json-final-path: ../../coverage/packages/${{ matrix.package }}/coverage-final.json
+
+
+#      - name: Upload use-long-press coverage reports to Codecov
+#        uses: codecov/codecov-action@13ce06bfc6bbe3ecf90edbbf1bc32fe5978ca1d3
+#        with:
+#          token: ${{ secrets.CODECOV_TOKEN }}
+#          directory: ./coverage/packages/use-long-press
+#          flags: hooks,use-long-press
+#
+#      - name: Upload use-double-tap coverage reports to Codecov
+#        uses: codecov/codecov-action@13ce06bfc6bbe3ecf90edbbf1bc32fe5978ca1d3
+#        with:
+#          token: ${{ secrets.CODECOV_TOKEN }}
+#          directory: ./coverage/packages/use-double-tap
+#          flags: hooks,use-double-tap
+#
+#      - name: Upload react-interval-hook coverage reports to Codecov
+#        uses: codecov/codecov-action@13ce06bfc6bbe3ecf90edbbf1bc32fe5978ca1d3
+#        with:
+#          token: ${{ secrets.CODECOV_TOKEN }}
+#          directory: ./coverage/packages/react-interval-hook
+#          flags: hooks,react-interval-hook
