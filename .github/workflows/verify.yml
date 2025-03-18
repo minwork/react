@@ -12,7 +12,7 @@ on:
     branches: ['main']
 
 jobs:
-  build:
+  verify-pr:
     runs-on: ubuntu-latest
 
     strategy:
