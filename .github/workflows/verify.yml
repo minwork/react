@@ -12,7 +12,7 @@ on:
     branches: ['main']
 
 jobs:
-  build:
+  verify-pr:
     runs-on: ubuntu-latest
 
     strategy:
@@ -62,24 +62,20 @@ jobs:
           json-summary-path: ../../coverage/packages/${{ matrix.package }}/coverage-summary.json
           json-final-path: ../../coverage/packages/${{ matrix.package }}/coverage-final.json
 
-
-#      - name: Upload use-long-press coverage reports to Codecov
-#        uses: codecov/codecov-action@13ce06bfc6bbe3ecf90edbbf1bc32fe5978ca1d3
-#        with:
-#          token: ${{ secrets.CODECOV_TOKEN }}
-#          directory: ./coverage/packages/use-long-press
-#          flags: hooks,use-long-press
-#
-#      - name: Upload use-double-tap coverage reports to Codecov
-#        uses: codecov/codecov-action@13ce06bfc6bbe3ecf90edbbf1bc32fe5978ca1d3
-#        with:
-#          token: ${{ secrets.CODECOV_TOKEN }}
-#          directory: ./coverage/packages/use-double-tap
-#          flags: hooks,use-double-tap
-#
-#      - name: Upload react-interval-hook coverage reports to Codecov
-#        uses: codecov/codecov-action@13ce06bfc6bbe3ecf90edbbf1bc32fe5978ca1d3
-#        with:
-#          token: ${{ secrets.CODECOV_TOKEN }}
-#          directory: ./coverage/packages/react-interval-hook
-#          flags: hooks,react-interval-hook
+  report-status:
+    name: Report PR verification status
+    runs-on: ubuntu-latest
+    needs: verify-pr
+    if: always()  # Ensures it runs even if a matrix job fails
+    steps:
+      - name: Determine overall status
+        run: |
+          if [[ "${{ needs.verify-pr.result }}" == "success" ]]; then
+            echo "All matrix jobs passed ✅"
+            exit 0
+          else
+            echo "Some matrix jobs failed ❌"
+            exit 1
+          fi
+    outputs:
+      status: ${{ job.status }}

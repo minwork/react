@@ -1,0 +1,67 @@
+name: Post Release
+
+permissions:
+  contents: read
+
+on:
+  push:
+    tags:
+      - "*@*.*.*"
+
+jobs:
+  extract-project:
+    name: Extract project name from git tag
+    runs-on: ubuntu-latest
+    outputs:
+      project: ${{ steps.extract-project-name.outputs.project }}
+    steps:
+      - name: Extract Project Name
+        id: extract-project-name
+        shell: bash
+        run: |
+          TAG_NAME=${{ github.ref_name }}
+          if [[ "$TAG_NAME" =~ ^(.+)@[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.]+)?$ ]]; then
+            PROJECT_NAME=${BASH_REMATCH[1]}
+          else
+            PROJECT_NAME=""
+          fi
+          echo "project=$PROJECT_NAME" >> "$GITHUB_OUTPUT"
+          echo "Extracted project '$PROJECT_NAME' from '$TAG_NAME'"
+
+  upload-test-coverage:
+    name: Upload tests coverage for project
+    runs-on: ubuntu-latest
+    needs: extract-project
+    if: ${{ needs.extract-project.outputs.project != '' }}
+    env:
+      PROJECT: ${{ needs.extract-project.outputs.project }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-tags: 'true'
+          fetch-depth: '0'
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: 'https://registry.npmjs.org/'
+          cache: 'yarn'
+          cache-dependency-path: 'yarn.lock'
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Run tests with coverage
+        run: npx nx run ${{ env.PROJECT }}:test --coverage
+
+      - name: Upload ${{ env.PROJECT }} coverage reports to Codecov
+        uses: codecov/codecov-action@13ce06bfc6bbe3ecf90edbbf1bc32fe5978ca1d3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./coverage/packages/${{ env.PROJECT }}
+          flags: ${{ env.PROJECT }}
