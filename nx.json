@@ -97,7 +97,7 @@
       "generatorOptions": {
         "fallbackCurrentVersionResolver": "disk"
       },
-      "preVersionCommand": "yarn nx run-many -t build",
+      "preVersionCommand": "yarn nx run-many -t build"
     },
     "changelog": {
       "projectChangelogs": true,
