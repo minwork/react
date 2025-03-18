@@ -1,7 +1,9 @@
-name: Extract Project from Tag
+name: Post Release
 
 on:
   push:
+    branches:
+      - feat/add-post-release-workflow
     tags:
       - "*@*.*.*"
   workflow_dispatch:
