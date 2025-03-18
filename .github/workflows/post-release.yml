@@ -2,8 +2,6 @@ name: Post Release
 
 on:
   push:
-    branches:
-      - feat/add-post-release-workflow
     tags:
       - "*@*.*.*"
 
