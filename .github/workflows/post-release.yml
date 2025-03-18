@@ -61,4 +61,4 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           directory: ./coverage/packages/${{ env.PROJECT }}
-          flags: hooks,${{ env.PROJECT }}
+          flags: ${{ env.PROJECT }}
