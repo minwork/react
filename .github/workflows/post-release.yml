@@ -9,7 +9,10 @@ on:
 
 jobs:
   extract-project:
+    name: Extract project name from git tag
     runs-on: ubuntu-latest
+    outputs:
+      project: ${{ steps.extract-project-name.outputs.project }}
     steps:
       - name: Extract Project Name
         id: extract-project-name
@@ -25,6 +28,7 @@ jobs:
           echo "Extracted project '$PROJECT_NAME' from '$TAG_NAME'"
 
   upload-test-coverage:
+    name: Upload tests coverage for project
     runs-on: ubuntu-latest
     needs: extract-project
     if: ${{ needs.extract-project.outputs.project != '' }}
