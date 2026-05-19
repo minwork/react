@@ -50,6 +50,3 @@ Minwork is the personal brand of Krzysztof Kalkhoff. You can find more informati
 
 ## What's new
 If you’re curious about the direction these libraries are heading, check out the [issues list](https://github.com/minwork/react/issues) to see what [new features](https://github.com/minwork/react/issues?q=is%3Aissue+is%3Aopen+label%3Afeature) are coming soon™️. 
-
-# Support
-If you like to support my work consider making a [donation](https://github.com/sponsors/minwork).
